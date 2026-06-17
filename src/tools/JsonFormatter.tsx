@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Copy, Check, AlertCircle, Wand2 } from 'lucide-react';
+import { Braces, Check, Copy, Wand2 } from 'lucide-react';
+import ToolPage from '../components/ToolPage';
 
 export default function JsonFormatter() {
   const [input, setInput] = useState('');
@@ -9,6 +10,7 @@ export default function JsonFormatter() {
 
   const formatJson = (value: string) => {
     setInput(value);
+
     if (!value.trim()) {
       setOutput('');
       setError('');
@@ -17,118 +19,94 @@ export default function JsonFormatter() {
 
     try {
       const parsed = JSON.parse(value);
-      const formatted = JSON.stringify(parsed, null, 2);
-      setOutput(formatted);
+      setOutput(JSON.stringify(parsed, null, 2));
       setError('');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Invalid JSON');
+    } catch (formatError) {
+      setError(formatError instanceof Error ? formatError.message : 'Invalid JSON.');
       setOutput('');
     }
   };
 
   const minifyJson = () => {
     if (!input.trim()) return;
+
     try {
       const parsed = JSON.parse(input);
-      const minified = JSON.stringify(parsed);
-      setOutput(minified);
+      setOutput(JSON.stringify(parsed));
       setError('');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Invalid JSON');
+    } catch (formatError) {
+      setError(formatError instanceof Error ? formatError.message : 'Invalid JSON.');
     }
   };
 
   const copyToClipboard = async () => {
-    if (output) {
-      await navigator.clipboard.writeText(output);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  const clear = () => {
-    setInput('');
-    setOutput('');
-    setError('');
+    if (!output) return;
+    await navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">JSON Formatter</h1>
-        <p className="text-gray-600 dark:text-gray-400">Format, validate and beautify your JSON data</p>
-      </div>
-
-      {/* Actions */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex gap-2">
-        <button
-          onClick={minifyJson}
-          disabled={!input.trim()}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <Wand2 size={16} />
-          Minify
-        </button>
-        <button
-          onClick={clear}
-          className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        >
-          Clear
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 p-6 overflow-hidden">
-        {/* Input */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Input JSON
-          </label>
+    <ToolPage
+      title="JSON Formatter"
+      description="Validate, format, and minify JSON with immediate feedback and a balanced editor layout."
+      category="Formatters"
+      icon={Braces}
+      actions={
+        <>
+          <button type="button" onClick={minifyJson} className="button-primary" disabled={!input.trim()}>
+            <Wand2 size={16} />
+            Minify
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setInput('');
+              setOutput('');
+              setError('');
+            }}
+            className="button-secondary"
+          >
+            Clear
+          </button>
+        </>
+      }
+    >
+      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-2">
+        <section className="app-panel p-6">
+          <label className="field-label">Input JSON</label>
           <textarea
             value={input}
-            onChange={(e) => formatJson(e.target.value)}
-            placeholder='{"name": "John", "age": 30}'
-            className="flex-1 p-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm text-gray-900 dark:text-white resize-none"
+            onChange={(event) => formatJson(event.target.value)}
+            placeholder='{"service": "utility-hub", "status": "ready"}'
+            className="field-textarea min-h-[420px] font-mono"
           />
-        </div>
+        </section>
 
-        {/* Output */}
-        <div className="flex flex-col">
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Formatted Output
-            </label>
-            {output && (
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center gap-1 px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-              >
-                {copied ? <Check size={14} /> : <Copy size={14} />}
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            )}
+        <section className="app-panel p-6">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <label className="field-label mb-0">Formatted Output</label>
+            <button type="button" onClick={copyToClipboard} className="button-ghost" disabled={!output}>
+              {copied ? <Check size={16} /> : <Copy size={16} />}
+              {copied ? 'Copied' : 'Copy'}
+            </button>
           </div>
+
           {error ? (
-            <div className="flex-1 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="flex items-start gap-2 text-red-600 dark:text-red-400">
-                <AlertCircle size={20} className="flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium">Invalid JSON</p>
-                  <p className="text-sm mt-1">{error}</p>
-                </div>
-              </div>
+            <div className="notice-error">
+              <p className="font-semibold">Invalid JSON</p>
+              <p className="mt-1">{error}</p>
             </div>
           ) : (
             <textarea
               value={output}
               readOnly
-              placeholder="Formatted JSON will appear here..."
-              className="flex-1 p-4 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg font-mono text-sm text-gray-900 dark:text-white resize-none"
+              placeholder="Formatted output appears here…"
+              className="field-textarea min-h-[420px] bg-background font-mono"
             />
           )}
-        </div>
+        </section>
       </div>
-    </div>
+    </ToolPage>
   );
 }

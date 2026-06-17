@@ -1,5 +1,12 @@
-import { useState } from 'react';
-import { Copy, Check, RefreshCw } from 'lucide-react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
+import { Check, Copy, KeyRound, RefreshCw } from 'lucide-react';
+import ToolPage from '../components/ToolPage';
+
+interface PasswordOption {
+  label: string;
+  value: boolean;
+  setter: Dispatch<SetStateAction<boolean>>;
+}
 
 export default function PasswordGenerator() {
   const [password, setPassword] = useState('');
@@ -17,32 +24,26 @@ export default function PasswordGenerator() {
     if (includeNumbers) charset += '0123456789';
     if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
-    if (charset === '') {
+    if (!charset) {
       setPassword('');
       return;
     }
 
-    let newPassword = '';
-    const array = new Uint32Array(length);
-    crypto.getRandomValues(array);
+    const randomValues = new Uint32Array(length);
+    crypto.getRandomValues(randomValues);
 
-    for (let i = 0; i < length; i++) {
-      newPassword += charset[array[i] % charset.length];
-    }
-
-    setPassword(newPassword);
+    setPassword(Array.from(randomValues, (value) => charset[value % charset.length]).join(''));
   };
 
   const copyToClipboard = async () => {
-    if (password) {
-      await navigator.clipboard.writeText(password);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    if (!password) return;
+    await navigator.clipboard.writeText(password);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const getStrength = (): { label: string; color: string; width: string } => {
-    if (!password) return { label: '', color: '', width: '0%' };
+  const getStrength = (): { label: string; width: string; tone: string } => {
+    if (!password) return { label: 'Not generated', width: '0%', tone: '#E2E8F0' };
 
     let strength = 0;
     if (password.length >= 8) strength++;
@@ -53,150 +54,99 @@ export default function PasswordGenerator() {
     if (/[0-9]/.test(password)) strength++;
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
-    if (strength <= 2) return { label: 'Weak', color: 'bg-red-500', width: '25%' };
-    if (strength <= 4) return { label: 'Fair', color: 'bg-yellow-500', width: '50%' };
-    if (strength <= 5) return { label: 'Good', color: 'bg-blue-500', width: '75%' };
-    return { label: 'Strong', color: 'bg-green-500', width: '100%' };
+    if (strength <= 2) return { label: 'Weak', width: '25%', tone: '#DC2626' };
+    if (strength <= 4) return { label: 'Fair', width: '50%', tone: '#D97706' };
+    if (strength <= 5) return { label: 'Good', width: '75%', tone: '#0058be' };
+    return { label: 'Strong', width: '100%', tone: '#059669' };
   };
 
   const strength = getStrength();
+  const options: PasswordOption[] = [
+    { label: 'Uppercase Letters (A-Z)', value: includeUppercase, setter: setIncludeUppercase },
+    { label: 'Lowercase Letters (a-z)', value: includeLowercase, setter: setIncludeLowercase },
+    { label: 'Numbers (0-9)', value: includeNumbers, setter: setIncludeNumbers },
+    { label: 'Symbols (!@#$%^&*)', value: includeSymbols, setter: setIncludeSymbols },
+  ];
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Password Generator</h1>
-        <p className="text-gray-600 dark:text-gray-400">Generate strong, secure passwords</p>
-      </div>
+    <ToolPage
+      title="Password Generator"
+      description="Create browser-generated passwords with configurable character sets, live strength feedback, and secure copy support."
+      category="Generators"
+      icon={KeyRound}
+      actions={
+        <>
+          <button type="button" onClick={generatePassword} className="button-primary">
+            <RefreshCw size={16} />
+            Generate
+          </button>
+          <button type="button" onClick={copyToClipboard} className="button-secondary" disabled={!password}>
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+            {copied ? 'Copied' : 'Copy'}
+          </button>
+        </>
+      }
+    >
+      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-[1.1fr_0.9fr]">
+        <section className="app-panel p-6">
+          <p className="font-mono text-label-sm uppercase text-text-secondary">Generated Password</p>
+          <div className="mt-4 code-surface flex min-h-[160px] items-center justify-center break-all text-center text-lg">
+            {password || 'Generate a password to preview the output.'}
+          </div>
 
-      {/* Content */}
-      <div className="flex-1 p-6 overflow-auto">
-        <div className="max-w-2xl mx-auto">
-          {/* Generated Password */}
+          <div className="mt-6 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-body-md font-medium text-text-primary">Strength: {strength.label}</p>
+              <p className="mt-1 text-body-md text-text-secondary">
+                {password ? `${password.length} characters selected.` : 'Choose your settings below.'}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 h-2 rounded-full bg-border">
+            <div className="h-full rounded-full transition-all" style={{ width: strength.width, backgroundColor: strength.tone }} />
+          </div>
+
+          <div className="mt-6 notice-success">
+            Passwords are produced locally with cryptographically secure random values. Nothing leaves your browser.
+          </div>
+        </section>
+
+        <section className="app-panel p-6">
           <div className="mb-6">
-            <div className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900 dark:text-white">Generated Password</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={generatePassword}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <RefreshCw size={16} />
-                    Generate
-                  </button>
-                  {password && (
-                    <button
-                      onClick={copyToClipboard}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                    >
-                      {copied ? <Check size={16} /> : <Copy size={16} />}
-                      {copied ? 'Copied!' : 'Copy'}
-                    </button>
-                  )}
-                </div>
-              </div>
-              <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4 min-h-[80px] flex items-center justify-center">
-                <p className="text-2xl font-mono text-gray-900 dark:text-white break-all text-center">
-                  {password || 'Click Generate to create a password'}
-                </p>
-              </div>
-              {password && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Password Strength: {strength.label}
-                    </span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {password.length} characters
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full ${strength.color} transition-all duration-300`}
-                      style={{ width: strength.width }}
-                    ></div>
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center justify-between gap-3">
+              <label className="field-label mb-0">Length</label>
+              <span className="font-mono text-label-md text-text-primary">{length}</span>
+            </div>
+            <input
+              type="range"
+              min="8"
+              max="64"
+              value={length}
+              onChange={(event) => setLength(Number(event.target.value))}
+              className="field-range mt-3"
+            />
+            <div className="mt-2 flex justify-between font-mono text-[11px] text-text-secondary">
+              <span>8</span>
+              <span>64</span>
             </div>
           </div>
 
-          {/* Options */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Options</h3>
-            
-            {/* Length */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Length: {length}
-                </label>
-              </div>
-              <input
-                type="range"
-                min="8"
-                max="64"
-                value={length}
-                onChange={(e) => setLength(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                <span>8</span>
-                <span>64</span>
-              </div>
-            </div>
-
-            {/* Character Types */}
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 cursor-pointer">
+          <div className="space-y-3">
+            {options.map((option) => (
+              <label key={option.label} className="flex items-center gap-3 rounded-md border border-border bg-background px-4 py-3">
                 <input
                   type="checkbox"
-                  checked={includeUppercase}
-                  onChange={(e) => setIncludeUppercase(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                  checked={option.value}
+                  onChange={(event) => option.setter(event.target.checked)}
+                  className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
                 />
-                <span className="text-gray-700 dark:text-gray-300">Uppercase Letters (A-Z)</span>
+                <span className="text-body-md text-text-primary">{option.label}</span>
               </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={includeLowercase}
-                  onChange={(e) => setIncludeLowercase(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-gray-700 dark:text-gray-300">Lowercase Letters (a-z)</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={includeNumbers}
-                  onChange={(e) => setIncludeNumbers(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-gray-700 dark:text-gray-300">Numbers (0-9)</span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={includeSymbols}
-                  onChange={(e) => setIncludeSymbols(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                />
-                <span className="text-gray-700 dark:text-gray-300">Symbols (!@#$%^&*)</span>
-              </label>
-            </div>
+            ))}
           </div>
-
-          {/* Security Note */}
-          <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-            <p className="text-sm text-green-800 dark:text-green-300">
-              <span className="font-semibold">🔒 Security:</span> Passwords are generated using cryptographically secure random values. 
-              All processing happens in your browser - nothing is sent to any server.
-            </p>
-          </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </ToolPage>
   );
 }

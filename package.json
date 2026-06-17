@@ -27,7 +27,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "node scripts/generate-playwright-validation-report.mjs",
+    "test:e2e:validate": "node scripts/run-playwright-validation.mjs"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
@@ -44,6 +47,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.0",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.3.1",
     "@types/crypto-js": "^4.2.2",
     "@types/js-md5": "^0.8.0",
