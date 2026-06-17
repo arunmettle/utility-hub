@@ -1,8 +1,28 @@
 {
   "name": "utility-hub",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Privacy-first utility hub for developers and creators with 10+ tools",
   "type": "module",
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://github.com/yourusername/utility-hub",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/utility-hub.git"
+  },
+  "keywords": [
+    "utilities",
+    "developer-tools",
+    "json-formatter",
+    "base64",
+    "hash-generator",
+    "qr-code",
+    "password-generator",
+    "jwt-decoder",
+    "privacy-first",
+    "client-side"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -33,6 +53,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.1",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
