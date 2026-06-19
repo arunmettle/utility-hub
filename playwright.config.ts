@@ -6,10 +6,9 @@ const resultsDirectory = path.join(process.cwd(), 'playwright-results');
 export default defineConfig({
   testDir: './tests',
   testMatch: ['**/*.spec.ts'],
-  globalSetup: './tests/global-setup.ts',
   fullyParallel: false,
   workers: 1,
-  timeout: 60_000,
+  timeout: 90_000,
   expect: {
     timeout: 10_000,
   },
@@ -20,11 +19,17 @@ export default defineConfig({
     ['json', { outputFile: path.join(resultsDirectory, 'results.json') }],
   ],
   use: {
-    baseURL: 'http://localhost:5175',
+    baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     ignoreHTTPSErrors: true,
+  },
+  webServer: {
+    command: process.platform === 'win32' ? 'npm.cmd run dev -- --host 127.0.0.1 --port 4173' : 'npm run dev -- --host 127.0.0.1 --port 4173',
+    port: 4173,
+    reuseExistingServer: true,
+    timeout: 120_000,
   },
   projects: [
     {

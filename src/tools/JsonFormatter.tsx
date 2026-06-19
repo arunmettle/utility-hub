@@ -1,112 +1,107 @@
 import { useState } from 'react';
-import { Braces, Check, Copy, Wand2 } from 'lucide-react';
-import ToolPage from '../components/ToolPage';
+import { Check, Copy, Minimize2, Sparkles, Trash2 } from 'lucide-react';
+import ToolFrame from '../components/ToolFrame';
+import { transformJson } from '../lib/privacyTools';
+
+const sampleJson = `{
+  "service": "cobalt",
+  "environment": "browser",
+  "features": [
+    "format",
+    "validate",
+    "minify"
+  ],
+  "privacyFirst": true
+}`;
 
 export default function JsonFormatter() {
-  const [input, setInput] = useState('');
-  const [output, setOutput] = useState('');
-  const [error, setError] = useState('');
+  const initialState = transformJson(sampleJson, 2);
+  const [input, setInput] = useState(sampleJson);
+  const [output, setOutput] = useState(initialState.output);
+  const [error, setError] = useState(initialState.error);
   const [copied, setCopied] = useState(false);
 
-  const formatJson = (value: string) => {
+  const updateOutput = (value: string, spacing: number) => {
     setInput(value);
-
-    if (!value.trim()) {
-      setOutput('');
-      setError('');
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(value);
-      setOutput(JSON.stringify(parsed, null, 2));
-      setError('');
-    } catch (formatError) {
-      setError(formatError instanceof Error ? formatError.message : 'Invalid JSON.');
-      setOutput('');
-    }
+    const nextState = transformJson(value, spacing);
+    setOutput(nextState.output);
+    setError(nextState.error);
   };
 
-  const minifyJson = () => {
-    if (!input.trim()) return;
-
-    try {
-      const parsed = JSON.parse(input);
-      setOutput(JSON.stringify(parsed));
-      setError('');
-    } catch (formatError) {
-      setError(formatError instanceof Error ? formatError.message : 'Invalid JSON.');
-    }
-  };
-
-  const copyToClipboard = async () => {
+  const handleCopy = async () => {
     if (!output) return;
     await navigator.clipboard.writeText(output);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    window.setTimeout(() => setCopied(false), 1500);
   };
 
   return (
-    <ToolPage
+    <ToolFrame
+      eyebrow="Formatter"
       title="JSON Formatter"
-      description="Validate, format, and minify JSON with immediate feedback and a balanced editor layout."
-      category="Formatters"
-      icon={Braces}
+      description="Validate, prettify, and minify JSON in the browser with immediate structure feedback."
       actions={
         <>
-          <button type="button" onClick={minifyJson} className="button-primary" disabled={!input.trim()}>
-            <Wand2 size={16} />
+          <button type="button" className="action-button action-button--primary" onClick={() => updateOutput(input, 2)}>
+            <Sparkles size={16} />
+            Prettify
+          </button>
+          <button type="button" className="action-button" onClick={() => updateOutput(input, 0)}>
+            <Minimize2 size={16} />
             Minify
+          </button>
+          <button type="button" className="action-button" onClick={handleCopy} disabled={!output}>
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+            {copied ? 'Copied' : 'Copy'}
           </button>
           <button
             type="button"
+            className="action-button"
             onClick={() => {
               setInput('');
               setOutput('');
               setError('');
             }}
-            className="button-secondary"
           >
+            <Trash2 size={16} />
             Clear
           </button>
         </>
       }
+      note={{
+        title: 'Quick tip',
+        body: 'Malformed payloads surface immediately in the output pane, so you can validate before copying or minifying.',
+      }}
     >
-      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-2">
-        <section className="app-panel p-6">
-          <label className="field-label">Input JSON</label>
+      <div className="editor-grid">
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span>Input</span>
+            <span>Paste raw JSON</span>
+          </div>
           <textarea
             value={input}
-            onChange={(event) => formatJson(event.target.value)}
-            placeholder='{"service": "utility-hub", "status": "ready"}'
-            className="field-textarea min-h-[420px] font-mono"
+            onChange={(event) => updateOutput(event.target.value, 2)}
+            className="editor-textarea"
+            placeholder='{"tool":"cobalt"}'
           />
         </section>
 
-        <section className="app-panel p-6">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <label className="field-label mb-0">Formatted Output</label>
-            <button type="button" onClick={copyToClipboard} className="button-ghost" disabled={!output}>
-              {copied ? <Check size={16} /> : <Copy size={16} />}
-              {copied ? 'Copied' : 'Copy'}
-            </button>
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span>Output</span>
+            <span>Structured result</span>
           </div>
-
           {error ? (
-            <div className="notice-error">
-              <p className="font-semibold">Invalid JSON</p>
-              <p className="mt-1">{error}</p>
+            <div className="editor-error">
+              <strong>Invalid JSON</strong>
+              <p>{error}</p>
             </div>
           ) : (
-            <textarea
-              value={output}
-              readOnly
-              placeholder="Formatted output appears here…"
-              className="field-textarea min-h-[420px] bg-background font-mono"
-            />
+            <textarea value={output} readOnly className="editor-textarea editor-textarea--output" />
           )}
         </section>
       </div>
-    </ToolPage>
+    </ToolFrame>
   );
 }

@@ -1,0 +1,54 @@
+# Cobalt
+
+> Privacy-first browser-based utility tools for developers, reviewers, and platform teams.
+
+Cobalt provides local, client-side tools for formatting, encoding, security review, API inspection, diff review, and delivery workflow checks.
+
+## Canonical references
+
+- Site: https://utility-hub.vercel.app/
+- Sitemap: https://utility-hub.vercel.app/sitemap.xml
+- Machine-readable catalog: https://utility-hub.vercel.app/tool-catalog.json
+
+## Privacy model
+
+- Tools are designed to run in the browser.
+- Pasted data should remain local to the page for normal use.
+- Good fit for transforming snippets, configs, request payloads, response headers, text diffs, and docs fragments.
+
+## Tool catalog
+
+- /json-formatter: Validate, prettify, and minify JSON locally.
+- /base64-studio: Encode or decode Base64 text payloads.
+- /hash-generator: Generate MD5, SHA-256, and SHA-512 digests.
+- /password-generator: Generate strong local passwords with adjustable options.
+- /url-encoder: Encode or decode URL-safe strings.
+- /case-converter: Convert text into common naming conventions.
+- /timestamp-converter: Convert Unix timestamps into local and ISO dates.
+- /jwt-decoder: Decode JWT headers and payloads locally.
+- /regex-tester: Test JavaScript regex patterns with highlighted matches.
+- /qr-code-generator: Generate downloadable QR codes from text or links.
+- /uuid-generator: Generate UUID batches locally.
+- /ulid-generator: Generate sortable ULIDs locally.
+- /hmac-generator: Generate SHA-256 and SHA-512 HMAC signatures.
+- /query-string-studio: Round-trip JSON objects and query strings.
+- /html-entity-studio: Encode or decode HTML entities.
+- /hex-studio: Encode text to hex or decode hex into text.
+- /slugify-studio: Produce URL-friendly slugs and path-safe variants.
+- /unicode-escape-studio: Encode text as unicode escape sequences and decode back.
+- /csv-json-studio: Convert CSV rows and JSON arrays.
+- /text-diff-checker: Compare two text blocks in a side-by-side review layout.
+- /docker-optimizer: Review Dockerfiles for repeatability and runtime hygiene.
+- /github-actions-validator: Review GitHub Actions workflow structure and CI safety signals.
+- /dependency-visualizer: Summarize package manifests and grouped dependencies.
+- /bundle-size-calculator: Estimate bundle totals and asset mix from pasted build output.
+- /curl-to-code-converter: Convert cURL commands into fetch, axios, and Python starter snippets.
+- /sql-beautifier: Format dense SQL into a reviewable layout.
+- /semantic-version-calculator: Estimate patch, minor, and major version bumps from change notes.
+- /breaking-change-detector: Compare JSON shapes for removed fields and type shifts.
+- /http-header-inspector: Review raw response headers for security, cache, and CORS gaps.
+- /cron-expression-explainer: Explain five-part cron schedules and preview next runs.
+- /docker-compose-auditor: Inspect docker-compose service definitions for health and image hygiene.
+- /openapi-summary: Summarize OpenAPI paths, operations, tags, and security schemes.
+- /markdown-table-builder: Convert CSV rows or JSON arrays into markdown tables.
+- /json-schema-generator: Infer draft JSON Schema from sample JSON.

@@ -2,6 +2,23 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/base64",
+      "destination": "/base64-studio",
+      "permanent": true
+    },
+    {
+      "source": "/qr-code",
+      "destination": "/qr-code-generator",
+      "permanent": true
+    },
+    {
+      "source": "/timestamp",
+      "destination": "/timestamp-converter",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

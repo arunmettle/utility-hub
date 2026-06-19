@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://utility-hub.vercel.app/sitemap.xml
 
-# Crawl delay
-Crawl-delay: 0
+# Machine-readable references
+# https://utility-hub.vercel.app/llms.txt
+# https://utility-hub.vercel.app/tool-catalog.json

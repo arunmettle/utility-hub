@@ -1,211 +1,176 @@
 import { useMemo, useState } from 'react';
 import { Check, Copy, Shield, TriangleAlert } from 'lucide-react';
-import ToolPage from '../components/ToolPage';
+import ToolFrame from '../components/ToolFrame';
+import { analyzeJwtToken, decodeJwtToken } from '../lib/privacyTools';
 
-interface DecodedToken {
-  header: Record<string, unknown>;
-  payload: Record<string, unknown>;
-  signature: string;
-}
+const sampleToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1dGlsaXR5LWh1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxODYyMjAwMCwiZXhwIjoyMDMyNjIyMDAwfQ.signature';
 
 export default function JWTDecoder() {
-  const [input, setInput] = useState('');
-  const [decoded, setDecoded] = useState<DecodedToken | null>(null);
-  const [error, setError] = useState('');
+  const [input, setInput] = useState(sampleToken);
   const [copied, setCopied] = useState<'header' | 'payload' | 'signature' | null>(null);
 
-  const decodeJWT = (token: string) => {
-    setInput(token);
+  const decoded = decodeJwtToken(input);
+  const analysis = useMemo(() => (decoded.output ? analyzeJwtToken(decoded.output) : null), [decoded.output]);
 
-    if (!token.trim()) {
-      setDecoded(null);
-      setError('');
-      return;
-    }
-
-    try {
-      const parts = token.split('.');
-      if (parts.length !== 3) {
-        throw new Error('JWT tokens must contain header, payload, and signature segments.');
-      }
-
-      const [headerB64, payloadB64, signature] = parts;
-      const decodePart = (value: string) => JSON.parse(atob(value.replace(/-/g, '+').replace(/_/g, '/')));
-
-      setDecoded({
-        header: decodePart(headerB64),
-        payload: decodePart(payloadB64),
-        signature,
-      });
-      setError('');
-    } catch (decodeError) {
-      setError(decodeError instanceof Error ? decodeError.message : 'Invalid JWT token.');
-      setDecoded(null);
-    }
-  };
-
-  const copyToClipboard = async (data: string, type: 'header' | 'payload' | 'signature') => {
-    await navigator.clipboard.writeText(data);
+  const copyValue = async (value: string, type: 'header' | 'payload' | 'signature') => {
+    if (!decoded.output) return;
+    await navigator.clipboard.writeText(value);
     setCopied(type);
-    setTimeout(() => setCopied(null), 2000);
+    window.setTimeout(() => setCopied(null), 1500);
   };
 
-  const analysis = useMemo(() => {
-    if (!decoded) return null;
-
-    const warnings: string[] = [];
-    const info: string[] = [];
-    const payload = decoded.payload as Record<string, number | string | undefined>;
-    const header = decoded.header as Record<string, string | undefined>;
-
-    if (payload.exp) {
-      const expiration = new Date(Number(payload.exp) * 1000);
-      if (expiration.getTime() < Date.now()) {
-        warnings.push(`Token expired on ${expiration.toLocaleString()}.`);
-      } else {
-        info.push(`Token expires on ${expiration.toLocaleString()}.`);
-      }
-    }
-
-    if (payload.iat) {
-      info.push(`Token issued on ${new Date(Number(payload.iat) * 1000).toLocaleString()}.`);
-    }
-
-    if (header.alg === 'none') {
-      warnings.push('The token uses the “none” algorithm and should not be trusted.');
-    }
-
-    return { warnings, info };
-  }, [decoded]);
-
-  const headerOutput = decoded ? JSON.stringify(decoded.header, null, 2) : 'Paste a JWT to inspect the header.';
-  const payloadOutput = decoded ? JSON.stringify(decoded.payload, null, 2) : 'Paste a JWT to inspect the payload.';
-  const signatureOutput = decoded?.signature ?? 'Paste a JWT to inspect the signature.';
+  const headerOutput = decoded.output ? JSON.stringify(decoded.output.header, null, 2) : '';
+  const payloadOutput = decoded.output ? JSON.stringify(decoded.output.payload, null, 2) : '';
+  const signatureOutput = decoded.output?.signature ?? '';
 
   return (
-    <ToolPage
+    <ToolFrame
+      eyebrow="Security"
       title="JWT Decoder"
-      description="Inspect token headers and payloads without leaving the browser, including simple expiration and algorithm warnings."
-      category="Encoders/Decoders"
-      icon={Shield}
+      description="Inspect token headers and payloads locally, with lightweight expiry and algorithm warnings to keep debugging safe."
       actions={
         <button
           type="button"
+          className="action-button"
           onClick={() => {
             setInput('');
-            setDecoded(null);
-            setError('');
+            setCopied(null);
           }}
-          className="button-secondary"
         >
           Clear
         </button>
       }
+      note={{
+        title: 'Privacy note',
+        body: 'This tool decodes tokens in the browser only. Signature verification still requires the original signing secret or public key.',
+      }}
     >
-      <section className="app-panel p-6">
-        <label className="field-label">JWT Token</label>
-        <textarea
-          value={input}
-          onChange={(event) => decodeJWT(event.target.value)}
-          placeholder="Paste a JWT here…"
-          className="field-textarea min-h-[140px] font-mono"
-        />
-      </section>
+      <div className="stack-grid">
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span className="editor-panel__heading-with-icon">
+              <Shield size={16} />
+              Token input
+            </span>
+            <span>Header.Payload.Signature</span>
+          </div>
+          <textarea
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            className="editor-textarea editor-textarea--compact"
+            placeholder="Paste a JWT to decode it locally."
+          />
+        </section>
 
-      {error ? <div className="notice-error">{error}</div> : null}
+        {decoded.error ? (
+          <div className="editor-error">
+            <strong>Invalid token</strong>
+            <p>{decoded.error}</p>
+          </div>
+        ) : null}
 
-      {analysis && (analysis.warnings.length > 0 || analysis.info.length > 0) ? (
-        <div className="grid grid-cols-1 gap-gutter xl:grid-cols-2">
-          {analysis.warnings.length > 0 ? (
-            <section className="notice-warning">
-              <div className="flex gap-3">
-                <TriangleAlert size={18} className="mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-semibold">Warnings</p>
-                  <ul className="mt-2 space-y-1">
-                    {analysis.warnings.map((warning) => (
-                      <li key={warning}>• {warning}</li>
-                    ))}
-                  </ul>
+        {analysis && (analysis.warnings.length > 0 || analysis.info.length > 0) ? (
+          <div className="result-grid">
+            {analysis.warnings.length > 0 ? (
+              <section className="editor-panel">
+                <div className="editor-panel__head">
+                  <span className="editor-panel__heading-with-icon">
+                    <TriangleAlert size={16} />
+                    Warnings
+                  </span>
+                  <span>Review carefully</span>
                 </div>
-              </div>
-            </section>
-          ) : null}
+                <div className="timestamp-card-list">
+                  {analysis.warnings.map((warning) => (
+                    <div key={warning} className="timestamp-card">
+                      <span>{warning}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
-          {analysis.info.length > 0 ? (
-            <section className="notice-info">
-              <p className="font-semibold text-text-primary">Analysis</p>
-              <ul className="mt-2 space-y-1">
-                {analysis.info.map((item) => (
-                  <li key={item}>• {item}</li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+            {analysis.info.length > 0 ? (
+              <section className="editor-panel">
+                <div className="editor-panel__head">
+                  <span>Analysis</span>
+                  <span>Token metadata</span>
+                </div>
+                <div className="timestamp-card-list">
+                  {analysis.info.map((item) => (
+                    <div key={item} className="timestamp-card">
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="result-grid">
+          <section className="editor-panel">
+            <div className="editor-panel__head">
+              <span>Header</span>
+              <button
+                type="button"
+                className="action-button action-button--icon"
+                onClick={() => copyValue(headerOutput, 'header')}
+                disabled={!headerOutput}
+                aria-label="Copy header"
+              >
+                {copied === 'header' ? <Check size={16} /> : <Copy size={16} />}
+              </button>
+            </div>
+            <textarea
+              readOnly
+              value={headerOutput || 'Paste a JWT to inspect the header.'}
+              className="editor-textarea editor-textarea--output editor-textarea--compact"
+            />
+          </section>
+
+          <section className="editor-panel">
+            <div className="editor-panel__head">
+              <span>Payload</span>
+              <button
+                type="button"
+                className="action-button action-button--icon"
+                onClick={() => copyValue(payloadOutput, 'payload')}
+                disabled={!payloadOutput}
+                aria-label="Copy payload"
+              >
+                {copied === 'payload' ? <Check size={16} /> : <Copy size={16} />}
+              </button>
+            </div>
+            <textarea
+              readOnly
+              value={payloadOutput || 'Paste a JWT to inspect the payload.'}
+              className="editor-textarea editor-textarea--output editor-textarea--compact"
+            />
+          </section>
+
+          <section className="editor-panel">
+            <div className="editor-panel__head">
+              <span>Signature</span>
+              <button
+                type="button"
+                className="action-button action-button--icon"
+                onClick={() => copyValue(signatureOutput, 'signature')}
+                disabled={!signatureOutput}
+                aria-label="Copy signature"
+              >
+                {copied === 'signature' ? <Check size={16} /> : <Copy size={16} />}
+              </button>
+            </div>
+            <textarea
+              readOnly
+              value={signatureOutput || 'Paste a JWT to inspect the signature.'}
+              className="editor-textarea editor-textarea--output editor-textarea--compact"
+            />
+          </section>
         </div>
-      ) : null}
-
-      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-2">
-        <section className="app-panel p-6">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Segment</p>
-              <h3 className="mt-2 text-headline-sm font-semibold text-text-primary">Header</h3>
-            </div>
-            <button
-              type="button"
-              onClick={() => copyToClipboard(headerOutput, 'header')}
-              className="button-ghost"
-              disabled={!decoded}
-            >
-              {copied === 'header' ? <Check size={16} /> : <Copy size={16} />}
-              {copied === 'header' ? 'Copied' : 'Copy'}
-            </button>
-          </div>
-          <pre className="code-surface overflow-auto whitespace-pre-wrap break-all">{headerOutput}</pre>
-        </section>
-
-        <section className="app-panel p-6">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Segment</p>
-              <h3 className="mt-2 text-headline-sm font-semibold text-text-primary">Payload</h3>
-            </div>
-            <button
-              type="button"
-              onClick={() => copyToClipboard(payloadOutput, 'payload')}
-              className="button-ghost"
-              disabled={!decoded}
-            >
-              {copied === 'payload' ? <Check size={16} /> : <Copy size={16} />}
-              {copied === 'payload' ? 'Copied' : 'Copy'}
-            </button>
-          </div>
-          <pre className="code-surface overflow-auto whitespace-pre-wrap break-all">{payloadOutput}</pre>
-        </section>
-
-        <section className="app-panel p-6 xl:col-span-2">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Segment</p>
-              <h3 className="mt-2 text-headline-sm font-semibold text-text-primary">Signature</h3>
-            </div>
-            <button
-              type="button"
-              onClick={() => copyToClipboard(signatureOutput, 'signature')}
-              className="button-ghost"
-              disabled={!decoded}
-            >
-              {copied === 'signature' ? <Check size={16} /> : <Copy size={16} />}
-              {copied === 'signature' ? 'Copied' : 'Copy'}
-            </button>
-          </div>
-          <div className="mt-4 code-surface break-all">{signatureOutput}</div>
-          <p className="mt-3 text-body-md text-text-secondary">
-            Signature verification requires the original signing secret or public key.
-          </p>
-        </section>
       </div>
-    </ToolPage>
+    </ToolFrame>
   );
 }

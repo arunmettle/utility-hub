@@ -1,131 +1,161 @@
+import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ShieldCheck, Sparkles, Zap } from 'lucide-react';
-import { tools } from '../utils/toolsData';
-import { useToolFilters } from '../components/ToolFiltersContext';
+import BrandMark from '../components/BrandMark';
+import { tools } from '../data/tools';
 
-const highlights = [
+const highlightPoints = [
   {
-    title: 'Runs locally',
-    description: 'Every workflow stays in the browser, keeping sensitive developer data private.',
-    icon: ShieldCheck,
+    title: 'Browser-local by default',
+    body: 'Most workflows are designed so pasted payloads, tokens, headers, diffs, and snippets stay on the page instead of bouncing through a backend.',
   },
   {
-    title: 'Fast interactions',
-    description: 'Subtle motion, sharp spacing, and predictable controls keep repetitive tasks efficient.',
-    icon: Zap,
+    title: 'Built for everyday engineering',
+    body: 'Format JSON, inspect JWTs, compare text, review Docker and workflow config, generate IDs, and transform request data without leaving the browser.',
   },
   {
-    title: 'Professional UI',
-    description: 'A clean, modern toolbox system designed for daily engineering workflows.',
-    icon: Sparkles,
+    title: 'Useful for people and machines',
+    body: 'Routes, metadata, sitemap entries, `llms.txt`, and the tool catalog are aligned so crawlers and assistants can identify what each page is for.',
+  },
+];
+
+const homepageFaqs = [
+  {
+    question: 'What is Cobalt?',
+    answer:
+      'Cobalt is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams. It focuses on quick local transformations, inspections, and workflow checks.',
+  },
+  {
+    question: 'Does Cobalt send my data to a server?',
+    answer:
+      'The tools are designed to work in the browser for normal usage. That means pasted snippets, request payloads, config files, response headers, and review text can stay local to the page.',
+  },
+  {
+    question: 'Who is Cobalt for?',
+    answer:
+      'It is useful for frontend and backend developers, DevOps and platform engineers, reviewers, QA engineers, and anyone who regularly needs small transformation tools during daily delivery work.',
+  },
+  {
+    question: 'What kinds of tools are included in Cobalt?',
+    answer:
+      'The current catalog covers formatters, encoders, converters, generators, security tools, testers, and a growing set of developer workflow utilities such as OpenAPI summaries, Docker audits, cron explainers, and schema generation.',
   },
 ];
 
 export default function Home() {
-  const { filteredTools, searchQuery, selectedCategory } = useToolFilters();
-  const visibleTools = filteredTools;
-
   return (
-    <div className="page-shell">
-      <section className="app-panel p-6 md:p-8">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-3xl">
-            <span className="tool-tag">Developer Toolbox</span>
-            <h1 className="mt-4 text-headline-lg font-bold tracking-[-0.02em] text-text-primary">
-              Clean utility workflows built around clarity, speed, and technical precision.
-            </h1>
-            <p className="mt-4 text-body-lg text-text-secondary">
-              Browse focused tools for formatting, encoding, testing, and generating development data with a Stitch-inspired interface system.
-            </p>
+    <div className="catalog-page">
+      <section className="hero-band">
+        <article className="feature-card">
+          <div className="feature-card__icon">
+            <BrandMark size={34} />
           </div>
-
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <div className="mini-card min-w-[150px]">
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Tool Count</p>
-              <p className="mt-3 text-headline-md font-semibold text-text-primary">{tools.length}</p>
-            </div>
-            <div className="mini-card min-w-[150px]">
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Visible</p>
-              <p className="mt-3 text-headline-md font-semibold text-text-primary">{visibleTools.length}</p>
-            </div>
-            <div className="mini-card col-span-2 min-w-[150px] md:col-span-1">
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Focus</p>
-              <p className="mt-3 truncate text-body-lg font-semibold text-text-primary">{selectedCategory}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-mono text-label-sm uppercase text-text-secondary">Tools</p>
-            <h2 className="mt-2 text-headline-md font-semibold tracking-[-0.01em] text-text-primary">
-              {selectedCategory === 'All Tools' ? 'All utilities' : selectedCategory}
-            </h2>
-            <p className="mt-2 text-body-md text-text-secondary">
-              {searchQuery
-                ? `Showing results for “${searchQuery}”.`
-                : 'Every tool follows the same refined card, spacing, and typography system.'}
+            <h1>Privacy-first browser tools for daily engineering work.</h1>
+            <p>
+              Cobalt keeps repetitive transformations calm, quick, and local. Start with a formatter for structured
+              payloads, inspect secure tokens, compare text, shape data, and transform encoded content without server
+              round-trips.
             </p>
           </div>
-        </div>
+        </article>
 
-        {visibleTools.length === 0 ? (
-          <div className="app-panel p-8 text-center">
-            <p className="text-headline-sm font-semibold text-text-primary">No tools match your current filters.</p>
-            <p className="mt-2 text-body-md text-text-secondary">Try a broader search or switch back to All Tools.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 xl:grid-cols-3">
-            {visibleTools.map((tool) => {
-              const Icon = tool.icon;
-
-              return (
-                <Link
-                  key={tool.id}
-                  to={tool.path}
-                  className="group rounded-2xl border border-border bg-surface p-6 shadow-card transition hover:shadow-hover"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary-50 text-primary">
-                      <Icon size={22} />
-                    </div>
-                    <span className="tool-tag">{tool.category}</span>
-                  </div>
-
-                  <div className="mt-6">
-                    <h3 className="text-headline-sm font-semibold text-text-primary">{tool.name}</h3>
-                    <p className="mt-3 text-body-md text-text-secondary">{tool.description}</p>
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                    <span className="font-mono text-label-sm uppercase text-text-secondary">Open tool</span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-background text-primary transition group-hover:bg-primary-50">
-                      <ArrowUpRight size={18} />
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+        <aside className="hero-copy">
+          <span className="hero-copy__eyebrow">Browser-based developer utility suite</span>
+          <h2>Built for payloads, diffs, configs, and delivery workflows that should stay readable.</h2>
+          <p>
+            Cobalt helps teams move through everyday engineering chores faster: formatting JSON, decoding Base64,
+            checking regexes, comparing text, reviewing headers, tightening Docker config, and exploring API specs.
+          </p>
+          <p>
+            The experience is intentionally lightweight and privacy-aware so developers can use it as a practical companion
+            during coding, QA, documentation, pull request review, and release preparation.
+          </p>
+        </aside>
       </section>
 
-      <section className="grid grid-cols-1 gap-gutter xl:grid-cols-3">
-        {highlights.map((highlight) => {
-          const Icon = highlight.icon;
+      <section className="catalog-section">
+        <div className="section-heading">
+          <h2>Why teams use it</h2>
+          <p>Cobalt is shaped around local-first utility work rather than one-off marketing demos.</p>
+        </div>
 
-          return (
-            <div key={highlight.title} className="app-panel p-6">
-              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary-50 text-primary">
-                <Icon size={22} />
+        <div className="insight-grid">
+          {highlightPoints.map((point) => (
+            <article key={point.title} className="insight-card">
+              <div className="insight-card__head">
+                <strong className="insight-card__title">{point.title}</strong>
               </div>
-              <h3 className="mt-5 text-headline-sm font-semibold text-text-primary">{highlight.title}</h3>
-              <p className="mt-3 text-body-md text-text-secondary">{highlight.description}</p>
-            </div>
-          );
-        })}
+              <p className="insight-card__body">{point.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="all-tools" className="catalog-section">
+        <div className="section-heading">
+          <h2>All tools</h2>
+          <p>{tools.length} privacy-first workflows, designed around quick local transformations instead of server round-trips.</p>
+        </div>
+
+        <div className="tool-grid">
+          {tools.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <Link key={tool.id} to={tool.path} className="tool-card">
+                <div className="tool-card__top">
+                  <div className="tool-card__icon">
+                    <Icon size={28} />
+                  </div>
+                  <Heart size={18} className="tool-card__favorite" />
+                </div>
+                <h3>{tool.name}</h3>
+                <p>{tool.description}</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="catalog-section">
+        <div className="section-heading">
+          <h2>How Cobalt fits into developer workflows</h2>
+          <p>Use it as a browser-side scratchpad for transforming or reviewing working material before it lands in code, docs, or delivery systems.</p>
+        </div>
+
+        <div className="workflow-copy">
+          <article className="tool-note">
+            <h2>Local transformation tools</h2>
+            <p>
+              These are the quick-turn utilities you reach for while building or reviewing: JSON formatting, Base64
+              conversion, query-string inspection, HTML entity conversion, UUID and ULID generation, hash creation, and
+              markdown table building.
+            </p>
+          </article>
+          <article className="tool-note">
+            <h2>Review and platform tools</h2>
+            <p>
+              Cobalt also covers review-heavy workflows such as side-by-side text diffs, GitHub Actions checks,
+              Docker and docker-compose inspection, cron schedule explanation, OpenAPI summarization, header inspection,
+              semantic version guidance, and JSON schema bootstrapping.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="faq" className="catalog-section">
+        <div className="section-heading">
+          <h2>Frequently asked questions</h2>
+          <p>Clear answers for search engines, LLMs, and people evaluating whether this utility app matches their workflow.</p>
+        </div>
+
+        <div className="faq-grid">
+          {homepageFaqs.map((item) => (
+            <article key={item.question} className="tool-note faq-card">
+              <h2>{item.question}</h2>
+              <p>{item.answer}</p>
+            </article>
+          ))}
+        </div>
       </section>
     </div>
   );

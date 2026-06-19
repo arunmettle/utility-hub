@@ -12,6 +12,7 @@ dist
 dist-ssr
 playwright-report
 playwright-results
+coverage
 *.local
 
 # Editor directories and files

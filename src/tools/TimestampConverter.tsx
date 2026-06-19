@@ -1,121 +1,117 @@
 import { useEffect, useState } from 'react';
-import { CalendarClock, Check, Copy } from 'lucide-react';
-import { format, fromUnixTime } from 'date-fns';
-import ToolPage from '../components/ToolPage';
+import { CalendarClock, Check, Copy, Trash2 } from 'lucide-react';
+import ToolFrame from '../components/ToolFrame';
+import { parseTimestamp } from '../lib/privacyTools';
 
 export default function TimestampConverter() {
   const [timestamp, setTimestamp] = useState('');
-  const [humanReadable, setHumanReadable] = useState('');
-  const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const interval = window.setInterval(() => setCurrentTime(Date.now()), 1000);
     return () => window.clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (!timestamp) {
-      setHumanReadable('');
-      setError('');
-      return;
-    }
+  const currentUnixSeconds = Math.floor(currentTime / 1000);
+  const currentUnixMilliseconds = currentTime;
+  const parsed = parseTimestamp(timestamp);
 
-    const numericTimestamp = Number.parseInt(timestamp, 10);
-    if (Number.isNaN(numericTimestamp)) {
-      setError('Enter a valid Unix timestamp in seconds or milliseconds.');
-      setHumanReadable('');
-      return;
-    }
-
-    const date = numericTimestamp > 10_000_000_000 ? new Date(numericTimestamp) : fromUnixTime(numericTimestamp);
-    if (Number.isNaN(date.getTime())) {
-      setError('Enter a valid Unix timestamp in seconds or milliseconds.');
-      setHumanReadable('');
-      return;
-    }
-
-    setHumanReadable(format(date, 'PPpp'));
-    setError('');
-  }, [timestamp]);
-
-  const currentUnix = Math.floor(currentTime / 1000);
-  const currentDate = format(new Date(currentTime), 'PPpp');
-
-  const copyToClipboard = async () => {
-    if (!humanReadable) return;
-    await navigator.clipboard.writeText(humanReadable);
+  const copyOutput = async () => {
+    if (!parsed.output) return;
+    await navigator.clipboard.writeText(parsed.output.iso);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    window.setTimeout(() => setCopied(false), 1500);
   };
 
   return (
-    <ToolPage
+    <ToolFrame
+      eyebrow="Converter"
       title="Timestamp Converter"
-      description="Convert Unix timestamps into readable dates while keeping a live view of the current Unix time."
-      category="Converters"
-      icon={CalendarClock}
+      description="Convert Unix timestamps in seconds or milliseconds into human-readable date formats instantly."
       actions={
         <>
-          <button type="button" onClick={() => setTimestamp(String(currentUnix))} className="button-primary">
-            Use Current Time
+          <button type="button" className="action-button action-button--primary" onClick={() => setTimestamp(String(currentUnixSeconds))}>
+            Use current time
           </button>
-          <button type="button" onClick={() => setTimestamp('')} className="button-secondary">
+          <button type="button" className="action-button" onClick={() => setTimestamp('')}>
+            <Trash2 size={16} />
             Clear
           </button>
         </>
       }
     >
-      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-[0.9fr_1.1fr]">
-        <section className="space-y-6">
-          <div className="app-panel p-6">
-            <p className="font-mono text-label-sm uppercase text-text-secondary">Current Time</p>
-            <div className="mt-4 space-y-4">
-              <div className="mini-card">
-                <p className="font-mono text-label-sm uppercase text-text-secondary">Unix</p>
-                <p className="mt-2 text-headline-sm font-semibold text-text-primary">{currentUnix}</p>
-              </div>
-              <div className="mini-card">
-                <p className="font-mono text-label-sm uppercase text-text-secondary">Date</p>
-                <p className="mt-2 text-body-lg text-text-primary">{currentDate}</p>
-              </div>
+      <div className="editor-grid">
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span className="editor-panel__heading-with-icon">
+              <CalendarClock size={16} />
+              Current time
+            </span>
+            <span>Live</span>
+          </div>
+
+          <div className="timestamp-card-list">
+            <div className="timestamp-card">
+              <strong>Unix seconds</strong>
+              <span>{currentUnixSeconds}</span>
+            </div>
+            <div className="timestamp-card">
+              <strong>Unix milliseconds</strong>
+              <span>{currentUnixMilliseconds}</span>
             </div>
           </div>
 
-          <div className="app-panel p-6">
-            <label className="field-label">Unix Timestamp</label>
-            <input
-              type="text"
-              value={timestamp}
-              onChange={(event) => setTimestamp(event.target.value)}
-              placeholder="1640000000 or 1640000000000"
-              className="field-input font-mono text-lg"
-            />
-            <p className="mt-3 text-body-md text-text-secondary">Values below 10,000,000,000 are treated as seconds.</p>
+          <div className="editor-panel__head editor-panel__head--spaced">
+            <span>Input timestamp</span>
+            <span>Seconds or milliseconds</span>
           </div>
+          <input
+            type="text"
+            value={timestamp}
+            onChange={(event) => setTimestamp(event.target.value)}
+            className="tool-input"
+            placeholder="1640000000 or 1640000000000"
+          />
         </section>
 
-        <section className="app-panel p-6">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono text-label-sm uppercase text-text-secondary">Output</p>
-              <h3 className="mt-2 text-headline-sm font-semibold text-text-primary">Human-readable date</h3>
-            </div>
-            <button type="button" onClick={copyToClipboard} className="button-ghost" disabled={!humanReadable}>
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span>Output</span>
+            <button type="button" className="action-button action-button--icon" onClick={copyOutput} disabled={!parsed.output}>
               {copied ? <Check size={16} /> : <Copy size={16} />}
             </button>
           </div>
 
-          {error ? (
-            <div className="notice-error">{error}</div>
-          ) : (
-            <div className="code-surface flex min-h-[220px] items-center justify-center text-center text-lg">
-              {humanReadable || 'Enter a timestamp to convert the value.'}
+          {parsed.error ? (
+            <div className="editor-error">
+              <strong>Invalid timestamp</strong>
+              <p>{parsed.error}</p>
             </div>
+          ) : parsed.output ? (
+            <div className="timestamp-output">
+              <div className="timestamp-output__item">
+                <strong>Local</strong>
+                <span>{parsed.output.local}</span>
+              </div>
+              <div className="timestamp-output__item">
+                <strong>ISO</strong>
+                <span>{parsed.output.iso}</span>
+              </div>
+              <div className="timestamp-output__item">
+                <strong>Unix seconds</strong>
+                <span>{parsed.output.unixSeconds}</span>
+              </div>
+              <div className="timestamp-output__item">
+                <strong>Unix milliseconds</strong>
+                <span>{parsed.output.unixMilliseconds}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="empty-panel-copy">Enter a timestamp to convert the value.</div>
           )}
         </section>
       </div>
-    </ToolPage>
+    </ToolFrame>
   );
 }

@@ -1,91 +1,78 @@
 import { useEffect, useState } from 'react';
-import { Check, Copy, Fingerprint } from 'lucide-react';
-import { md5 } from 'js-md5';
-import { sha256 } from 'js-sha256';
-import { sha512 } from 'js-sha512';
-import ToolPage from '../components/ToolPage';
+import { Check, Copy, Fingerprint, Trash2 } from 'lucide-react';
+import ToolFrame from '../components/ToolFrame';
+import { generateHashes, type HashType } from '../lib/privacyTools';
 
-type HashType = 'md5' | 'sha256' | 'sha512';
+const hashItems: { type: HashType; label: string; helper: string }[] = [
+  { type: 'md5', label: 'MD5', helper: 'Fast checksum for legacy comparison.' },
+  { type: 'sha256', label: 'SHA-256', helper: 'A strong default for integrity verification.' },
+  { type: 'sha512', label: 'SHA-512', helper: 'Long-form digest for advanced verification needs.' },
+];
 
 export default function HashGenerator() {
   const [input, setInput] = useState('');
-  const [hashes, setHashes] = useState<Record<HashType, string>>({ md5: '', sha256: '', sha512: '' });
+  const [hashes, setHashes] = useState(generateHashes(''));
   const [copied, setCopied] = useState<HashType | null>(null);
 
   useEffect(() => {
-    if (!input) {
-      setHashes({ md5: '', sha256: '', sha512: '' });
-      return;
-    }
-
-    setHashes({
-      md5: md5(input),
-      sha256: sha256(input),
-      sha512: sha512(input),
-    });
+    setHashes(generateHashes(input));
   }, [input]);
 
-  const copyToClipboard = async (hash: string, type: HashType) => {
-    await navigator.clipboard.writeText(hash);
+  const copyHash = async (type: HashType) => {
+    if (!hashes[type]) return;
+    await navigator.clipboard.writeText(hashes[type]);
     setCopied(type);
-    setTimeout(() => setCopied(null), 2000);
+    window.setTimeout(() => setCopied(null), 1500);
   };
 
-  const hashTypes: { type: HashType; label: string; helper: string }[] = [
-    { type: 'md5', label: 'MD5', helper: 'Fast checksum for legacy workflows.' },
-    { type: 'sha256', label: 'SHA-256', helper: 'Balanced default for modern integrity checks.' },
-    { type: 'sha512', label: 'SHA-512', helper: 'Extended digest length for advanced verification.' },
-  ];
-
   return (
-    <ToolPage
+    <ToolFrame
+      eyebrow="Generator"
       title="Hash Generator"
-      description="Generate deterministic digests for plain text with clean comparison blocks and one-click copy actions."
-      category="Generators"
-      icon={Fingerprint}
+      description="Generate deterministic MD5, SHA-256, and SHA-512 digests locally in the browser."
       actions={
-        <button type="button" onClick={() => setInput('')} className="button-secondary">
+        <button type="button" className="action-button" onClick={() => setInput('')}>
+          <Trash2 size={16} />
           Clear
         </button>
       }
+      note={{
+        title: 'Privacy note',
+        body: 'Hashing happens entirely in-browser, so secrets and payloads never leave your device.',
+      }}
     >
-      <div className="grid grid-cols-1 gap-gutter xl:grid-cols-[1.1fr_1fr]">
-        <section className="app-panel p-6">
-          <label className="field-label">Source Text</label>
+      <div className="stack-grid">
+        <section className="editor-panel">
+          <div className="editor-panel__head">
+            <span>Source text</span>
+            <span>Local only</span>
+          </div>
           <textarea
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Enter text to hash…"
-            className="field-textarea min-h-[220px]"
+            className="editor-textarea editor-textarea--compact"
+            placeholder="Enter text to hash"
           />
-          <div className="mt-4 notice-info">
-            Hashes are one-way outputs. The original value cannot be reconstructed from the digest.
-          </div>
         </section>
 
-        <section className="space-y-4">
-          {hashTypes.map(({ type, label, helper }) => (
-            <div key={type} className="app-panel p-5">
-              <div className="mb-4 flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-mono text-label-sm uppercase text-text-secondary">Algorithm</p>
-                  <h3 className="mt-2 text-headline-sm font-semibold text-text-primary">{label}</h3>
-                  <p className="mt-1 text-body-md text-text-secondary">{helper}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(hashes[type], type)}
-                  className="button-ghost"
-                  disabled={!hashes[type]}
-                >
-                  {copied === type ? <Check size={16} /> : <Copy size={16} />}
+        <div className="result-grid">
+          {hashItems.map((item) => (
+            <section key={item.type} className="editor-panel">
+              <div className="editor-panel__head">
+                <span className="editor-panel__heading-with-icon">
+                  <Fingerprint size={16} />
+                  {item.label}
+                </span>
+                <button type="button" className="action-button action-button--icon" onClick={() => copyHash(item.type)} disabled={!hashes[item.type]}>
+                  {copied === item.type ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
-              <div className="code-surface break-all">{hashes[type] || 'Digest output appears here…'}</div>
-            </div>
+              <p className="panel-helper">{item.helper}</p>
+              <textarea value={hashes[item.type]} readOnly className="editor-textarea editor-textarea--compact editor-textarea--output" />
+            </section>
           ))}
-        </section>
+        </div>
       </div>
-    </ToolPage>
+    </ToolFrame>
   );
 }

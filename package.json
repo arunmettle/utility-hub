@@ -2,15 +2,10 @@
   "name": "utility-hub",
   "private": true,
   "version": "1.0.0",
-  "description": "Privacy-first utility hub for developers and creators with 10+ tools",
+  "description": "Privacy-first browser utilities for developers, reviewers, and platform teams",
   "type": "module",
-  "author": "Your Name",
+  "author": "Cobalt",
   "license": "MIT",
-  "homepage": "https://github.com/yourusername/utility-hub",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/utility-hub.git"
-  },
   "keywords": [
     "utilities",
     "developer-tools",
@@ -20,6 +15,9 @@
     "qr-code",
     "password-generator",
     "jwt-decoder",
+    "openapi",
+    "diff-tools",
+    "docker-compose",
     "privacy-first",
     "client-side"
   ],
@@ -27,6 +25,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "vitest run --coverage",
+    "test:unit": "vitest run --coverage",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:report": "node scripts/generate-playwright-validation-report.mjs",
@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "^1.61.0",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.3.1",
     "@types/crypto-js": "^4.2.2",
@@ -57,6 +56,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
     "autoprefixer": "^10.5.0",
     "esbuild": "^0.28.1",
     "eslint": "^10.3.0",
@@ -67,6 +67,7 @@
     "tailwindcss": "^4.3.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "vitest": "^4.1.9"
   }
 }

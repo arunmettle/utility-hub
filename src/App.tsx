@@ -1,37 +1,87 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import JsonFormatter from './tools/JsonFormatter';
-import Base64Encoder from './tools/Base64Encoder';
-import HashGenerator from './tools/HashGenerator';
-import QRCodeGenerator from './tools/QRCodeGenerator';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import AppShell from './components/AppShell';
+import Base64Studio from './tools/Base64Studio';
+import BreakingChangeDetector from './tools/BreakingChangeDetector';
+import BundleSizeCalculator from './tools/BundleSizeCalculator';
 import CaseConverter from './tools/CaseConverter';
-import TimestampConverter from './tools/TimestampConverter';
-import URLEncoder from './tools/URLEncoder';
-import PasswordGenerator from './tools/PasswordGenerator';
+import CronExpressionExplainer from './tools/CronExpressionExplainer';
+import CsvJsonStudio from './tools/CsvJsonStudio';
+import CurlToCodeConverter from './tools/CurlToCodeConverter';
+import DependencyVisualizer from './tools/DependencyVisualizer';
+import DockerComposeAuditor from './tools/DockerComposeAuditor';
+import DockerOptimizer from './tools/DockerOptimizer';
+import GitHubActionsValidator from './tools/GitHubActionsValidator';
+import HashGenerator from './tools/HashGenerator';
+import HmacGenerator from './tools/HmacGenerator';
+import HtmlEntityStudio from './tools/HtmlEntityStudio';
+import HexStudio from './tools/HexStudio';
+import HttpHeaderInspector from './tools/HttpHeaderInspector';
 import JWTDecoder from './tools/JWTDecoder';
+import JsonSchemaGenerator from './tools/JsonSchemaGenerator';
+import JsonFormatter from './tools/JsonFormatter';
+import MarkdownTableBuilder from './tools/MarkdownTableBuilder';
+import OpenApiSummary from './tools/OpenApiSummary';
+import Home from './pages/Home';
+import PasswordGenerator from './tools/PasswordGenerator';
+import QueryStringStudio from './tools/QueryStringStudio';
+import QRCodeGenerator from './tools/QRCodeGenerator';
 import RegexTester from './tools/RegexTester';
+import SemanticVersionCalculator from './tools/SemanticVersionCalculator';
+import SlugifyStudio from './tools/SlugifyStudio';
+import SqlBeautifier from './tools/SqlBeautifier';
+import TextDiffChecker from './tools/TextDiffChecker';
+import TimestampConverter from './tools/TimestampConverter';
+import UlidGenerator from './tools/UlidGenerator';
+import UnicodeEscapeStudio from './tools/UnicodeEscapeStudio';
+import UrlStudio from './tools/UrlStudio';
+import UuidGenerator from './tools/UuidGenerator';
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
+      <AppShell>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/json-formatter" element={<JsonFormatter />} />
-          <Route path="/base64-encoder" element={<Base64Encoder />} />
+          <Route path="/base64-studio" element={<Base64Studio />} />
           <Route path="/hash-generator" element={<HashGenerator />} />
-          <Route path="/qr-code-generator" element={<QRCodeGenerator />} />
+          <Route path="/password-generator" element={<PasswordGenerator />} />
+          <Route path="/url-encoder" element={<UrlStudio />} />
+          <Route path="/base64" element={<Navigate to="/base64-studio" replace />} />
           <Route path="/case-converter" element={<CaseConverter />} />
           <Route path="/timestamp-converter" element={<TimestampConverter />} />
-          <Route path="/url-encoder" element={<URLEncoder />} />
-          <Route path="/password-generator" element={<PasswordGenerator />} />
+          <Route path="/timestamp" element={<Navigate to="/timestamp-converter" replace />} />
           <Route path="/jwt-decoder" element={<JWTDecoder />} />
           <Route path="/regex-tester" element={<RegexTester />} />
+          <Route path="/qr-code-generator" element={<QRCodeGenerator />} />
+          <Route path="/qr-code" element={<Navigate to="/qr-code-generator" replace />} />
+          <Route path="/uuid-generator" element={<UuidGenerator />} />
+          <Route path="/ulid-generator" element={<UlidGenerator />} />
+          <Route path="/hmac-generator" element={<HmacGenerator />} />
+          <Route path="/query-string-studio" element={<QueryStringStudio />} />
+          <Route path="/html-entity-studio" element={<HtmlEntityStudio />} />
+          <Route path="/hex-studio" element={<HexStudio />} />
+          <Route path="/slugify-studio" element={<SlugifyStudio />} />
+          <Route path="/unicode-escape-studio" element={<UnicodeEscapeStudio />} />
+          <Route path="/csv-json-studio" element={<CsvJsonStudio />} />
+          <Route path="/text-diff-checker" element={<TextDiffChecker />} />
+          <Route path="/docker-optimizer" element={<DockerOptimizer />} />
+          <Route path="/github-actions-validator" element={<GitHubActionsValidator />} />
+          <Route path="/dependency-visualizer" element={<DependencyVisualizer />} />
+          <Route path="/bundle-size-calculator" element={<BundleSizeCalculator />} />
+          <Route path="/curl-to-code-converter" element={<CurlToCodeConverter />} />
+          <Route path="/sql-beautifier" element={<SqlBeautifier />} />
+          <Route path="/semantic-version-calculator" element={<SemanticVersionCalculator />} />
+          <Route path="/breaking-change-detector" element={<BreakingChangeDetector />} />
+          <Route path="/http-header-inspector" element={<HttpHeaderInspector />} />
+          <Route path="/cron-expression-explainer" element={<CronExpressionExplainer />} />
+          <Route path="/docker-compose-auditor" element={<DockerComposeAuditor />} />
+          <Route path="/openapi-summary" element={<OpenApiSummary />} />
+          <Route path="/markdown-table-builder" element={<MarkdownTableBuilder />} />
+          <Route path="/json-schema-generator" element={<JsonSchemaGenerator />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Layout>
+      </AppShell>
     </BrowserRouter>
   );
 }
-
-export default App;
