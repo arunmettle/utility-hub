@@ -35,6 +35,38 @@ import UlidGenerator from './tools/UlidGenerator';
 import UnicodeEscapeStudio from './tools/UnicodeEscapeStudio';
 import UrlStudio from './tools/UrlStudio';
 import UuidGenerator from './tools/UuidGenerator';
+import {
+  AgentLoopTraceViewer,
+  AiResponseComparator,
+  BatchEvalDatasetBuilder,
+  BestOfNComparisonTool,
+  CitationFormatterForAiAnswers,
+  ConsistencyRunner,
+  ContextWindowCompactor,
+  ConversationStateSimulator,
+  EmbeddingSimilarityExplorer,
+  FewShotExampleOrganizer,
+  FunctionCallingSchemaTester,
+  GroundedAnswerChecker,
+  HallucinationReviewWorkspace,
+  JailbreakPromptInjectionChecker,
+  LatencyQualityPlanner,
+  OutputRepairStudio,
+  PromptDiffChecker,
+  PromptEvalScorecard,
+  PromptStudio,
+  PromptTestRunner,
+  PromptLeakDetector,
+  PromptVariableExtractor,
+  RagChunkPreviewer,
+  RedTeamScenarioBuilder,
+  SafetyPolicyTester,
+  StructuredOutputSchemaBuilder,
+  SyntheticTestCaseGenerator,
+  SystemPromptBuilder,
+  TokenCostEstimator,
+  ToolCallPayloadValidator,
+} from './tools/AiWorkbench';
 
 export default function App() {
   return (
@@ -79,6 +111,36 @@ export default function App() {
           <Route path="/openapi-summary" element={<OpenApiSummary />} />
           <Route path="/markdown-table-builder" element={<MarkdownTableBuilder />} />
           <Route path="/json-schema-generator" element={<JsonSchemaGenerator />} />
+          <Route path="/prompt-studio" element={<PromptStudio />} />
+          <Route path="/prompt-diff-checker" element={<PromptDiffChecker />} />
+          <Route path="/prompt-test-runner" element={<PromptTestRunner />} />
+          <Route path="/prompt-eval-scorecard" element={<PromptEvalScorecard />} />
+          <Route path="/structured-output-schema-builder" element={<StructuredOutputSchemaBuilder />} />
+          <Route path="/output-repair-studio" element={<OutputRepairStudio />} />
+          <Route path="/jailbreak-prompt-injection-checker" element={<JailbreakPromptInjectionChecker />} />
+          <Route path="/hallucination-review-workspace" element={<HallucinationReviewWorkspace />} />
+          <Route path="/rag-chunk-previewer" element={<RagChunkPreviewer />} />
+          <Route path="/embedding-similarity-explorer" element={<EmbeddingSimilarityExplorer />} />
+          <Route path="/system-prompt-builder" element={<SystemPromptBuilder />} />
+          <Route path="/few-shot-example-organizer" element={<FewShotExampleOrganizer />} />
+          <Route path="/prompt-variable-extractor" element={<PromptVariableExtractor />} />
+          <Route path="/token-cost-estimator" element={<TokenCostEstimator />} />
+          <Route path="/latency-quality-planner" element={<LatencyQualityPlanner />} />
+          <Route path="/ai-response-comparator" element={<AiResponseComparator />} />
+          <Route path="/safety-policy-tester" element={<SafetyPolicyTester />} />
+          <Route path="/tool-call-payload-validator" element={<ToolCallPayloadValidator />} />
+          <Route path="/function-calling-schema-tester" element={<FunctionCallingSchemaTester />} />
+          <Route path="/agent-loop-trace-viewer" element={<AgentLoopTraceViewer />} />
+          <Route path="/grounded-answer-checker" element={<GroundedAnswerChecker />} />
+          <Route path="/citation-formatter-for-ai-answers" element={<CitationFormatterForAiAnswers />} />
+          <Route path="/conversation-state-simulator" element={<ConversationStateSimulator />} />
+          <Route path="/context-window-compactor" element={<ContextWindowCompactor />} />
+          <Route path="/prompt-leak-detector" element={<PromptLeakDetector />} />
+          <Route path="/consistency-runner" element={<ConsistencyRunner />} />
+          <Route path="/best-of-n-comparison-tool" element={<BestOfNComparisonTool />} />
+          <Route path="/batch-eval-dataset-builder" element={<BatchEvalDatasetBuilder />} />
+          <Route path="/synthetic-test-case-generator" element={<SyntheticTestCaseGenerator />} />
+          <Route path="/red-team-scenario-builder" element={<RedTeamScenarioBuilder />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AppShell>

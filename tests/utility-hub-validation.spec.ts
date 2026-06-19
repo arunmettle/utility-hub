@@ -461,6 +461,44 @@ test('Given Text Diff Checker when two text blocks diverge then a pull-request s
   await expect(page.locator('.pr-diff__line--placeholder')).toHaveCount(2);
 });
 
+test('Given Prompt Variable Extractor when a templated prompt is entered then placeholders are surfaced as variable chips', async ({ page }) => {
+  await page.goto('/prompt-variable-extractor', { waitUntil: 'domcontentloaded' });
+
+  await page.locator('textarea').first().fill('Summarize {{incident_summary}} for {{audience}} with {{next_actions}}.');
+
+  await expect(page.locator('.chip')).toContainText(['incident_summary', 'audience', 'next_actions']);
+});
+
+test('Given Output Repair Studio when malformed structured output is pasted then safe local fixes produce valid json', async ({ page }) => {
+  await page.goto('/output-repair-studio', { waitUntil: 'domcontentloaded' });
+
+  await page.locator('textarea').first().fill('{\nsummary: "incident",\nrisk: "medium",\nnext_actions: ["rollback",],\n}');
+  await expect(page.locator('.editor-textarea--output')).toHaveValue(/"summary": "incident"/);
+  await expect(page.locator('.editor-textarea--output')).toHaveValue(/"next_actions": \[/);
+});
+
+test('Given RAG Chunk Previewer when a longer document is entered then chunk cards and token estimates are shown', async ({ page }) => {
+  await page.goto('/rag-chunk-previewer', { waitUntil: 'domcontentloaded' });
+
+  await page
+    .locator('textarea')
+    .first()
+    .fill('Cobalt keeps prompt work local. '.repeat(80));
+
+  await expect(page.locator('.insight-row')).toHaveCount(13);
+  await expect(page.locator('.insight-row').first()).toContainText(/Chunk 1/);
+});
+
+test('Given Tool Call Payload Validator when required fields are missing then the missing field chips are listed', async ({ page }) => {
+  await page.goto('/tool-call-payload-validator', { waitUntil: 'domcontentloaded' });
+
+  const areas = page.locator('textarea');
+  await areas.nth(0).fill('endpointId\ninput\npolicy');
+  await areas.nth(1).fill('{\n  "endpointId": "ep_123",\n  "input": { "prompt": "hello" }\n}');
+
+  await expect(page.locator('.chip')).toContainText(['policy']);
+});
+
 test('Given URL Studio when encoding and decoding values then the output updates correctly', async ({ page }) => {
   await page.goto('/url-encoder', { waitUntil: 'domcontentloaded' });
 
