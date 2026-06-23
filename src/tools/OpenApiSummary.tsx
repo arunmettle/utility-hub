@@ -6,7 +6,7 @@ import { summarizeOpenApi } from '../lib/privacyTools';
 const sampleOpenApi = `{
   "openapi": "3.1.0",
   "info": {
-    "title": "Cobalt API",
+    "title": "UtilityHub API",
     "version": "1.2.0"
   },
   "servers": [

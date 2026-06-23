@@ -1220,6 +1220,124 @@ textarea {
   font: 500 0.9rem/1.6 'IBM Plex Mono', monospace;
 }
 
+.markdown-preview {
+  margin-top: 14px;
+  padding: 18px 20px;
+  border: 1px solid var(--surface-border-soft);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface-output) 78%, var(--panel));
+  color: var(--text);
+  overflow-x: auto;
+}
+
+.markdown-preview__empty {
+  color: var(--muted);
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin: 0 0 12px;
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.markdown-preview h1 {
+  font-size: clamp(1.7rem, 2vw, 2.15rem);
+}
+
+.markdown-preview h2 {
+  font-size: clamp(1.35rem, 1.5vw, 1.7rem);
+}
+
+.markdown-preview p,
+.markdown-preview ul,
+.markdown-preview ol,
+.markdown-preview blockquote,
+.markdown-preview pre,
+.markdown-preview table {
+  margin: 0 0 14px;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 22px;
+}
+
+.markdown-preview li + li {
+  margin-top: 6px;
+}
+
+.markdown-preview blockquote {
+  padding: 12px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 14px 14px 0;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--text-soft);
+}
+
+.markdown-preview code {
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-subtle) 88%, transparent);
+  font: 600 0.82rem/1.4 'IBM Plex Mono', monospace;
+}
+
+.markdown-preview__code {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--surface-border-soft);
+  background: var(--surface-output);
+  overflow-x: auto;
+}
+
+.markdown-preview__code code {
+  padding: 0;
+  background: transparent;
+}
+
+.markdown-preview__table-wrap {
+  overflow-x: auto;
+}
+
+.markdown-preview__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+.markdown-preview__table th,
+.markdown-preview__table td {
+  padding: 10px 12px;
+  border: 1px solid var(--surface-border-soft);
+  text-align: left;
+}
+
+.markdown-preview__table th {
+  background: color-mix(in srgb, var(--surface-subtle) 92%, transparent);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.markdown-preview__table td {
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  color: var(--text-soft);
+}
+
+.markdown-preview hr {
+  margin: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--surface-border-soft);
+}
+
+.markdown-preview a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .chip-list {
   display: flex;
   flex-wrap: wrap;

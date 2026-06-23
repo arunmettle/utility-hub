@@ -10,7 +10,10 @@ export type TransformResult<T> = {
 };
 
 export type Base64Mode = 'encode' | 'decode';
+export type DataUrlMode = 'text-to-data-url' | 'data-url-to-text';
 export type UrlMode = 'encode' | 'decode';
+export type JsonLinesMode = 'jsonl-to-array' | 'array-to-jsonl';
+export type LineDeduplicationMode = 'preserve-order' | 'sort-ascending';
 
 export type HashType = 'md5' | 'sha256' | 'sha512';
 
@@ -73,6 +76,8 @@ export interface RegexMatch {
 export type HmacType = 'sha256' | 'sha512';
 
 export type QueryMode = 'encode' | 'decode';
+export type CredentialMode = 'encode' | 'decode';
+export type CharacterCodeMode = 'encode' | 'decode';
 
 export interface QueryValueMap {
   [key: string]: string | string[];
@@ -81,6 +86,102 @@ export interface QueryValueMap {
 export interface HmacResult {
   sha256: string;
   sha512: string;
+}
+
+export interface ApiKeyFingerprintReport {
+  masked: string;
+  fingerprint: string;
+  length: number;
+  likelyProvider: string;
+}
+
+export interface SriHashReport {
+  sha256: string;
+  sha384: string;
+  sha512: string;
+}
+
+export interface CorsPolicyReport {
+  allowedOrigin: string;
+  allowCredentials: boolean;
+  allowMethods: string[];
+  allowHeaders: string[];
+  findings: HeaderFinding[];
+  risk: 'low' | 'medium' | 'high';
+}
+
+export interface SecurityTxtReport {
+  fields: string[];
+  contacts: string[];
+  expires: string;
+  findings: HeaderFinding[];
+}
+
+export interface OpenRedirectReport {
+  target: string;
+  host: string;
+  protocol: string;
+  findings: HeaderFinding[];
+  isRelativeTarget: boolean;
+}
+
+export interface PasswordPolicyReport {
+  minimumLength: number | null;
+  requirements: string[];
+  findings: HeaderFinding[];
+  score: number;
+}
+
+export interface SignedUrlReport {
+  provider: string;
+  parameters: string[];
+  expirySummary: string;
+  findings: HeaderFinding[];
+}
+
+export interface GitignoreTemplateReport {
+  output: string;
+  sections: string[];
+}
+
+export interface PaletteReport {
+  values: Array<{ label: string; hex: string }>;
+}
+
+export interface FakeUserReport {
+  values: Array<{ name: string; email: string; role: string }>;
+}
+
+export interface ReleaseNoteReport {
+  markdown: string;
+  bulletCount: number;
+}
+
+export interface TestCaseTitleReport {
+  values: string[];
+}
+
+export interface JsonPointerReport {
+  found: boolean;
+  value: string;
+}
+
+export interface UrlPatternReport {
+  matched: boolean;
+  normalizedPattern: string;
+  parameters: Array<{ key: string; value: string }>;
+}
+
+export interface SemverRangeReport {
+  isMatch: boolean;
+  normalizedRange: string;
+  reasons: string[];
+}
+
+export interface HttpStatusRuleReport {
+  isMatch: boolean;
+  normalizedRule: string;
+  reasons: string[];
 }
 
 export type CsvJsonMode = 'csv-to-json' | 'json-to-csv';
@@ -254,6 +355,203 @@ export interface MarkdownTableReport {
   markdown: string;
   rowCount: number;
   columnCount: number;
+}
+
+export type MarkdownInputFormat =
+  | 'markdown'
+  | 'pipe-table'
+  | 'box-table'
+  | 'whitespace-table'
+  | 'csv'
+  | 'json-array'
+  | 'plain-text';
+
+export interface MarkdownStudioReport {
+  markdown: string;
+  detectedFormat: MarkdownInputFormat;
+  rowCount: number;
+  columnCount: number;
+  notes: string[];
+}
+
+export interface JsonLinesReport {
+  normalizedJsonl: string;
+  prettyJsonArray: string;
+  rowCount: number;
+  uniqueKeyCount: number;
+}
+
+export interface EnvEntryReport {
+  key: string;
+  valuePreview: string;
+  hasValue: boolean;
+  secretLike: boolean;
+}
+
+export interface EnvInspectionReport {
+  entries: EnvEntryReport[];
+  duplicateKeys: string[];
+  invalidLines: string[];
+  secretLikeCount: number;
+}
+
+export interface AnsiCleanReport {
+  cleaned: string;
+  removedSequences: number;
+  lineCount: number;
+}
+
+export interface MarkdownChecklistReport {
+  markdown: string;
+  itemCount: number;
+  checkedCount: number;
+}
+
+export interface LineDeduplicationReport {
+  output: string;
+  uniqueCount: number;
+  removedCount: number;
+}
+
+export interface JsonPathExplorerReport {
+  path: string;
+  found: boolean;
+  value: string;
+  valueType: string;
+  availableKeys: string[];
+}
+
+export interface HeaderDiffReport {
+  added: string[];
+  removed: string[];
+  changed: Array<{ key: string; left: string; right: string }>;
+}
+
+export interface HarRequestSummaryReport {
+  requestCount: number;
+  domainCount: number;
+  methods: Record<string, number>;
+  requests: Array<{ method: string; url: string; status: number; domain: string }>;
+}
+
+export interface WebhookPayloadInspectionReport {
+  eventName: string;
+  topLevelKeys: Array<{ key: string; type: string }>;
+  nestedObjectCount: number;
+  arrayCount: number;
+}
+
+export interface LogLevelAnalysisReport {
+  counts: Record<'error' | 'warn' | 'info' | 'debug', number>;
+  totalLines: number;
+  findings: string[];
+}
+
+export interface UuidExtractionReport {
+  uuids: string[];
+  uniqueCount: number;
+}
+
+export interface LinkExtractionReport {
+  urls: string[];
+  emails: string[];
+}
+
+export interface SecretRedactionReport {
+  redacted: string;
+  replacements: number;
+}
+
+export interface ApiErrorFormattingReport {
+  markdown: string;
+  title: string;
+  statusCode: string;
+  detailCount: number;
+}
+
+export type BinaryTextMode = 'encode' | 'decode';
+export type MorseCodeMode = 'encode' | 'decode';
+
+export interface NumberBaseReport {
+  binary: string;
+  octal: string;
+  decimal: string;
+  hexadecimal: string;
+}
+
+export interface NanoIdReport {
+  values: string[];
+}
+
+export interface LoremIpsumReport {
+  output: string;
+  paragraphCount: number;
+  wordCount: number;
+}
+
+export interface CookieSecurityReport {
+  cookies: Array<{ name: string; secure: boolean; httpOnly: boolean; sameSite: string }>;
+  findings: HeaderFinding[];
+}
+
+export interface CspPolicyReport {
+  directives: Array<{ key: string; value: string }>;
+  findings: HeaderFinding[];
+}
+
+export interface JwtExpiryReport {
+  expiresAt: string;
+  issuedAt: string;
+  status: string;
+}
+
+export interface RegexReplaceReport {
+  output: string;
+  replacements: number;
+}
+
+export interface EmailValidationReport {
+  valid: string[];
+  invalid: string[];
+}
+
+export interface JsonComparisonReport {
+  added: string[];
+  removed: string[];
+  changed: string[];
+}
+
+export type LineEndingMode = 'lf' | 'crlf';
+export type TabSpaceMode = 'tabs-to-spaces' | 'spaces-to-tabs';
+export type ListJsonMode = 'list-to-json' | 'json-to-list';
+
+export interface ByteSizeConversionReport {
+  bytes: string;
+  kilobytes: string;
+  megabytes: string;
+  gigabytes: string;
+}
+
+export interface ColorConversionReport {
+  hex: string;
+  rgb: string;
+  hsl: string;
+}
+
+export interface PassphraseReport {
+  values: string[];
+}
+
+export interface RandomNumberReport {
+  values: number[];
+}
+
+export interface UsernameReport {
+  values: string[];
+}
+
+export interface ApiTokenReport {
+  values: string[];
 }
 
 export interface JsonSchemaGenerationReport {
@@ -2379,6 +2677,127 @@ function toMarkdownTableRows(rows: string[][]) {
   };
 }
 
+function normalizeMarkdownWhitespace(value: string) {
+  return value
+    .replace(/\r\n/g, '\n')
+    .replace(/\t/g, '  ')
+    .split('\n')
+    .map((line) => line.replace(/[ \t]+$/g, ''))
+    .map((line) => line.replace(/^(\s*)[•●◦▪▸–—]\s+/, '$1- '))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function rowsToMarkdownStudioReport(
+  rows: string[][],
+  detectedFormat: MarkdownInputFormat,
+  notes: string[],
+): MarkdownStudioReport {
+  const table = toMarkdownTableRows(
+    rows.map((row) => row.map((cell) => cell.trim().replace(/\s+/g, ' '))),
+  );
+
+  return {
+    markdown: table.markdown,
+    detectedFormat,
+    rowCount: table.rowCount,
+    columnCount: table.columnCount,
+    notes,
+  };
+}
+
+function parsePipeTableRows(source: string) {
+  const lines = source
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2 || !lines.every((line) => line.includes('|'))) {
+    return null;
+  }
+
+  const rows = lines
+    .map((line) => line.replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => cell.trim()))
+    .filter((row) => row.length >= 2);
+
+  if (rows.length < 2) {
+    return null;
+  }
+
+  const headerCount = rows[0].length;
+  if (!rows.every((row) => row.length === headerCount)) {
+    return null;
+  }
+
+  const dividerPattern = /^:?-{3,}:?$/;
+  const hasDivider = rows[1].every((cell) => dividerPattern.test(cell));
+
+  return hasDivider ? [rows[0], ...rows.slice(2)] : rows;
+}
+
+function parseBoxDrawingTableRows(source: string) {
+  const contentRows = source
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trimEnd())
+    .filter((line) => line.includes('│'))
+    .map((line) => line.split('│').map((cell) => cell.trim()).filter((cell) => cell.length > 0));
+
+  if (contentRows.length < 2) {
+    return null;
+  }
+
+  const headerCount = contentRows[0].length;
+  if (headerCount < 2 || !contentRows.every((row) => row.length === headerCount)) {
+    return null;
+  }
+
+  return contentRows;
+}
+
+function parseWhitespaceTableRows(source: string) {
+  const lines = source
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length < 2) {
+    return null;
+  }
+
+  const rows = lines
+    .map((line) => line.split(/\s{2,}|\t+/).map((cell) => cell.trim()).filter(Boolean))
+    .filter((row) => row.length >= 2);
+
+  if (rows.length < 2) {
+    return null;
+  }
+
+  const headerCount = rows[0].length;
+  if (headerCount < 2 || !rows.every((row) => row.length === headerCount)) {
+    return null;
+  }
+
+  return rows;
+}
+
+function looksLikeCsv(source: string) {
+  const lines = source
+    .replace(/\r\n/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return lines.length > 1 && lines.every((line) => line.includes(','));
+}
+
+function looksLikeMarkdown(source: string) {
+  return /(^#{1,6}\s)|(^[-*+]\s)|(^\d+\.\s)|(```)|(^>\s)|(\|.+\|)/m.test(source);
+}
+
 export function buildMarkdownTable(value: string): TransformResult<MarkdownTableReport | null> {
   const source = value.trim();
   if (!source) {
@@ -2410,6 +2829,2152 @@ export function buildMarkdownTable(value: string): TransformResult<MarkdownTable
       output: null,
     };
   }
+}
+
+export function buildMarkdownStudio(value: string): TransformResult<MarkdownStudioReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    if (source.startsWith('[')) {
+      const tableResult = buildMarkdownTable(source);
+      if (tableResult.error || !tableResult.output) {
+        throw new Error(tableResult.error || 'Provide a valid JSON array of objects.');
+      }
+
+      return {
+        error: '',
+        output: {
+          markdown: tableResult.output.markdown,
+          detectedFormat: 'json-array',
+          rowCount: tableResult.output.rowCount,
+          columnCount: tableResult.output.columnCount,
+          notes: ['Detected a JSON array and converted it into a markdown table.'],
+        },
+      };
+    }
+
+    if (looksLikeCsv(source)) {
+      const tableResult = buildMarkdownTable(source);
+      if (tableResult.error || !tableResult.output) {
+        throw new Error(tableResult.error || 'Provide valid CSV rows.');
+      }
+
+      return {
+        error: '',
+        output: {
+          markdown: tableResult.output.markdown,
+          detectedFormat: 'csv',
+          rowCount: tableResult.output.rowCount,
+          columnCount: tableResult.output.columnCount,
+          notes: ['Detected CSV rows and converted them into a markdown table.'],
+        },
+      };
+    }
+
+    const boxTableRows = parseBoxDrawingTableRows(source);
+    if (boxTableRows) {
+      return {
+        error: '',
+        output: rowsToMarkdownStudioReport(boxTableRows, 'box-table', [
+          'Detected a boxed CLI table and converted it into GitHub-friendly markdown.',
+        ]),
+      };
+    }
+
+    const pipeTableRows = parsePipeTableRows(source);
+    if (pipeTableRows) {
+      return {
+        error: '',
+        output: rowsToMarkdownStudioReport(pipeTableRows, 'pipe-table', [
+          'Detected a pipe-style table and normalized it into clean markdown.',
+        ]),
+      };
+    }
+
+    const whitespaceTableRows = parseWhitespaceTableRows(source);
+    if (whitespaceTableRows) {
+      return {
+        error: '',
+        output: rowsToMarkdownStudioReport(whitespaceTableRows, 'whitespace-table', [
+          'Detected aligned text columns and converted them into a markdown table.',
+        ]),
+      };
+    }
+
+    const normalized = normalizeMarkdownWhitespace(source);
+    return {
+      error: '',
+      output: {
+        markdown: normalized,
+        detectedFormat: looksLikeMarkdown(normalized) ? 'markdown' : 'plain-text',
+        rowCount: 0,
+        columnCount: 0,
+        notes: [
+          looksLikeMarkdown(normalized)
+            ? 'Detected markdown content and cleaned spacing, bullets, and blank lines.'
+            : 'Kept the text as markdown-friendly plain content and normalized spacing.',
+        ],
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to format the markdown content.',
+      output: null,
+    };
+  }
+}
+
+export function transformJsonLines(value: string, mode: JsonLinesMode): TransformResult<JsonLinesReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    if (mode === 'jsonl-to-array') {
+      const rows = source
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => JSON.parse(line) as Record<string, unknown>);
+
+      const keySet = new Set(rows.flatMap((row) => Object.keys(row)));
+      return {
+        error: '',
+        output: {
+          normalizedJsonl: rows.map((row) => JSON.stringify(row)).join('\n'),
+          prettyJsonArray: JSON.stringify(rows, null, 2),
+          rowCount: rows.length,
+          uniqueKeyCount: keySet.size,
+        },
+      };
+    }
+
+    const parsed = JSON.parse(source) as unknown;
+    if (!Array.isArray(parsed)) {
+      throw new Error('Provide a JSON array when converting array data into JSONL.');
+    }
+
+    const rows = parsed as Array<Record<string, unknown>>;
+    const keySet = new Set(rows.flatMap((row) => Object.keys(row)));
+    return {
+      error: '',
+      output: {
+        normalizedJsonl: rows.map((row) => JSON.stringify(row)).join('\n'),
+        prettyJsonArray: JSON.stringify(rows, null, 2),
+        rowCount: rows.length,
+        uniqueKeyCount: keySet.size,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to convert the JSON Lines input.',
+      output: null,
+    };
+  }
+}
+
+function maskEnvValue(value: string) {
+  if (!value) {
+    return '(empty)';
+  }
+
+  if (value.length <= 6) {
+    return `${value.slice(0, 1)}***`;
+  }
+
+  return `${value.slice(0, 2)}***${value.slice(-2)}`;
+}
+
+export function inspectEnvFile(value: string): TransformResult<EnvInspectionReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const entries: EnvEntryReport[] = [];
+  const invalidLines: string[] = [];
+  const counts = new Map<string, number>();
+  const secretPattern = /(token|secret|password|key|dsn|auth|private)/i;
+
+  for (const line of source.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
+
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match) {
+      invalidLines.push(trimmed);
+      continue;
+    }
+
+    const [, key, rawValue] = match;
+    const normalizedValue = rawValue.replace(/^['"]|['"]$/g, '');
+    const secretLike = secretPattern.test(key);
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+    entries.push({
+      key,
+      valuePreview: secretLike ? maskEnvValue(normalizedValue) : normalizedValue || '(empty)',
+      hasValue: normalizedValue.length > 0,
+      secretLike,
+    });
+  }
+
+  return {
+    error: '',
+    output: {
+      entries,
+      duplicateKeys: Array.from(counts.entries())
+        .filter(([, count]) => count > 1)
+        .map(([key]) => key),
+      invalidLines,
+      secretLikeCount: entries.filter((entry) => entry.secretLike).length,
+    },
+  };
+}
+
+export function cleanAnsiOutput(value: string): TransformResult<AnsiCleanReport | null> {
+  const source = value;
+  if (!source.trim()) {
+    return { error: '', output: null };
+  }
+
+  const ansiPattern = /\u001B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~]|\][^\u0007]*(?:\u0007|\u001B\\))/g;
+  const removedSequences = (source.match(ansiPattern) ?? []).length;
+  const cleaned = source
+    .replace(ansiPattern, '')
+    .replace(/\r/g, '')
+    .replace(/\u0008/g, '')
+    .replace(/[ \t]+$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return {
+    error: '',
+    output: {
+      cleaned,
+      removedSequences,
+      lineCount: cleaned ? cleaned.split('\n').length : 0,
+    },
+  };
+}
+
+export function buildMarkdownChecklist(value: string): TransformResult<MarkdownChecklistReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const items = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const checked = /^\[(x|X)\]\s+/.test(line);
+      const normalized = line
+        .replace(/^[-*+]\s+/, '')
+        .replace(/^\[(?: |x|X)\]\s+/, '')
+        .replace(/^\d+\.\s+/, '');
+
+      return {
+        checked,
+        text: normalized,
+      };
+    });
+
+  return {
+    error: '',
+    output: {
+      markdown: items.map((item) => `- [${item.checked ? 'x' : ' '}] ${item.text}`).join('\n'),
+      itemCount: items.length,
+      checkedCount: items.filter((item) => item.checked).length,
+    },
+  };
+}
+
+export function deduplicateLines(value: string, mode: LineDeduplicationMode): TransformResult<LineDeduplicationReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const lines = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const unique = Array.from(new Set(lines));
+  const finalLines = mode === 'sort-ascending' ? [...unique].sort((left, right) => left.localeCompare(right)) : unique;
+
+  return {
+    error: '',
+    output: {
+      output: finalLines.join('\n'),
+      uniqueCount: finalLines.length,
+      removedCount: lines.length - unique.length,
+    },
+  };
+}
+
+function parseHeaderBlock(value: string) {
+  const headers = new Map<string, string>();
+
+  value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .forEach((line) => {
+      if (/^HTTP\/\d/i.test(line)) {
+        return;
+      }
+
+      const separatorIndex = line.indexOf(':');
+      if (separatorIndex < 1) {
+        return;
+      }
+
+      const key = line.slice(0, separatorIndex).trim().toLowerCase();
+      const headerValue = line.slice(separatorIndex + 1).trim();
+      headers.set(key, headerValue);
+    });
+
+  return headers;
+}
+
+export function exploreJsonPath(input: string, path: string): TransformResult<JsonPathExplorerReport | null> {
+  if (!input.trim()) {
+    return { error: '', output: null };
+  }
+
+  try {
+    const parsed = JSON.parse(input) as unknown;
+    const normalizedPath = path.trim().replace(/\[(\d+)\]/g, '.$1').replace(/^\./, '');
+    const segments = normalizedPath ? normalizedPath.split('.').filter(Boolean) : [];
+    let current: unknown = parsed;
+
+    for (const segment of segments) {
+      if (current === null || current === undefined) {
+        current = undefined;
+        break;
+      }
+
+      if (Array.isArray(current)) {
+        current = current[Number(segment)];
+      } else if (typeof current === 'object') {
+        current = (current as Record<string, unknown>)[segment];
+      } else {
+        current = undefined;
+      }
+    }
+
+    const found = segments.length === 0 ? true : current !== undefined;
+    const currentValue = segments.length === 0 ? parsed : current;
+    const valueType = Array.isArray(currentValue) ? 'array' : currentValue === null ? 'null' : typeof currentValue;
+    const availableKeys =
+      currentValue && typeof currentValue === 'object' && !Array.isArray(currentValue)
+        ? Object.keys(currentValue as Record<string, unknown>)
+        : [];
+
+    return {
+      error: '',
+      output: {
+        path: normalizedPath || '(root)',
+        found,
+        value: found ? JSON.stringify(currentValue, null, 2) : '',
+        valueType,
+        availableKeys,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to inspect the JSON payload.',
+      output: null,
+    };
+  }
+}
+
+export function diffHeaders(left: string, right: string): TransformResult<HeaderDiffReport | null> {
+  const leftHeaders = parseHeaderBlock(left);
+  const rightHeaders = parseHeaderBlock(right);
+
+  const keys = new Set([...leftHeaders.keys(), ...rightHeaders.keys()]);
+  const added: string[] = [];
+  const removed: string[] = [];
+  const changed: Array<{ key: string; left: string; right: string }> = [];
+
+  for (const key of keys) {
+    const leftValue = leftHeaders.get(key);
+    const rightValue = rightHeaders.get(key);
+
+    if (leftValue === undefined && rightValue !== undefined) {
+      added.push(key);
+    } else if (leftValue !== undefined && rightValue === undefined) {
+      removed.push(key);
+    } else if (leftValue !== rightValue && leftValue !== undefined && rightValue !== undefined) {
+      changed.push({ key, left: leftValue, right: rightValue });
+    }
+  }
+
+  return { error: '', output: { added, removed, changed } };
+}
+
+export function summarizeHarRequests(value: string): TransformResult<HarRequestSummaryReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    const parsed = JSON.parse(source) as { log?: { entries?: Array<{ request?: { method?: string; url?: string }; response?: { status?: number } }> } };
+    const entries = parsed.log?.entries ?? [];
+    const requests = entries
+      .map((entry) => {
+        const url = entry.request?.url ?? '';
+        const method = (entry.request?.method ?? 'GET').toUpperCase();
+        const status = entry.response?.status ?? 0;
+        const domain = (() => {
+          try {
+            return new URL(url).host;
+          } catch {
+            return 'unknown';
+          }
+        })();
+
+        return { method, url, status, domain };
+      })
+      .filter((entry) => entry.url);
+
+    const methods = requests.reduce<Record<string, number>>((acc, request) => {
+      acc[request.method] = (acc[request.method] ?? 0) + 1;
+      return acc;
+    }, {});
+
+    return {
+      error: '',
+      output: {
+        requestCount: requests.length,
+        domainCount: new Set(requests.map((request) => request.domain)).size,
+        methods,
+        requests,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to parse the HAR payload.',
+      output: null,
+    };
+  }
+}
+
+function valueKind(value: unknown) {
+  if (Array.isArray(value)) return 'array';
+  if (value === null) return 'null';
+  return typeof value;
+}
+
+export function inspectWebhookPayload(value: string): TransformResult<WebhookPayloadInspectionReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    const parsed = JSON.parse(source) as Record<string, unknown>;
+    const topLevelKeys = Object.keys(parsed).map((key) => ({ key, type: valueKind(parsed[key]) }));
+    const nestedObjectCount = Object.values(parsed).filter((entry) => entry && typeof entry === 'object' && !Array.isArray(entry)).length;
+    const arrayCount = Object.values(parsed).filter(Array.isArray).length;
+    const eventName =
+      [parsed.type, parsed.event, parsed.eventType, parsed.topic]
+        .find((candidate) => typeof candidate === 'string' && candidate.trim().length > 0) as string | undefined;
+
+    return {
+      error: '',
+      output: {
+        eventName: eventName ?? 'unknown-event',
+        topLevelKeys,
+        nestedObjectCount,
+        arrayCount,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to inspect the webhook payload.',
+      output: null,
+    };
+  }
+}
+
+export function convertSqlResultToMarkdown(value: string): TransformResult<MarkdownTableReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const rows = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !/^[-+|]+$/.test(line))
+    .map((line) => line.split(/\t+|\s{2,}/).map((cell) => cell.trim()).filter(Boolean))
+    .filter((row) => row.length >= 2);
+
+  if (rows.length < 2) {
+    return { error: 'Paste a tab-separated or aligned SQL result with a header row and at least one data row.', output: null };
+  }
+
+  const columnCount = rows[0].length;
+  if (!rows.every((row) => row.length === columnCount)) {
+    return { error: 'Each detected row must have the same number of columns.', output: null };
+  }
+
+  return { error: '', output: toMarkdownTableRows(rows) };
+}
+
+export function analyzeLogLevels(value: string): TransformResult<LogLevelAnalysisReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const lines = source.split(/\r?\n/).filter(Boolean);
+  const counts = {
+    error: 0,
+    warn: 0,
+    info: 0,
+    debug: 0,
+  } as Record<'error' | 'warn' | 'info' | 'debug', number>;
+
+  for (const line of lines) {
+    const normalized = line.toLowerCase();
+    if (/\berror\b/.test(normalized)) counts.error += 1;
+    if (/\bwarn(?:ing)?\b/.test(normalized)) counts.warn += 1;
+    if (/\binfo\b/.test(normalized)) counts.info += 1;
+    if (/\bdebug\b/.test(normalized)) counts.debug += 1;
+  }
+
+  const findings: string[] = [];
+  if (counts.error > 0) findings.push(`${counts.error} error lines detected.`);
+  if (counts.warn > 0) findings.push(`${counts.warn} warning lines detected.`);
+  if (findings.length === 0) findings.push('No common log levels were detected in the pasted output.');
+
+  return { error: '', output: { counts, totalLines: lines.length, findings } };
+}
+
+export function extractUuids(value: string): TransformResult<UuidExtractionReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const matches = source.match(/\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/gi) ?? [];
+  const uuids = Array.from(new Set(matches));
+  return { error: '', output: { uuids, uniqueCount: uuids.length } };
+}
+
+export function extractLinksAndEmails(value: string): TransformResult<LinkExtractionReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  const urls = Array.from(new Set(source.match(/\bhttps?:\/\/[^\s)>"']+/gi) ?? []));
+  const emails = Array.from(new Set(source.match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi) ?? []));
+  return { error: '', output: { urls, emails } };
+}
+
+export function redactSecrets(value: string): TransformResult<SecretRedactionReport | null> {
+  const source = value;
+  if (!source.trim()) {
+    return { error: '', output: null };
+  }
+
+  const patterns = [
+    /\bsk-[A-Za-z0-9_-]{8,}\b/g,
+    /\bgh[pousr]_[A-Za-z0-9]{10,}\b/g,
+    /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi,
+    /\b(?:Bearer\s+)?[A-Za-z0-9_-]{24,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g,
+  ];
+
+  let redacted = source;
+  let replacements = 0;
+  for (const pattern of patterns) {
+    redacted = redacted.replace(pattern, (match) => {
+      replacements += 1;
+      if (match.includes('@')) return '[REDACTED_EMAIL]';
+      if (match.startsWith('sk-')) return '[REDACTED_API_KEY]';
+      if (match.startsWith('gh')) return '[REDACTED_GITHUB_TOKEN]';
+      return '[REDACTED_SECRET]';
+    });
+  }
+
+  return { error: '', output: { redacted, replacements } };
+}
+
+export function formatApiError(value: string): TransformResult<ApiErrorFormattingReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    const parsed = JSON.parse(source) as Record<string, unknown>;
+    const title = String(parsed.message ?? parsed.error ?? parsed.title ?? 'API error');
+    const statusCode = String(parsed.status ?? parsed.statusCode ?? parsed.code ?? 'unknown');
+    const details = Object.entries(parsed).filter(([key]) => !['message', 'error', 'title', 'status', 'statusCode', 'code'].includes(key));
+    const markdown = [
+      `## ${title}`,
+      '',
+      `- Status: \`${statusCode}\``,
+      ...details.map(([key, entry]) => `- ${key}: \`${typeof entry === 'string' ? entry : JSON.stringify(entry)}\``),
+    ].join('\n');
+
+    return {
+      error: '',
+      output: {
+        markdown,
+        title,
+        statusCode,
+        detailCount: details.length,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to format the API error payload.',
+      output: null,
+    };
+  }
+}
+
+function prettyMarkup(value: string) {
+  const normalized = value
+    .replace(/>\s+</g, '><')
+    .replace(/(>)(<)(\/*)/g, '$1\n$2$3')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  let indent = 0;
+  const lines: string[] = [];
+  for (const rawLine of normalized) {
+    const line = rawLine.trim();
+    if (/^<\//.test(line)) {
+      indent = Math.max(indent - 1, 0);
+    }
+
+    lines.push(`${'  '.repeat(indent)}${line}`);
+
+    if (
+      /^<[^!?/][^>]*[^/]?>$/.test(line) &&
+      !/<\/[^>]+>$/.test(line) &&
+      !/^<.*\/>$/.test(line)
+    ) {
+      indent += 1;
+    }
+  }
+
+  return lines.join('\n');
+}
+
+export function formatXml(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  if (!source.startsWith('<') || !source.endsWith('>')) {
+    return { error: 'Paste XML content starting and ending with tags.', output: '' };
+  }
+
+  return { error: '', output: prettyMarkup(source) };
+}
+
+export function formatHtml(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  if (!source.startsWith('<') || !source.includes('>')) {
+    return { error: 'Paste HTML markup to format.', output: '' };
+  }
+
+  return { error: '', output: prettyMarkup(source) };
+}
+
+export function formatCssStylesheet(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  const formatted = source
+    .replace(/\s*{\s*/g, ' {\n  ')
+    .replace(/;\s*/g, ';\n  ')
+    .replace(/\s*}\s*/g, '\n}\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .split('\n')
+    .map((line) => line.replace(/\s+$/g, ''))
+    .join('\n')
+    .replace(/\n  \n/g, '\n')
+    .trim();
+
+  return { error: '', output: formatted };
+}
+
+export function formatMarkdownDocument(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  return { error: '', output: normalizeMarkdownWhitespace(source) };
+}
+
+export function transformRot13(value: string): TransformResult<string> {
+  if (!value) {
+    return { error: '', output: '' };
+  }
+
+  return {
+    error: '',
+    output: value.replace(/[a-zA-Z]/g, (char) => {
+      const base = char <= 'Z' ? 65 : 97;
+      return String.fromCharCode(((char.charCodeAt(0) - base + 13) % 26) + base);
+    }),
+  };
+}
+
+export function transformBinaryText(value: string, mode: BinaryTextMode): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  try {
+    if (mode === 'encode') {
+      return {
+        error: '',
+        output: Array.from(source)
+          .map((char) => char.charCodeAt(0).toString(2).padStart(8, '0'))
+          .join(' '),
+      };
+    }
+
+    const decoded = source
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((chunk) => {
+        if (!/^[01]{8}$/.test(chunk)) {
+          throw new Error('Use 8-bit binary groups separated by spaces when decoding.');
+        }
+        return String.fromCharCode(Number.parseInt(chunk, 2));
+      })
+      .join('');
+
+    return { error: '', output: decoded };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert binary text.', output: '' };
+  }
+}
+
+const base32Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+export function transformBase32(value: string, mode: Base64Mode): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  try {
+    if (mode === 'encode') {
+      const bytes = new TextEncoder().encode(source);
+      let bits = '';
+      for (const byte of bytes) {
+        bits += byte.toString(2).padStart(8, '0');
+      }
+
+      while (bits.length % 5 !== 0) {
+        bits += '0';
+      }
+
+      let output = '';
+      for (let index = 0; index < bits.length; index += 5) {
+        output += base32Alphabet[Number.parseInt(bits.slice(index, index + 5), 2)];
+      }
+
+      while (output.length % 8 !== 0) {
+        output += '=';
+      }
+
+      return { error: '', output };
+    }
+
+    const cleaned = source.toUpperCase().replace(/=+$/g, '');
+    let bits = '';
+    for (const char of cleaned) {
+      const charIndex = base32Alphabet.indexOf(char);
+      if (charIndex < 0) {
+        throw new Error('Base32 input may only contain A-Z, 2-7, and optional padding.');
+      }
+      bits += charIndex.toString(2).padStart(5, '0');
+    }
+
+    const bytes: number[] = [];
+    for (let index = 0; index + 8 <= bits.length; index += 8) {
+      bytes.push(Number.parseInt(bits.slice(index, index + 8), 2));
+    }
+
+    return { error: '', output: new TextDecoder().decode(new Uint8Array(bytes)) };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert Base32 content.', output: '' };
+  }
+}
+
+const morseAlphabet: Record<string, string> = {
+  A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....', I: '..', J: '.---',
+  K: '-.-', L: '.-..', M: '--', N: '-.', O: '---', P: '.--.', Q: '--.-', R: '.-.', S: '...', T: '-',
+  U: '..-', V: '...-', W: '.--', X: '-..-', Y: '-.--', Z: '--..',
+  '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+  '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+};
+
+export function transformMorseCode(value: string, mode: MorseCodeMode): TransformResult<string> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  if (mode === 'encode') {
+    return {
+      error: '',
+      output: source
+        .toUpperCase()
+        .split('')
+        .map((char) => {
+          if (char === ' ') return '/';
+          return morseAlphabet[char] ?? '?';
+        })
+        .join(' '),
+    };
+  }
+
+  const reverseMap = Object.fromEntries(Object.entries(morseAlphabet).map(([key, morse]) => [morse, key]));
+  return {
+    error: '',
+    output: source
+      .split(' ')
+      .map((token) => {
+        if (token === '/') return ' ';
+        return reverseMap[token] ?? '?';
+      })
+      .join(''),
+  };
+}
+
+export function convertNumberBases(value: string, inputBase: 2 | 8 | 10 | 16): TransformResult<NumberBaseReport | null> {
+  const source = value.trim();
+  if (!source) {
+    return { error: '', output: null };
+  }
+
+  try {
+    const parsed = BigInt(parseInt(source, inputBase));
+    return {
+      error: '',
+      output: {
+        binary: parsed.toString(2),
+        octal: parsed.toString(8),
+        decimal: parsed.toString(10),
+        hexadecimal: parsed.toString(16).toUpperCase(),
+      },
+    };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert the number across bases.', output: null };
+  }
+}
+
+const romanMap: Array<[number, string]> = [
+  [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
+  [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I'],
+];
+
+export function convertRomanNumeral(value: string): TransformResult<string> {
+  const source = value.trim().toUpperCase();
+  if (!source) {
+    return { error: '', output: '' };
+  }
+
+  if (/^\d+$/.test(source)) {
+    let number = Number.parseInt(source, 10);
+    if (number <= 0 || number >= 4000) {
+      return { error: 'Use a number between 1 and 3999.', output: '' };
+    }
+
+    let roman = '';
+    for (const [amount, symbol] of romanMap) {
+      while (number >= amount) {
+        roman += symbol;
+        number -= amount;
+      }
+    }
+
+    return { error: '', output: roman };
+  }
+
+  const values: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+  let total = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    const current = values[source[index]];
+    const next = values[source[index + 1]];
+    if (!current) {
+      return { error: 'Use only valid Roman numeral characters.', output: '' };
+    }
+    total += next && current < next ? -current : current;
+  }
+
+  return { error: '', output: String(total) };
+}
+
+function randomFromAlphabet(length: number, alphabet: string) {
+  const chars = new Uint8Array(length);
+  crypto.getRandomValues(chars);
+  return Array.from(chars, (value) => alphabet[value % alphabet.length]).join('');
+}
+
+export function generateNanoIds(count: number, length: number): TransformResult<NanoIdReport | null> {
+  if (count <= 0 || length <= 0) {
+    return { error: 'Use positive values for count and length.', output: null };
+  }
+
+  const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, () => randomFromAlphabet(length, alphabet)),
+    },
+  };
+}
+
+const loremWords = 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'.split(' ');
+
+export function generateLoremIpsum(paragraphs: number): TransformResult<LoremIpsumReport | null> {
+  if (paragraphs <= 0) {
+    return { error: 'Choose at least one paragraph.', output: null };
+  }
+
+  const blocks = Array.from({ length: paragraphs }, (_, paragraphIndex) => {
+    const wordCount = 28 + (paragraphIndex % 3) * 6;
+    const words = Array.from({ length: wordCount }, (_, index) => loremWords[(index + paragraphIndex * 5) % loremWords.length]);
+    const sentence = `${words.join(' ')}.`;
+    return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+  });
+
+  return {
+    error: '',
+    output: {
+      output: blocks.join('\n\n'),
+      paragraphCount: blocks.length,
+      wordCount: blocks.join(' ').split(/\s+/).filter(Boolean).length,
+    },
+  };
+}
+
+export function inspectCookieSecurity(value: string): TransformResult<CookieSecurityReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const cookies = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^set-cookie:/i.test(line))
+    .map((line) => line.replace(/^set-cookie:\s*/i, ''))
+    .map((line) => {
+      const [nameValue, ...attributes] = line.split(';').map((part) => part.trim());
+      const [name] = nameValue.split('=');
+      const secure = attributes.some((attribute) => /^secure$/i.test(attribute));
+      const httpOnly = attributes.some((attribute) => /^httponly$/i.test(attribute));
+      const sameSite = attributes.find((attribute) => /^samesite=/i.test(attribute))?.split('=')[1] ?? 'missing';
+      return { name, secure, httpOnly, sameSite };
+    });
+
+  const findings: HeaderFinding[] = [];
+  for (const cookie of cookies) {
+    if (!cookie.secure) findings.push({ severity: 'high', title: `${cookie.name} missing Secure`, detail: 'Transmit cookies over HTTPS only when using Secure.' });
+    if (!cookie.httpOnly) findings.push({ severity: 'medium', title: `${cookie.name} missing HttpOnly`, detail: 'HttpOnly helps reduce client-side script access to cookies.' });
+    if (cookie.sameSite === 'missing') findings.push({ severity: 'medium', title: `${cookie.name} missing SameSite`, detail: 'SameSite can reduce cross-site request exposure.' });
+  }
+
+  return { error: '', output: { cookies, findings } };
+}
+
+export function inspectCspPolicy(value: string): TransformResult<CspPolicyReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const directives = source
+    .split(';')
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const [key, ...rest] = part.split(/\s+/);
+      return { key, value: rest.join(' ') };
+    });
+
+  const map = new Map(directives.map((directive) => [directive.key, directive.value]));
+  const findings: HeaderFinding[] = [];
+  if (!map.has('default-src')) findings.push({ severity: 'high', title: 'Missing default-src', detail: 'A baseline default-src directive is usually expected in a CSP policy.' });
+  if (!map.has('object-src')) findings.push({ severity: 'medium', title: 'Missing object-src', detail: 'Set object-src to none unless legacy plugin content is required.' });
+  if (!map.has('base-uri')) findings.push({ severity: 'medium', title: 'Missing base-uri', detail: 'base-uri can reduce abuse of injected base tags.' });
+  if ((map.get('script-src') ?? '').includes("'unsafe-inline'")) findings.push({ severity: 'high', title: 'script-src allows unsafe-inline', detail: 'Inline scripts weaken CSP protections and are best avoided.' });
+
+  return { error: '', output: { directives, findings } };
+}
+
+export function inspectJwtExpiry(value: string): TransformResult<JwtExpiryReport | null> {
+  const decoded = decodeJwtToken(value);
+  if (decoded.error || !decoded.output) {
+    return { error: decoded.error, output: null };
+  }
+
+  const payload = decoded.output.payload;
+  const exp = typeof payload.exp === 'number' ? payload.exp : null;
+  const iat = typeof payload.iat === 'number' ? payload.iat : null;
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const status = exp === null ? 'No exp claim' : exp < nowSeconds ? 'Expired' : 'Active';
+
+  return {
+    error: '',
+    output: {
+      expiresAt: exp ? new Date(exp * 1000).toISOString() : 'missing',
+      issuedAt: iat ? new Date(iat * 1000).toISOString() : 'missing',
+      status,
+    },
+  };
+}
+
+export function runRegexReplace(pattern: string, replacement: string, text: string, flags: string): TransformResult<RegexReplaceReport | null> {
+  if (!pattern) return { error: '', output: null };
+
+  try {
+    const expression = new RegExp(pattern, flags);
+    const matches = text.match(new RegExp(pattern, flags.includes('g') ? flags : `${flags}g`)) ?? [];
+    return {
+      error: '',
+      output: {
+        output: text.replace(expression, replacement),
+        replacements: matches.length,
+      },
+    };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Invalid regex pattern.', output: null };
+  }
+}
+
+export function validateEmailAddresses(value: string): TransformResult<EmailValidationReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  const valid: string[] = [];
+  const invalid: string[] = [];
+
+  source.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).forEach((entry) => {
+    if (emailPattern.test(entry)) valid.push(entry);
+    else invalid.push(entry);
+  });
+
+  return { error: '', output: { valid, invalid } };
+}
+
+function flattenJsonPaths(value: unknown, prefix = ''): Map<string, string> {
+  const output = new Map<string, string>();
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => {
+      flattenJsonPaths(item, `${prefix}[${index}]`).forEach((nestedValue, nestedKey) => output.set(nestedKey, nestedValue));
+    });
+    return output;
+  }
+  if (value && typeof value === 'object') {
+    Object.entries(value as Record<string, unknown>).forEach(([key, nested]) => {
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (nested && typeof nested === 'object') {
+        flattenJsonPaths(nested, path).forEach((nestedValue, nestedKey) => output.set(nestedKey, nestedValue));
+      } else {
+        output.set(path, JSON.stringify(nested));
+      }
+    });
+    return output;
+  }
+  output.set(prefix || '(root)', JSON.stringify(value));
+  return output;
+}
+
+export function compareJsonValues(left: string, right: string): TransformResult<JsonComparisonReport | null> {
+  const leftSource = left.trim();
+  const rightSource = right.trim();
+  if (!leftSource || !rightSource) return { error: '', output: null };
+
+  try {
+    const leftMap = flattenJsonPaths(JSON.parse(leftSource));
+    const rightMap = flattenJsonPaths(JSON.parse(rightSource));
+    const keys = new Set([...leftMap.keys(), ...rightMap.keys()]);
+    const added: string[] = [];
+    const removed: string[] = [];
+    const changed: string[] = [];
+
+    for (const key of keys) {
+      const leftValue = leftMap.get(key);
+      const rightValue = rightMap.get(key);
+      if (leftValue === undefined && rightValue !== undefined) added.push(key);
+      else if (leftValue !== undefined && rightValue === undefined) removed.push(key);
+      else if (leftValue !== rightValue) changed.push(key);
+    }
+
+    return { error: '', output: { added, removed, changed } };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to compare the JSON values.', output: null };
+  }
+}
+
+export function convertByteSize(value: string, unit: 'bytes' | 'kb' | 'mb' | 'gb'): TransformResult<ByteSizeConversionReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const parsed = Number(source);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return { error: 'Enter a non-negative number for byte conversion.', output: null };
+  }
+
+  const bytes =
+    unit === 'bytes' ? parsed :
+      unit === 'kb' ? parsed * 1024 :
+        unit === 'mb' ? parsed * 1024 * 1024 :
+          parsed * 1024 * 1024 * 1024;
+
+  return {
+    error: '',
+    output: {
+      bytes: bytes.toFixed(0),
+      kilobytes: (bytes / 1024).toFixed(4),
+      megabytes: (bytes / (1024 * 1024)).toFixed(4),
+      gigabytes: (bytes / (1024 * 1024 * 1024)).toFixed(6),
+    },
+  };
+}
+
+function clampColor(value: number) {
+  return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function rgbToHsl(red: number, green: number, blue: number) {
+  const r = red / 255;
+  const g = green / 255;
+  const b = blue / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+  let hue = 0;
+  const lightness = (max + min) / 2;
+  const saturation = delta === 0 ? 0 : delta / (1 - Math.abs(2 * lightness - 1));
+
+  if (delta !== 0) {
+    if (max === r) hue = ((g - b) / delta) % 6;
+    else if (max === g) hue = (b - r) / delta + 2;
+    else hue = (r - g) / delta + 4;
+  }
+
+  return {
+    h: Math.round(hue * 60 < 0 ? hue * 60 + 360 : hue * 60),
+    s: Math.round(saturation * 100),
+    l: Math.round(lightness * 100),
+  };
+}
+
+function hslToRgb(hue: number, saturation: number, lightness: number) {
+  const s = saturation / 100;
+  const l = lightness / 100;
+  const chroma = (1 - Math.abs(2 * l - 1)) * s;
+  const x = chroma * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const m = l - chroma / 2;
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  if (hue < 60) [r, g, b] = [chroma, x, 0];
+  else if (hue < 120) [r, g, b] = [x, chroma, 0];
+  else if (hue < 180) [r, g, b] = [0, chroma, x];
+  else if (hue < 240) [r, g, b] = [0, x, chroma];
+  else if (hue < 300) [r, g, b] = [x, 0, chroma];
+  else [r, g, b] = [chroma, 0, x];
+
+  return {
+    r: clampColor((r + m) * 255),
+    g: clampColor((g + m) * 255),
+    b: clampColor((b + m) * 255),
+  };
+}
+
+export function convertColorFormats(value: string): TransformResult<ColorConversionReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  try {
+    let red = 0;
+    let green = 0;
+    let blue = 0;
+
+    if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(source)) {
+      const hex = source.slice(1);
+      const normalized = hex.length === 3 ? hex.split('').map((char) => `${char}${char}`).join('') : hex;
+      red = Number.parseInt(normalized.slice(0, 2), 16);
+      green = Number.parseInt(normalized.slice(2, 4), 16);
+      blue = Number.parseInt(normalized.slice(4, 6), 16);
+    } else if (/^rgb\(/i.test(source)) {
+      const match = source.match(/^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i);
+      if (!match) throw new Error('Use rgb(r, g, b) when converting RGB colors.');
+      red = clampColor(Number(match[1]));
+      green = clampColor(Number(match[2]));
+      blue = clampColor(Number(match[3]));
+    } else if (/^hsl\(/i.test(source)) {
+      const match = source.match(/^hsl\(\s*(\d{1,3})\s*,\s*(\d{1,3})%\s*,\s*(\d{1,3})%\s*\)$/i);
+      if (!match) throw new Error('Use hsl(h, s%, l%) when converting HSL colors.');
+      const rgb = hslToRgb(Number(match[1]) % 360, Number(match[2]), Number(match[3]));
+      red = rgb.r;
+      green = rgb.g;
+      blue = rgb.b;
+    } else {
+      throw new Error('Paste a hex, rgb(...), or hsl(...) color value.');
+    }
+
+    const hsl = rgbToHsl(red, green, blue);
+    return {
+      error: '',
+      output: {
+        hex: `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`.toUpperCase(),
+        rgb: `rgb(${red}, ${green}, ${blue})`,
+        hsl: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,
+      },
+    };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert the color value.', output: null };
+  }
+}
+
+export function convertLineEndings(value: string, mode: LineEndingMode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+  const normalized = value.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  return { error: '', output: mode === 'lf' ? normalized : normalized.replace(/\n/g, '\r\n') };
+}
+
+export function convertTabsAndSpaces(value: string, mode: TabSpaceMode, size: number): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+  const width = Number.isFinite(size) && size > 0 ? Math.floor(size) : 2;
+  if (mode === 'tabs-to-spaces') {
+    return { error: '', output: value.replace(/\t/g, ' '.repeat(width)) };
+  }
+  const pattern = new RegExp(` {${width}}`, 'g');
+  return { error: '', output: value.replace(pattern, '\t') };
+}
+
+export function transformListJson(value: string, mode: ListJsonMode): TransformResult<string> {
+  const source = value.trim();
+  if (!source) return { error: '', output: '' };
+
+  try {
+    if (mode === 'list-to-json') {
+      const items = source.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+      return { error: '', output: JSON.stringify(items, null, 2) };
+    }
+
+    const parsed = JSON.parse(source) as unknown;
+    if (!Array.isArray(parsed)) {
+      throw new Error('Provide a JSON array when converting JSON to a line list.');
+    }
+    return { error: '', output: parsed.map((entry) => String(entry)).join('\n') };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert between list and JSON array.', output: '' };
+  }
+}
+
+const passphraseWords = 'anchor maple orbit kernel velvet copper signal drift canyon pixel ember lotus spruce ember comet tide lantern glacier branch fable rocket meadow summit harbor pebble delta'.split(' ');
+
+export function generatePassphrases(count: number, wordsPerPhrase: number): TransformResult<PassphraseReport | null> {
+  if (count <= 0 || wordsPerPhrase <= 0) {
+    return { error: 'Use positive values for count and words per phrase.', output: null };
+  }
+
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, (_, phraseIndex) =>
+        Array.from({ length: wordsPerPhrase }, (_, wordIndex) => passphraseWords[(phraseIndex * 3 + wordIndex * 5) % passphraseWords.length]).join('-'),
+      ),
+    },
+  };
+}
+
+export function generateRandomNumbers(count: number, min: number, max: number): TransformResult<RandomNumberReport | null> {
+  if (count <= 0 || !Number.isFinite(min) || !Number.isFinite(max) || min > max) {
+    return { error: 'Provide a positive count and a valid min/max range.', output: null };
+  }
+
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min),
+    },
+  };
+}
+
+export function generateUsernames(seed: string, count: number): TransformResult<UsernameReport | null> {
+  const source = seed.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'utility';
+  if (count <= 0) {
+    return { error: 'Use a positive count for username generation.', output: null };
+  }
+
+  const suffixes = ['dev', 'lab', 'forge', 'pilot', 'stack', 'flow', 'node', 'grid', 'loop', 'dock'];
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, (_, index) => `${source}-${suffixes[index % suffixes.length]}${index + 1}`),
+    },
+  };
+}
+
+export function generateApiTokens(count: number, length: number, prefix: string): TransformResult<ApiTokenReport | null> {
+  if (count <= 0 || length <= 0) {
+    return { error: 'Use positive values for count and token length.', output: null };
+  }
+
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, () => `${prefix}${prefix ? '_' : ''}${randomFromAlphabet(length, alphabet)}`),
+    },
+  };
+}
+
+const base58Alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+function encodeBytesToBase58(bytes: Uint8Array) {
+  if (bytes.length === 0) return '';
+
+  let value = 0n;
+  for (const byte of bytes) {
+    value = (value << 8n) + BigInt(byte);
+  }
+
+  let output = '';
+  while (value > 0n) {
+    const remainder = Number(value % 58n);
+    value /= 58n;
+    output = base58Alphabet[remainder] + output;
+  }
+
+  let leadingZeroes = 0;
+  while (leadingZeroes < bytes.length && bytes[leadingZeroes] === 0) {
+    output = `1${output}`;
+    leadingZeroes += 1;
+  }
+
+  return output || '1';
+}
+
+function decodeBase58ToBytes(value: string) {
+  let decoded = 0n;
+  for (const character of value) {
+    const index = base58Alphabet.indexOf(character);
+    if (index === -1) {
+      throw new Error('That Base58 payload contains unsupported characters.');
+    }
+    decoded = decoded * 58n + BigInt(index);
+  }
+
+  const bytes: number[] = [];
+  while (decoded > 0n) {
+    bytes.unshift(Number(decoded & 255n));
+    decoded >>= 8n;
+  }
+
+  for (const character of value) {
+    if (character === '1') {
+      bytes.unshift(0);
+    } else {
+      break;
+    }
+  }
+
+  return Uint8Array.from(bytes);
+}
+
+function encodeBytesToBase64(bytes: Uint8Array) {
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function decodeBase64ToBytes(value: string) {
+  const binary = atob(value);
+  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+}
+
+function parseRawHeaders(value: string) {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.includes(':'))
+    .map((line) => {
+      const index = line.indexOf(':');
+      return {
+        key: line.slice(0, index).trim().toLowerCase(),
+        value: line.slice(index + 1).trim(),
+      };
+    });
+}
+
+function guessApiKeyProvider(value: string) {
+  if (/^sk-[A-Za-z0-9]/.test(value)) return 'OpenAI-style secret key';
+  if (/^gh[pousr]_[A-Za-z0-9]/.test(value)) return 'GitHub token';
+  if (/^AKIA[0-9A-Z]{16}$/.test(value)) return 'AWS access key';
+  if (/^AIza[0-9A-Za-z\-_]{20,}$/.test(value)) return 'Google API key';
+  if (/^xox[baprs]-/.test(value)) return 'Slack token';
+  return 'Unknown token format';
+}
+
+export function transformBase58(value: string, mode: Base64Mode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'encode') {
+      return { error: '', output: encodeBytesToBase58(textEncoder.encode(value)) };
+    }
+
+    const bytes = decodeBase58ToBytes(value.trim());
+    return { error: '', output: textDecoder.decode(bytes) };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to convert the Base58 payload.',
+      output: '',
+    };
+  }
+}
+
+export function transformBase64Url(value: string, mode: Base64Mode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'encode') {
+      return {
+        error: '',
+        output: encodeBytesToBase64(textEncoder.encode(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, ''),
+      };
+    }
+
+    const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
+    return { error: '', output: textDecoder.decode(decodeBase64ToBytes(padded)) };
+  } catch {
+    return {
+      error: mode === 'decode' ? 'That Base64 URL payload could not be decoded.' : 'Unable to encode the supplied text.',
+      output: '',
+    };
+  }
+}
+
+export function transformQuotedPrintable(value: string, mode: Base64Mode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'encode') {
+      const bytes = textEncoder.encode(value);
+      const output = Array.from(bytes, (byte) => {
+        if (byte === 9 || (byte >= 33 && byte <= 60) || (byte >= 62 && byte <= 126)) {
+          return String.fromCharCode(byte);
+        }
+        if (byte === 10) return '\n';
+        if (byte === 13) return '\r';
+        return `=${byte.toString(16).toUpperCase().padStart(2, '0')}`;
+      }).join('');
+      return { error: '', output };
+    }
+
+    const normalized = value.replace(/=\r?\n/g, '');
+    const bytes: number[] = [];
+
+    for (let index = 0; index < normalized.length; index += 1) {
+      const character = normalized[index];
+      if (character === '=' && /^[A-Fa-f0-9]{2}$/.test(normalized.slice(index + 1, index + 3))) {
+        bytes.push(Number.parseInt(normalized.slice(index + 1, index + 3), 16));
+        index += 2;
+      } else {
+        bytes.push(...textEncoder.encode(character));
+      }
+    }
+
+    return { error: '', output: textDecoder.decode(Uint8Array.from(bytes)) };
+  } catch {
+    return { error: 'Unable to convert the quoted-printable payload.', output: '' };
+  }
+}
+
+export function transformDataUrl(value: string, mode: DataUrlMode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'text-to-data-url') {
+      return {
+        error: '',
+        output: `data:text/plain;charset=utf-8;base64,${encodeBytesToBase64(textEncoder.encode(value))}`,
+      };
+    }
+
+    const match = value.match(/^data:([^,]*?),(.*)$/s);
+    if (!match) {
+      throw new Error('Paste a valid data URL to decode.');
+    }
+    const [, metadata, payload] = match;
+    const output = /;base64/i.test(metadata) ? textDecoder.decode(decodeBase64ToBytes(payload)) : decodeURIComponent(payload);
+    return { error: '', output };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to decode the data URL.', output: '' };
+  }
+}
+
+export function transformBasicAuth(value: string, mode: CredentialMode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'encode') {
+      if (!value.includes(':')) {
+        throw new Error('Enter credentials in the form username:password.');
+      }
+      return { error: '', output: `Basic ${encodeBytesToBase64(textEncoder.encode(value))}` };
+    }
+
+    const payload = value.replace(/^Basic\s+/i, '').trim();
+    return { error: '', output: textDecoder.decode(decodeBase64ToBytes(payload)) };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : 'Unable to convert the Basic Auth payload.',
+      output: '',
+    };
+  }
+}
+
+export function transformCharacterCodes(value: string, mode: CharacterCodeMode): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+
+  try {
+    if (mode === 'encode') {
+      return {
+        error: '',
+        output: Array.from(value, (character) => String(character.codePointAt(0))).join(' '),
+      };
+    }
+
+    const codePoints = value
+      .split(/[\s,]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => Number.parseInt(item, 10));
+
+    if (codePoints.some((item) => !Number.isFinite(item))) {
+      throw new Error('Provide decimal character codes separated by spaces or commas.');
+    }
+
+    return { error: '', output: String.fromCodePoint(...codePoints) };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Unable to convert the character codes.', output: '' };
+  }
+}
+
+export function inspectApiKeyFingerprint(value: string): TransformResult<ApiKeyFingerprintReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  return {
+    error: '',
+    output: {
+      masked: source.length <= 8 ? `${source[0] ?? ''}***` : `${source.slice(0, 4)}${'*'.repeat(Math.max(4, source.length - 8))}${source.slice(-4)}`,
+      fingerprint: sha256(source).slice(0, 16),
+      length: source.length,
+      likelyProvider: guessApiKeyProvider(source),
+    },
+  };
+}
+
+export function generateSriHashes(value: string): TransformResult<SriHashReport | null> {
+  if (!value) return { error: '', output: null };
+
+  const wordArray = CryptoJS.lib.WordArray.create(textEncoder.encode(value) as unknown as number[]);
+  return {
+    error: '',
+    output: {
+      sha256: `sha256-${CryptoJS.enc.Base64.stringify(CryptoJS.SHA256(wordArray))}`,
+      sha384: `sha384-${CryptoJS.enc.Base64.stringify(CryptoJS.SHA384(wordArray))}`,
+      sha512: `sha512-${CryptoJS.enc.Base64.stringify(CryptoJS.SHA512(wordArray))}`,
+    },
+  };
+}
+
+export function inspectCorsPolicy(value: string): TransformResult<CorsPolicyReport | null> {
+  const headers = parseRawHeaders(value);
+  if (headers.length === 0) return { error: '', output: null };
+
+  const find = (key: string) => headers.find((header) => header.key === key)?.value ?? '';
+  const allowedOrigin = find('access-control-allow-origin');
+  const allowCredentials = /^true$/i.test(find('access-control-allow-credentials'));
+  const allowMethods = find('access-control-allow-methods').split(',').map((item) => item.trim()).filter(Boolean);
+  const allowHeaders = find('access-control-allow-headers').split(',').map((item) => item.trim()).filter(Boolean);
+  const findings: HeaderFinding[] = [];
+
+  if (!allowedOrigin) {
+    findings.push({ severity: 'medium', title: 'Missing Access-Control-Allow-Origin', detail: 'Browsers will block cross-origin access if the allow-origin header is absent.' });
+  }
+  if (allowedOrigin === '*' && allowCredentials) {
+    findings.push({ severity: 'high', title: 'Wildcard origin with credentials', detail: 'Credentialed cross-origin requests should never be paired with a wildcard origin.' });
+  } else if (allowedOrigin === '*') {
+    findings.push({ severity: 'medium', title: 'Wildcard origin detected', detail: 'A wildcard origin is often broader than necessary for authenticated or internal endpoints.' });
+  }
+  if (allowCredentials && !headers.some((header) => header.key === 'vary' && /origin/i.test(header.value))) {
+    findings.push({ severity: 'low', title: 'Missing Vary: Origin', detail: 'Caches can behave unexpectedly for credentialed CORS responses without Vary: Origin.' });
+  }
+
+  return {
+    error: '',
+    output: {
+      allowedOrigin,
+      allowCredentials,
+      allowMethods,
+      allowHeaders,
+      findings,
+      risk: findings.some((finding) => finding.severity === 'high') ? 'high' : findings.some((finding) => finding.severity === 'medium') ? 'medium' : 'low',
+    },
+  };
+}
+
+export function inspectSecurityTxt(value: string): TransformResult<SecurityTxtReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const entries = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith('#'))
+    .map((line) => {
+      const index = line.indexOf(':');
+      return index === -1 ? null : { key: line.slice(0, index).trim(), value: line.slice(index + 1).trim() };
+    })
+    .filter((entry): entry is { key: string; value: string } => Boolean(entry));
+
+  const fields = entries.map((entry) => entry.key);
+  const contacts = entries.filter((entry) => entry.key.toLowerCase() === 'contact').map((entry) => entry.value);
+  const expires = entries.find((entry) => entry.key.toLowerCase() === 'expires')?.value ?? '';
+  const findings: HeaderFinding[] = [];
+
+  if (contacts.length === 0) {
+    findings.push({ severity: 'high', title: 'Missing Contact field', detail: 'A security.txt file should provide at least one contact method for reporting vulnerabilities.' });
+  }
+  if (!expires) {
+    findings.push({ severity: 'medium', title: 'Missing Expires field', detail: 'Adding an expiry date helps consumers know whether the security.txt file is still maintained.' });
+  }
+
+  return { error: '', output: { fields, contacts, expires, findings } };
+}
+
+export function inspectOpenRedirect(value: string, allowlist = ''): TransformResult<OpenRedirectReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  try {
+    const allowedHosts = allowlist.split(/[\s,]+/).map((item) => item.trim().toLowerCase()).filter(Boolean);
+    let target = source;
+
+    if (/^https?:\/\//i.test(source)) {
+      const url = new URL(source);
+      target = url.searchParams.get('next') ?? url.searchParams.get('redirect') ?? url.searchParams.get('url') ?? source;
+    }
+
+    const isRelativeTarget = /^\//.test(target) && !/^\/\//.test(target);
+    const url = isRelativeTarget ? new URL(`https://placeholder.local${target}`) : new URL(target);
+    const findings: HeaderFinding[] = [];
+
+    if (/^(javascript|data):/i.test(target)) {
+      findings.push({ severity: 'high', title: 'Unsafe redirect scheme', detail: 'javascript: and data: schemes should never be allowed as redirect targets.' });
+    }
+    if (/^\/\//.test(target)) {
+      findings.push({ severity: 'high', title: 'Protocol-relative redirect target', detail: 'Protocol-relative targets can bypass naive host validation checks.' });
+    }
+    if (!isRelativeTarget && allowedHosts.length > 0 && !allowedHosts.includes(url.host.toLowerCase())) {
+      findings.push({ severity: 'medium', title: 'Target is outside the allowlist', detail: 'External redirect targets should be checked against an explicit host allowlist.' });
+    }
+
+    return {
+      error: '',
+      output: {
+        target,
+        host: isRelativeTarget ? 'relative-path' : url.host,
+        protocol: isRelativeTarget ? 'relative' : url.protocol.replace(':', ''),
+        findings,
+        isRelativeTarget,
+      },
+    };
+  } catch {
+    return { error: 'Paste a valid redirect target or a URL containing a next/redirect parameter.', output: null };
+  }
+}
+
+export function inspectPasswordPolicy(value: string): TransformResult<PasswordPolicyReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const minimumLengthMatch = source.match(/(?:minimum|min)\s*(?:length)?\s*(?:of|:)?\s*(\d{1,2})/i) ?? source.match(/(\d{1,2})\s*(?:characters|chars)/i);
+  const minimumLength = minimumLengthMatch ? Number.parseInt(minimumLengthMatch[1], 10) : null;
+  const requirements = [
+    /uppercase|capital/i.test(source) ? 'Uppercase letter' : '',
+    /lowercase/i.test(source) ? 'Lowercase letter' : '',
+    /number|digit/i.test(source) ? 'Number' : '',
+    /symbol|special character|punctuation/i.test(source) ? 'Symbol' : '',
+    /passphrase/i.test(source) ? 'Passphrase wording' : '',
+  ].filter(Boolean);
+  const findings: HeaderFinding[] = [];
+
+  if (!minimumLength || minimumLength < 12) {
+    findings.push({ severity: 'medium', title: 'Minimum length under 12 or unspecified', detail: 'Modern guidance usually starts at 12+ characters for reusable account passwords.' });
+  }
+  if (!/multi-factor|mfa|2fa/i.test(source)) {
+    findings.push({ severity: 'low', title: 'No MFA mention', detail: 'Pairing password guidance with MFA expectations usually improves practical account security.' });
+  }
+  if (/rotate every|expire every|change every/i.test(source)) {
+    findings.push({ severity: 'low', title: 'Mandatory rotation detected', detail: 'Frequent forced rotation can backfire unless there is evidence of compromise.' });
+  }
+
+  return {
+    error: '',
+    output: {
+      minimumLength,
+      requirements,
+      findings,
+      score: Math.max(0, Math.min(100, (minimumLength ?? 8) * 5 + requirements.length * 10 - findings.length * 8)),
+    },
+  };
+}
+
+export function inspectSignedUrl(value: string): TransformResult<SignedUrlReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  try {
+    const url = new URL(source);
+    const parameters = Array.from(url.searchParams.keys());
+    const findings: HeaderFinding[] = [];
+
+    let provider = 'Generic signed URL';
+    let expirySummary = 'No expiry parameter recognized';
+
+    if (url.searchParams.has('X-Amz-Expires')) {
+      provider = 'AWS S3 presigned URL';
+      const seconds = Number(url.searchParams.get('X-Amz-Expires'));
+      expirySummary = Number.isFinite(seconds) ? `${seconds} seconds from signature time` : 'AWS expiry present';
+      if (seconds > 86400) {
+        findings.push({ severity: 'medium', title: 'Long AWS presign duration', detail: 'Long-lived presigned URLs increase the exposure window if the link leaks.' });
+      }
+    } else if (url.searchParams.has('se')) {
+      provider = 'Azure SAS URL';
+      expirySummary = url.searchParams.get('se') ?? expirySummary;
+    } else if (url.searchParams.has('Expires')) {
+      provider = 'Google or generic signed URL';
+      expirySummary = url.searchParams.get('Expires') ?? expirySummary;
+    }
+
+    if (!parameters.some((parameter) => /expires|x-amz-expires|se/i.test(parameter))) {
+      findings.push({ severity: 'medium', title: 'No obvious expiry parameter', detail: 'Signed URLs should usually have an explicit and reviewable expiry window.' });
+    }
+
+    return { error: '', output: { provider, parameters, expirySummary, findings } };
+  } catch {
+    return { error: 'Paste a valid signed URL to inspect.', output: null };
+  }
+}
+
+export function buildGitignoreTemplate(value: string): TransformResult<GitignoreTemplateReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  const requested = new Set(
+    source
+      .split(/[\r\n,]+/)
+      .map((entry) => entry.trim().toLowerCase())
+      .filter(Boolean),
+  );
+
+  const templates: Record<string, string[]> = {
+    node: ['node_modules/', 'dist/', '.env.local', '.env.*.local', 'coverage/'],
+    python: ['__pycache__/', '*.pyc', '.venv/', '.pytest_cache/'],
+    dotnet: ['bin/', 'obj/', '*.user', '*.suo'],
+    vscode: ['.vscode/*', '!.vscode/extensions.json', '!.vscode/settings.json'],
+    logs: ['*.log', 'npm-debug.log*', 'yarn-debug.log*'],
+  };
+
+  const sections = Object.keys(templates).filter((key) => requested.has(key));
+  if (sections.length === 0) {
+    return { error: 'Use known section names like node, python, dotnet, vscode, or logs.', output: null };
+  }
+
+  const output = sections
+    .map((section) => [`# ${section.toUpperCase()}`, ...templates[section], ''].join('\n'))
+    .join('\n')
+    .trim();
+
+  return { error: '', output: { output, sections } };
+}
+
+export function formatIniDocument(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) return { error: '', output: '' };
+
+  const lines = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      if (/^\[.+\]$/.test(line)) return line;
+      const match = line.match(/^([^=:#]+)\s*[:=]\s*(.*)$/);
+      return match ? `${match[1].trim()} = ${match[2].trim()}` : line;
+    });
+
+  return { error: '', output: lines.join('\n') };
+}
+
+export function formatHttpRequest(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) return { error: '', output: '' };
+
+  const [requestLine = '', ...rest] = source.split(/\r?\n/);
+  const methodMatch = requestLine.match(/^([A-Z]+)\s+(\S+)(?:\s+HTTP\/[0-9.]+)?$/i);
+  const lines: string[] = [];
+
+  if (methodMatch) {
+    lines.push(`${methodMatch[1].toUpperCase()} ${methodMatch[2]}`);
+  } else {
+    lines.push(requestLine.trim());
+  }
+
+  const headers: string[] = [];
+  const body: string[] = [];
+  let reachedBody = false;
+
+  for (const rawLine of rest) {
+    const line = rawLine.trim();
+    if (!reachedBody && line.includes(':')) {
+      const index = line.indexOf(':');
+      headers.push(`${line.slice(0, index).trim()}: ${line.slice(index + 1).trim()}`);
+      continue;
+    }
+    if (line === '' && !reachedBody) {
+      reachedBody = true;
+      continue;
+    }
+    reachedBody = true;
+    if (line) body.push(line);
+  }
+
+  headers.sort((left, right) => left.localeCompare(right));
+  if (headers.length > 0) lines.push(...headers);
+  if (body.length > 0) {
+    lines.push('');
+    const joinedBody = body.join('\n');
+    const jsonAttempt = transformJson(joinedBody, 2);
+    lines.push(jsonAttempt.error ? joinedBody : jsonAttempt.output);
+  }
+
+  return { error: '', output: lines.join('\n') };
+}
+
+export function formatStackTrace(value: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) return { error: '', output: '' };
+
+  const lines = source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => line.replace(/^at\s+/, '').replace(/\s+/g, ' '));
+
+  return {
+    error: '',
+    output: lines.map((line, index) => `${String(index + 1).padStart(2, '0')}. ${line}`).join('\n'),
+  };
+}
+
+export function convertDelimitedText(value: string, sourceDelimiter: string, targetDelimiter: string): TransformResult<string> {
+  const source = value.trim();
+  if (!source) return { error: '', output: '' };
+
+  const from = sourceDelimiter === 'tab' ? '\t' : sourceDelimiter;
+  const to = targetDelimiter === 'tab' ? '\t' : targetDelimiter;
+  const rows = source.split(/\r?\n/).map((line) => line.split(from).map((cell) => cell.trim()));
+  return { error: '', output: rows.map((row) => row.join(to)).join('\n') };
+}
+
+export function convertDurationUnits(value: string, unit: 'milliseconds' | 'seconds' | 'minutes' | 'hours'): TransformResult<Record<string, string> | null> {
+  const amount = Number.parseFloat(value);
+  if (!Number.isFinite(amount)) {
+    return { error: 'Enter a valid duration value.', output: null };
+  }
+
+  const milliseconds =
+    unit === 'milliseconds' ? amount : unit === 'seconds' ? amount * 1000 : unit === 'minutes' ? amount * 60_000 : amount * 3_600_000;
+
+  return {
+    error: '',
+    output: {
+      milliseconds: milliseconds.toFixed(0),
+      seconds: (milliseconds / 1000).toFixed(4),
+      minutes: (milliseconds / 60_000).toFixed(4),
+      hours: (milliseconds / 3_600_000).toFixed(4),
+    },
+  };
+}
+
+export function convertPathSeparators(value: string, target: 'windows' | 'posix'): TransformResult<string> {
+  if (!value) return { error: '', output: '' };
+  const normalized = value.replace(/\\/g, '/');
+  return { error: '', output: target === 'posix' ? normalized : normalized.replace(/\//g, '\\') };
+}
+
+function clampPaletteColor(value: number) {
+  return Math.max(0, Math.min(255, Math.round(value)));
+}
+
+function adjustHexColor(hex: string, amount: number) {
+  const normalized = hex.replace('#', '');
+  const red = Number.parseInt(normalized.slice(0, 2), 16);
+  const green = Number.parseInt(normalized.slice(2, 4), 16);
+  const blue = Number.parseInt(normalized.slice(4, 6), 16);
+  return `#${[red, green, blue]
+    .map((channel) => clampPaletteColor(channel + amount).toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase()}`;
+}
+
+export function generateColorPalette(value: string): TransformResult<PaletteReport | null> {
+  const base = convertColorFormats(value);
+  if (base.error || !base.output) {
+    return { error: base.error || 'Enter a valid color value.', output: null };
+  }
+
+  return {
+    error: '',
+    output: {
+      values: [
+        { label: 'Base', hex: base.output.hex },
+        { label: 'Soft', hex: adjustHexColor(base.output.hex, 28) },
+        { label: 'Strong', hex: adjustHexColor(base.output.hex, -28) },
+        { label: 'Accent', hex: adjustHexColor(base.output.hex, 56) },
+        { label: 'Deep', hex: adjustHexColor(base.output.hex, -56) },
+      ],
+    },
+  };
+}
+
+const fakeFirstNames = ['Arun', 'Maya', 'Ivy', 'Noah', 'Luca', 'Asha', 'Nina', 'Leo'];
+const fakeLastNames = ['Stone', 'Patel', 'Nguyen', 'Hart', 'Lopez', 'Khan', 'Price', 'Miller'];
+const fakeRoles = ['Engineer', 'Reviewer', 'Designer', 'Analyst', 'QA'];
+
+export function generateFakeUsers(count: number): TransformResult<FakeUserReport | null> {
+  if (count <= 0) return { error: 'Use a positive count for fake users.', output: null };
+
+  return {
+    error: '',
+    output: {
+      values: Array.from({ length: count }, (_, index) => {
+        const firstName = fakeFirstNames[index % fakeFirstNames.length];
+        const lastName = fakeLastNames[(index * 2) % fakeLastNames.length];
+        return {
+          name: `${firstName} ${lastName}`,
+          email: `${firstName}.${lastName}${index + 1}@example.test`.toLowerCase(),
+          role: fakeRoles[index % fakeRoles.length],
+        };
+      }),
+    },
+  };
+}
+
+export function generateReleaseNotes(value: string): TransformResult<ReleaseNoteReport | null> {
+  const items = value
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^[-*]\s*/, '').trim())
+    .filter(Boolean);
+
+  if (items.length === 0) return { error: '', output: null };
+
+  return {
+    error: '',
+    output: {
+      markdown: ['## Release notes', '', ...items.map((item) => `- ${item}`)].join('\n'),
+      bulletCount: items.length,
+    },
+  };
+}
+
+export function generateTestCaseTitles(value: string): TransformResult<TestCaseTitleReport | null> {
+  const source = value.trim();
+  if (!source) return { error: '', output: null };
+
+  return {
+    error: '',
+    output: {
+      values: [
+        `Given ${source} when valid input is provided then the expected result is shown`,
+        `Given ${source} when invalid input is provided then a clear error is shown`,
+        `Given ${source} when the form is reset then the default sample state returns`,
+        `Given ${source} when output is generated then the result can be copied cleanly`,
+      ],
+    },
+  };
+}
+
+function readPointerSegment(value: unknown, segment: string): unknown {
+  const token = segment.replace(/~1/g, '/').replace(/~0/g, '~');
+  if (Array.isArray(value)) {
+    const index = Number.parseInt(token, 10);
+    return Number.isInteger(index) ? value[index] : undefined;
+  }
+  if (value && typeof value === 'object') {
+    return (value as Record<string, unknown>)[token];
+  }
+  return undefined;
+}
+
+export function testJsonPointer(json: string, pointer: string): TransformResult<JsonPointerReport | null> {
+  const source = json.trim();
+  if (!source) return { error: '', output: null };
+
+  try {
+    const parsed = JSON.parse(source) as unknown;
+    if (pointer === '' || pointer === '/') {
+      return { error: '', output: { found: true, value: JSON.stringify(parsed, null, 2) } };
+    }
+
+    const segments = pointer.replace(/^\//, '').split('/');
+    let current: unknown = parsed;
+    for (const segment of segments) {
+      current = readPointerSegment(current, segment);
+      if (current === undefined) {
+        return { error: '', output: { found: false, value: '' } };
+      }
+    }
+    return { error: '', output: { found: true, value: typeof current === 'string' ? current : JSON.stringify(current, null, 2) } };
+  } catch {
+    return { error: 'Paste valid JSON before testing a JSON Pointer.', output: null };
+  }
+}
+
+export function testUrlPattern(pattern: string, candidate: string): TransformResult<UrlPatternReport | null> {
+  if (!pattern.trim() || !candidate.trim()) return { error: '', output: null };
+
+  const keys: string[] = [];
+  const regex = new RegExp(
+    `^${pattern
+      .replace(/\/:([A-Za-z0-9_]+)/g, (_, key) => {
+        keys.push(key);
+        return '/([^/]+)';
+      })
+      .replace(/\*/g, '.*')}$`,
+  );
+  const match = candidate.match(regex);
+
+  return {
+    error: '',
+    output: {
+      matched: Boolean(match),
+      normalizedPattern: pattern,
+      parameters: match ? keys.map((key, index) => ({ key, value: match[index + 1] ?? '' })) : [],
+    },
+  };
+}
+
+function parseSimpleSemver(value: string) {
+  const match = value.trim().match(/^(\d+)\.(\d+)\.(\d+)$/);
+  if (!match) return null;
+  return { major: Number(match[1]), minor: Number(match[2]), patch: Number(match[3]) };
+}
+
+function compareSemver(left: { major: number; minor: number; patch: number }, right: { major: number; minor: number; patch: number }) {
+  if (left.major !== right.major) return left.major - right.major;
+  if (left.minor !== right.minor) return left.minor - right.minor;
+  return left.patch - right.patch;
+}
+
+export function testSemverRange(version: string, range: string): TransformResult<SemverRangeReport | null> {
+  const parsedVersion = parseSimpleSemver(version);
+  if (!parsedVersion) return { error: 'Use a semantic version like 1.2.3.', output: null };
+
+  const normalizedRange = range.trim();
+  if (!normalizedRange) return { error: '', output: null };
+
+  const reasons: string[] = [];
+  let isMatch = false;
+
+  if (normalizedRange.startsWith('^')) {
+    const base = parseSimpleSemver(normalizedRange.slice(1));
+    if (!base) return { error: 'Use a valid caret range like ^1.2.3.', output: null };
+    isMatch = parsedVersion.major === base.major && compareSemver(parsedVersion, base) >= 0;
+    reasons.push(`Major version must stay within ${base.major}.x.x`);
+  } else if (normalizedRange.startsWith('~')) {
+    const base = parseSimpleSemver(normalizedRange.slice(1));
+    if (!base) return { error: 'Use a valid tilde range like ~1.2.3.', output: null };
+    isMatch = parsedVersion.major === base.major && parsedVersion.minor === base.minor && compareSemver(parsedVersion, base) >= 0;
+    reasons.push(`Major and minor version must stay within ${base.major}.${base.minor}.x`);
+  } else if (/^(>=|<=|>|<)/.test(normalizedRange)) {
+    const operator = normalizedRange.match(/^(>=|<=|>|<)/)?.[1] ?? '';
+    const base = parseSimpleSemver(normalizedRange.slice(operator.length));
+    if (!base) return { error: 'Use a valid comparison range like >=1.2.3.', output: null };
+    const comparison = compareSemver(parsedVersion, base);
+    isMatch =
+      (operator === '>=' && comparison >= 0) ||
+      (operator === '<=' && comparison <= 0) ||
+      (operator === '>' && comparison > 0) ||
+      (operator === '<' && comparison < 0);
+    reasons.push(`Version is checked with ${operator} ${normalizedRange.slice(operator.length)}`);
+  } else {
+    const exact = parseSimpleSemver(normalizedRange);
+    if (!exact) return { error: 'Use a valid semantic range like ^1.2.3, ~1.2.3, or >=1.2.3.', output: null };
+    isMatch = compareSemver(parsedVersion, exact) === 0;
+    reasons.push('Exact semantic version match required');
+  }
+
+  return { error: '', output: { isMatch, normalizedRange, reasons } };
+}
+
+export function testHttpStatusRule(statusCode: string, rule: string): TransformResult<HttpStatusRuleReport | null> {
+  const code = Number.parseInt(statusCode.trim(), 10);
+  const normalizedRule = rule.trim().toLowerCase();
+  if (!Number.isInteger(code)) return { error: 'Enter a valid HTTP status code.', output: null };
+  if (!normalizedRule) return { error: '', output: null };
+
+  let isMatch = false;
+  const reasons: string[] = [];
+
+  if (/^\dxx$/.test(normalizedRule)) {
+    const family = Number.parseInt(normalizedRule[0], 10);
+    isMatch = Math.floor(code / 100) === family;
+    reasons.push(`Matches the ${family}xx response family`);
+  } else if (/^\d{3}-\d{3}$/.test(normalizedRule)) {
+    const [start, end] = normalizedRule.split('-').map((entry) => Number.parseInt(entry, 10));
+    isMatch = code >= start && code <= end;
+    reasons.push(`Matches the ${start}-${end} range`);
+  } else if (/^\d{3}$/.test(normalizedRule)) {
+    isMatch = code === Number.parseInt(normalizedRule, 10);
+    reasons.push('Exact status code match required');
+  } else {
+    return { error: 'Use a rule like 2xx, 200-299, or 204.', output: null };
+  }
+
+  return { error: '', output: { isMatch, normalizedRule, reasons } };
 }
 
 function inferSchemaFromValue(value: unknown): Record<string, unknown> {

@@ -78,7 +78,13 @@ export default function TimestampConverter() {
         <section className="editor-panel">
           <div className="editor-panel__head">
             <span>Output</span>
-            <button type="button" className="action-button action-button--icon" onClick={copyOutput} disabled={!parsed.output}>
+            <button
+              type="button"
+              className="action-button action-button--icon"
+              onClick={copyOutput}
+              disabled={!parsed.output}
+              aria-label="Copy ISO timestamp"
+            >
               {copied ? <Check size={16} /> : <Copy size={16} />}
             </button>
           </div>

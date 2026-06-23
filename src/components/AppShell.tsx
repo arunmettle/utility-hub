@@ -271,7 +271,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             >
               {sidebarVisible ? <X size={22} /> : <Menu size={22} />}
             </button>
-            <Link to="/" className="icon-button icon-button--brand" aria-label="Cobalt home">
+            <Link to="/" className="icon-button icon-button--brand" aria-label="UtilityHub home">
               <BrandMark size={24} />
             </Link>
             <label className="searchbar" htmlFor="tool-search">
@@ -288,7 +288,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="topbar__actions">
-            <a className="icon-button" href="/#faq" aria-label="About Cobalt">
+            <a className="icon-button" href="/#faq" aria-label="About UtilityHub">
               <Info size={20} />
             </a>
             <button

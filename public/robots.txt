@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://utility-hub.vercel.app/sitemap.xml
+Sitemap: https://utilityhub.dev/sitemap.xml
 
 # Machine-readable references
-# https://utility-hub.vercel.app/llms.txt
-# https://utility-hub.vercel.app/tool-catalog.json
+# https://utilityhub.dev/llms.txt
+# https://utilityhub.dev/tool-catalog.json

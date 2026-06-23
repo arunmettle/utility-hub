@@ -422,7 +422,7 @@ export function HallucinationReviewWorkspace() {
   );
 }
 
-const ragSample = 'Cobalt is a browser-first developer and AI utility suite. It keeps pasted prompt drafts, diffs, payloads, headers, schemas, and eval snippets local to the page. Teams use it for structured output design, guardrail checks, and workflow validation without standing up a backend.';
+const ragSample = 'UtilityHub is a browser-first developer and AI utility suite. It keeps pasted prompt drafts, diffs, payloads, headers, schemas, and eval snippets local to the page. Teams use it for structured output design, guardrail checks, and workflow validation without standing up a backend.';
 
 export function RagChunkPreviewer() {
   const [text, setText] = useState(`${ragSample} ${ragSample} ${ragSample}`);
@@ -611,8 +611,8 @@ export function GroundedAnswerChecker() {
 }
 
 export function CitationFormatterForAiAnswers() {
-  const [answer, setAnswer] = useState('Cobalt keeps prompt, diff, and schema workflows local to the browser.');
-  const [sources, setSources] = useState('https://utility-hub-psi.vercel.app/\nhttps://platform.openai.com/docs');
+  const [answer, setAnswer] = useState('UtilityHub keeps prompt, diff, and schema workflows local to the browser.');
+  const [sources, setSources] = useState('https://utilityhub.dev/\nhttps://platform.openai.com/docs');
   const formatted = useMemo(() => formatCitations(answer, sources), [answer, sources]);
   return (
     <ToolFrame eyebrow="AI" title="Citation Formatter for AI Answers" description="Append clean numbered citations to an AI answer so reviewers and readers can trace claims more quickly." actions={<CopyAction value={formatted} label="Copy cited answer" />}>

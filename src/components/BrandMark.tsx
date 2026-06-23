@@ -8,7 +8,7 @@ export default function BrandMark({
   compactWordmark?: boolean;
 }) {
   return (
-    <span className={`brand-mark ${withWordmark ? 'brand-mark--with-wordmark' : ''}`} aria-label="Cobalt">
+    <span className={`brand-mark ${withWordmark ? 'brand-mark--with-wordmark' : ''}`} aria-label="UtilityHub">
       <svg
         width={size}
         height={size}
@@ -29,7 +29,7 @@ export default function BrandMark({
       </svg>
       {withWordmark ? (
         <span className="brand-mark__wordmark">
-          <strong>{compactWordmark ? 'Cobalt' : 'COBALT'}</strong>
+          <strong>{compactWordmark ? 'UtilityHub' : 'UTILITYHUB'}</strong>
           {!compactWordmark ? <small>Privacy-first browser tools</small> : null}
         </span>
       ) : null}

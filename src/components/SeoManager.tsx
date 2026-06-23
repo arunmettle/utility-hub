@@ -2,14 +2,26 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { tools } from '../data/tools';
 
-const siteUrl = 'https://utility-hub.vercel.app';
-const socialImageUrl = `${siteUrl}/og-image.svg`;
-const socialImageAlt = 'Cobalt preview card with privacy-first browser tools branding and developer workflow categories.';
-const defaultTitle = 'Cobalt | Privacy-first browser tools for developers';
+const fallbackSiteUrl = 'https://utilityhub.dev';
+const socialImageAlt = 'UtilityHub preview card with privacy-first browser tools branding and developer workflow categories.';
+const defaultTitle = 'UtilityHub | Privacy-first browser tools, AI prompt tools, and developer utilities';
 const defaultDescription =
-  'Cobalt is a privacy-first collection of browser-based developer tools for formatting, encoding, testing, reviewing diffs, and inspecting delivery workflows without server round-trips.';
+  'UtilityHub is a privacy-first collection of browser-based developer tools, AI prompt utilities, formatters, encoders, diff checkers, and workflow helpers that keep sensitive data in the browser.';
 const defaultKeywords =
-  'privacy-first developer tools, browser utilities, json formatter, base64 studio, regex tester, diff checker, docker tools, openapi tools';
+  'privacy-first developer tools, browser utilities, ai utility tools, llm prompt tools, prompt testing tools, markdown formatter, json formatter, base64 studio, regex tester, diff checker, openapi tools, developer workflow tools';
+
+function getSiteUrl() {
+  const configuredSiteUrl = import.meta.env.VITE_SITE_URL?.trim();
+  if (configuredSiteUrl) {
+    return configuredSiteUrl.replace(/\/$/, '');
+  }
+
+  if (typeof window !== 'undefined' && window.location.origin) {
+    return window.location.origin.replace(/\/$/, '');
+  }
+
+  return fallbackSiteUrl;
+}
 
 function upsertMeta(selector: string, attributes: Record<string, string>) {
   let element = document.head.querySelector(selector) as HTMLMetaElement | null;
@@ -49,13 +61,15 @@ export default function SeoManager() {
   const location = useLocation();
 
   useEffect(() => {
+    const siteUrl = getSiteUrl();
+    const socialImageUrl = `${siteUrl}/og-image.svg`;
     const activeTool = tools.find((tool) => tool.path === location.pathname);
-    const title = activeTool ? `${activeTool.name} | Cobalt` : defaultTitle;
+    const title = activeTool ? `${activeTool.name} | UtilityHub` : defaultTitle;
     const description = activeTool
-      ? `${activeTool.description} Cobalt keeps the workflow local in your browser so sensitive snippets, payloads, and review data do not leave the page.`
+      ? `${activeTool.description} UtilityHub keeps the workflow local in your browser so sensitive snippets, payloads, and review data do not leave the page.`
       : defaultDescription;
     const keywords = activeTool
-      ? `${activeTool.name.toLowerCase()}, ${activeTool.category.toLowerCase()}, privacy-first browser tool, cobalt`
+      ? `${activeTool.name.toLowerCase()}, ${activeTool.category.toLowerCase()}, privacy-first browser tool, browser utility, local data processing, developer utility, ai workflow tool, cobalt`
       : defaultKeywords;
     const canonicalUrl = `${siteUrl}${location.pathname === '/' ? '' : location.pathname}`;
 
@@ -68,7 +82,7 @@ export default function SeoManager() {
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title });
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description });
     upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonicalUrl });
-    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'Cobalt' });
+    upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: 'UtilityHub' });
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: socialImageUrl });
     upsertMeta('meta[property="og:image:alt"]', { property: 'og:image:alt', content: socialImageAlt });
     upsertMeta('meta[property="twitter:card"]', { property: 'twitter:card', content: 'summary_large_image' });
@@ -90,7 +104,7 @@ export default function SeoManager() {
         isAccessibleForFree: true,
         publisher: {
           '@type': 'Organization',
-          name: 'Cobalt',
+          name: 'UtilityHub',
         },
       });
       return;
@@ -101,25 +115,30 @@ export default function SeoManager() {
       '@graph': [
         {
           '@type': 'WebSite',
-          name: 'Cobalt',
+          name: 'UtilityHub',
           url: siteUrl,
           description: defaultDescription,
           inLanguage: 'en',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${siteUrl}/?q={search_term_string}`,
+            'query-input': 'required name=search_term_string',
+          },
         },
         {
           '@type': 'FAQPage',
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'What is Cobalt?',
+              name: 'What is UtilityHub?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'Cobalt is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams.',
+                text: 'UtilityHub is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams.',
               },
             },
             {
               '@type': 'Question',
-              name: 'Does Cobalt send my data to a server?',
+              name: 'Does UtilityHub send my data to a server?',
               acceptedAnswer: {
                 '@type': 'Answer',
                 text: 'The tools are designed to work in the browser for normal usage, so pasted payloads, snippets, headers, and diffs can stay local to the page.',
@@ -137,7 +156,7 @@ export default function SeoManager() {
         },
         {
           '@type': 'ItemList',
-          name: 'Cobalt tool catalog',
+          name: 'UtilityHub tool catalog',
           itemListElement: tools.map((tool, index) => ({
             '@type': 'ListItem',
             position: index + 1,

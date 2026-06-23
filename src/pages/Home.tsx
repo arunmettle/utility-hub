@@ -20,22 +20,22 @@ const highlightPoints = [
 
 const homepageFaqs = [
   {
-    question: 'What is Cobalt?',
+    question: 'What is UtilityHub?',
     answer:
-      'Cobalt is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams. It focuses on quick local transformations, inspections, and workflow checks.',
+      'UtilityHub is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams. It focuses on quick local transformations, inspections, and workflow checks.',
   },
   {
-    question: 'Does Cobalt send my data to a server?',
+    question: 'Does UtilityHub send my data to a server?',
     answer:
       'The tools are designed to work in the browser for normal usage. That means pasted snippets, request payloads, config files, response headers, and review text can stay local to the page.',
   },
   {
-    question: 'Who is Cobalt for?',
+    question: 'Who is UtilityHub for?',
     answer:
       'It is useful for frontend and backend developers, DevOps and platform engineers, reviewers, QA engineers, and anyone who regularly needs small transformation tools during daily delivery work.',
   },
   {
-    question: 'What kinds of tools are included in Cobalt?',
+    question: 'What kinds of tools are included in UtilityHub?',
     answer:
       'The current catalog covers formatters, encoders, converters, generators, security tools, testers, and a growing set of developer workflow utilities such as OpenAPI summaries, Docker audits, cron explainers, and schema generation.',
   },
@@ -52,7 +52,7 @@ export default function Home() {
           <div>
             <h1>Privacy-first browser tools for daily engineering work.</h1>
             <p>
-              Cobalt keeps repetitive transformations calm, quick, and local. Start with a formatter for structured
+              UtilityHub keeps repetitive transformations calm, quick, and local. Start with a formatter for structured
               payloads, inspect secure tokens, compare text, shape data, and transform encoded content without server
               round-trips.
             </p>
@@ -63,7 +63,7 @@ export default function Home() {
           <span className="hero-copy__eyebrow">Browser-based developer utility suite</span>
           <h2>Built for payloads, diffs, configs, and delivery workflows that should stay readable.</h2>
           <p>
-            Cobalt helps teams move through everyday engineering chores faster: formatting JSON, decoding Base64,
+            UtilityHub helps teams move through everyday engineering chores faster: formatting JSON, decoding Base64,
             checking regexes, comparing text, reviewing headers, tightening Docker config, and exploring API specs.
           </p>
           <p>
@@ -76,7 +76,7 @@ export default function Home() {
       <section className="catalog-section">
         <div className="section-heading">
           <h2>Why teams use it</h2>
-          <p>Cobalt is shaped around local-first utility work rather than one-off marketing demos.</p>
+          <p>UtilityHub is shaped around local-first utility work rather than one-off marketing demos.</p>
         </div>
 
         <div className="insight-grid">
@@ -118,7 +118,7 @@ export default function Home() {
 
       <section className="catalog-section">
         <div className="section-heading">
-          <h2>How Cobalt fits into developer workflows</h2>
+          <h2>How UtilityHub fits into developer workflows</h2>
           <p>Use it as a browser-side scratchpad for transforming or reviewing working material before it lands in code, docs, or delivery systems.</p>
         </div>
 
@@ -134,7 +134,7 @@ export default function Home() {
           <article className="tool-note">
             <h2>Review and platform tools</h2>
             <p>
-              Cobalt also covers review-heavy workflows such as side-by-side text diffs, GitHub Actions checks,
+              UtilityHub also covers review-heavy workflows such as side-by-side text diffs, GitHub Actions checks,
               Docker and docker-compose inspection, cron schedule explanation, OpenAPI summarization, header inspection,
               semantic version guidance, and JSON schema bootstrapping.
             </p>

@@ -1,20 +1,35 @@
-# Cobalt
+# UtilityHub
 
-> Privacy-first browser-based utility tools for developers, reviewers, and platform teams.
+> Privacy-first browser-based utility tools, AI prompt tools, developer workflow helpers, and local review utilities.
 
-Cobalt provides local, client-side tools for formatting, encoding, security review, API inspection, diff review, and delivery workflow checks.
+UtilityHub provides local, client-side tools for formatting, encoding, security review, AI prompt design, eval preparation, API inspection, diff review, file-fixture generation, and delivery workflow checks.
 
 ## Canonical references
 
-- Site: https://utility-hub.vercel.app/
-- Sitemap: https://utility-hub.vercel.app/sitemap.xml
-- Machine-readable catalog: https://utility-hub.vercel.app/tool-catalog.json
+- Site: https://utilityhub.dev/
+- Sitemap: https://utilityhub.dev/sitemap.xml
+- Machine-readable catalog: https://utilityhub.dev/tool-catalog.json
 
 ## Privacy model
 
 - Tools are designed to run in the browser.
 - Pasted data should remain local to the page for normal use.
-- Good fit for transforming snippets, configs, request payloads, response headers, text diffs, and docs fragments.
+- Good fit for transforming snippets, configs, request payloads, response headers, AI prompts, text diffs, fixture files, and docs fragments.
+
+## Search keywords
+
+- Privacy-first developer tools
+- Browser-based utilities
+- AI utility tools
+- LLM prompt tools
+- Prompt testing tools
+- JSON formatter
+- Markdown formatter
+- Diff checker
+- Base64 encoder
+- JWT decoder
+- OpenAPI tools
+- Developer workflow tools
 
 ## Tool catalog
 

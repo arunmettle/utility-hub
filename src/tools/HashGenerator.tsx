@@ -63,7 +63,13 @@ export default function HashGenerator() {
                   <Fingerprint size={16} />
                   {item.label}
                 </span>
-                <button type="button" className="action-button action-button--icon" onClick={() => copyHash(item.type)} disabled={!hashes[item.type]}>
+                <button
+                  type="button"
+                  className="action-button action-button--icon"
+                  onClick={() => copyHash(item.type)}
+                  disabled={!hashes[item.type]}
+                  aria-label={`Copy ${item.label} hash`}
+                >
                   {copied === item.type ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>

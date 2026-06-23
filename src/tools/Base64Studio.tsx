@@ -3,7 +3,7 @@ import { ArrowLeftRight, Check, Copy, Trash2 } from 'lucide-react';
 import ToolFrame from '../components/ToolFrame';
 import { transformBase64, type Base64Mode } from '../lib/privacyTools';
 
-const sampleText = 'Cobalt keeps Base64 workflows readable.';
+const sampleText = 'UtilityHub keeps Base64 workflows readable.';
 const samplePayload = transformBase64(sampleText, 'encode').output;
 
 export default function Base64Studio() {

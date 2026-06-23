@@ -3,7 +3,7 @@ import { ArrowLeftRight, Check, Copy, Table2, Trash2 } from 'lucide-react';
 import ToolFrame from '../components/ToolFrame';
 import { transformCsvJson, type CsvJsonMode } from '../lib/privacyTools';
 
-const sampleCsv = 'name,role\nCobalt,platform\nOpenAI,partner';
+const sampleCsv = 'name,role\nUtilityHub,platform\nOpenAI,partner';
 const sampleJson = transformCsvJson(sampleCsv, 'csv-to-json').output;
 
 export default function CsvJsonStudio() {
@@ -106,7 +106,7 @@ export default function CsvJsonStudio() {
             value={input}
             onChange={(event) => transform(event.target.value)}
             className="editor-textarea"
-            placeholder={mode === 'csv-to-json' ? 'name,role' : '[{\"name\":\"Cobalt\"}]'}
+            placeholder={mode === 'csv-to-json' ? 'name,role' : '[{\"name\":\"UtilityHub\"}]'}
           />
         </section>
 

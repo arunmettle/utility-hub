@@ -1,42 +1,970 @@
 {
-  "name": "Cobalt",
-  "siteUrl": "https://utility-hub.vercel.app",
+  "name": "UtilityHub",
+  "siteUrl": "https://utilityhub.dev",
   "privacyModel": "browser-local",
-  "toolCount": 34,
+  "toolCount": 136,
+  "categories": [
+    "Formatters",
+    "Encoders",
+    "Generators",
+    "Converters",
+    "Security",
+    "Testers",
+    "Developer",
+    "AI"
+  ],
   "tools": [
-    { "id": "json-formatter", "name": "JSON Formatter", "category": "Formatters", "path": "/json-formatter", "description": "Validate, prettify, and minify structured payloads without leaving the browser." },
-    { "id": "base64-studio", "name": "Base64 Studio", "category": "Encoders", "path": "/base64-studio", "description": "Encode or decode text payloads with clear input and output surfaces." },
-    { "id": "hash-generator", "name": "Hash Generator", "category": "Generators", "path": "/hash-generator", "description": "Create deterministic MD5, SHA-256, and SHA-512 digests for local integrity checks." },
-    { "id": "password-generator", "name": "Password Generator", "category": "Generators", "path": "/password-generator", "description": "Generate strong passwords locally with configurable character sets and live strength feedback." },
-    { "id": "url-studio", "name": "URL Studio", "category": "Encoders", "path": "/url-encoder", "description": "Encode or decode URL-safe strings while keeping source text private in the browser." },
-    { "id": "case-converter", "name": "Case Converter", "category": "Converters", "path": "/case-converter", "description": "Switch between common naming conventions for code, APIs, and docs." },
-    { "id": "timestamp-converter", "name": "Timestamp Converter", "category": "Converters", "path": "/timestamp-converter", "description": "Convert Unix seconds or milliseconds into human-readable local and ISO dates." },
-    { "id": "jwt-decoder", "name": "JWT Decoder", "category": "Security", "path": "/jwt-decoder", "description": "Decode token headers and payloads locally with quick warnings for expiry and unsafe algorithms." },
-    { "id": "regex-tester", "name": "Regex Tester", "category": "Testers", "path": "/regex-tester", "description": "Test JavaScript patterns with live match counts, capture groups, and highlighted results." },
-    { "id": "qr-code-generator", "name": "QR Code Generator", "category": "Generators", "path": "/qr-code-generator", "description": "Create downloadable QR codes from text or links without sending content anywhere." },
-    { "id": "uuid-generator", "name": "UUID Generator", "category": "Generators", "path": "/uuid-generator", "description": "Generate local UUID batches for identifiers, fixtures, and test data." },
-    { "id": "ulid-generator", "name": "ULID Generator", "category": "Generators", "path": "/ulid-generator", "description": "Create sortable ULIDs locally for ordered records and compact identifiers." },
-    { "id": "hmac-generator", "name": "HMAC Generator", "category": "Security", "path": "/hmac-generator", "description": "Produce SHA-256 and SHA-512 HMAC signatures in-browser from a message and secret." },
-    { "id": "query-string-studio", "name": "Query String Studio", "category": "Converters", "path": "/query-string-studio", "description": "Round-trip JSON parameter objects and URL query strings without server calls." },
-    { "id": "html-entity-studio", "name": "HTML Entity Studio", "category": "Encoders", "path": "/html-entity-studio", "description": "Encode or decode HTML entities safely for templates, docs, and copied snippets." },
-    { "id": "hex-studio", "name": "Hex Studio", "category": "Encoders", "path": "/hex-studio", "description": "Encode text into hexadecimal bytes or decode hex back into readable text locally." },
-    { "id": "slugify-studio", "name": "Slugify Studio", "category": "Converters", "path": "/slugify-studio", "description": "Create URL-friendly slugs and path-safe variants from titles, labels, and filenames." },
-    { "id": "unicode-escape-studio", "name": "Unicode Escape Studio", "category": "Encoders", "path": "/unicode-escape-studio", "description": "Transform readable text into unicode escape sequences and decode them back again." },
-    { "id": "csv-json-studio", "name": "CSV JSON Studio", "category": "Converters", "path": "/csv-json-studio", "description": "Round-trip CSV tables and JSON arrays locally for fixtures, imports, and exports." },
-    { "id": "text-diff-checker", "name": "Text Diff Checker", "category": "Testers", "path": "/text-diff-checker", "description": "Compare two text blocks line by line to inspect additions and removals privately." },
-    { "id": "docker-optimizer", "name": "Docker Optimizer", "category": "Developer", "path": "/docker-optimizer", "description": "Review Dockerfiles for repeatability, image size, and runtime hygiene inside the browser." },
-    { "id": "github-actions-validator", "name": "GitHub Actions Validator", "category": "Developer", "path": "/github-actions-validator", "description": "Check workflow YAML for missing triggers, job wiring, checkout steps, and CI safety signals." },
-    { "id": "dependency-visualizer", "name": "Dependency Visualizer", "category": "Developer", "path": "/dependency-visualizer", "description": "Inspect package manifests for grouped dependencies, scripts, and duplicate package names." },
-    { "id": "bundle-size-calculator", "name": "Bundle Size Calculator", "category": "Developer", "path": "/bundle-size-calculator", "description": "Estimate asset totals, file mix, and rough gzip impact from pasted build output." },
-    { "id": "curl-to-code-converter", "name": "cURL to Code Converter", "category": "Developer", "path": "/curl-to-code-converter", "description": "Turn a raw cURL request into fetch, axios, and Python starter snippets locally." },
-    { "id": "sql-beautifier", "name": "SQL Beautifier", "category": "Developer", "path": "/sql-beautifier", "description": "Format pasted SQL into a cleaner review layout before you run or share the query." },
-    { "id": "semantic-version-calculator", "name": "Semantic Version Calculator", "category": "Developer", "path": "/semantic-version-calculator", "description": "Estimate patch, minor, and major bumps from release notes and compatibility signals." },
-    { "id": "breaking-change-detector", "name": "Breaking Change Detector", "category": "Developer", "path": "/breaking-change-detector", "description": "Compare two JSON shapes to surface removed fields and type shifts that may break consumers." },
-    { "id": "http-header-inspector", "name": "HTTP Header Inspector", "category": "Developer", "path": "/http-header-inspector", "description": "Review raw response headers for missing security controls, cache policy, and CORS posture." },
-    { "id": "cron-expression-explainer", "name": "Cron Expression Explainer", "category": "Developer", "path": "/cron-expression-explainer", "description": "Break down five-part cron expressions and preview the next matching run times." },
-    { "id": "docker-compose-auditor", "name": "Docker Compose Auditor", "category": "Developer", "path": "/docker-compose-auditor", "description": "Inspect docker-compose service definitions for health, restart coverage, and image hygiene." },
-    { "id": "openapi-summary", "name": "OpenAPI Summary", "category": "Developer", "path": "/openapi-summary", "description": "Summarize an OpenAPI document into paths, methods, tags, and detected security schemes." },
-    { "id": "markdown-table-builder", "name": "Markdown Table Builder", "category": "Developer", "path": "/markdown-table-builder", "description": "Convert CSV rows or JSON arrays into markdown tables for docs, PRs, and release notes." },
-    { "id": "json-schema-generator", "name": "JSON Schema Generator", "category": "Developer", "path": "/json-schema-generator", "description": "Infer a draft JSON Schema from a representative JSON sample entirely in the browser." }
+    {
+      "id": "json-formatter",
+      "name": "JSON Formatter",
+      "description": "Validate, prettify, and minify structured payloads without leaving the browser.",
+      "category": "Formatters",
+      "path": "/json-formatter"
+    },
+    {
+      "id": "ini-formatter",
+      "name": "INI Formatter",
+      "description": "Normalize INI and config-style key/value text into a cleaner readable layout.",
+      "category": "Formatters",
+      "path": "/ini-formatter"
+    },
+    {
+      "id": "http-request-formatter",
+      "name": "HTTP Request Formatter",
+      "description": "Clean up copied HTTP request blocks with normalized methods, headers, and JSON bodies.",
+      "category": "Formatters",
+      "path": "/http-request-formatter"
+    },
+    {
+      "id": "stack-trace-formatter",
+      "name": "Stack Trace Formatter",
+      "description": "Reshape pasted stack traces into a compact review-friendly numbered list.",
+      "category": "Formatters",
+      "path": "/stack-trace-formatter"
+    },
+    {
+      "id": "base64-studio",
+      "name": "Base64 Studio",
+      "description": "Encode or decode text payloads with clear input and output surfaces.",
+      "category": "Encoders",
+      "path": "/base64-studio"
+    },
+    {
+      "id": "base64-url-studio",
+      "name": "Base64 URL Studio",
+      "description": "Encode and decode URL-safe Base64 strings for JWT-like segments and query-safe payloads.",
+      "category": "Encoders",
+      "path": "/base64-url-studio"
+    },
+    {
+      "id": "base58-studio",
+      "name": "Base58 Studio",
+      "description": "Convert plain text and Base58 payloads locally for compact identifiers and wallet-style strings.",
+      "category": "Encoders",
+      "path": "/base58-studio"
+    },
+    {
+      "id": "base32-studio",
+      "name": "Base32 Studio",
+      "description": "Encode text into Base32 or decode Base32 payloads locally.",
+      "category": "Encoders",
+      "path": "/base32-studio"
+    },
+    {
+      "id": "hash-generator",
+      "name": "Hash Generator",
+      "description": "Create deterministic MD5, SHA-256, and SHA-512 digests for local integrity checks.",
+      "category": "Generators",
+      "path": "/hash-generator"
+    },
+    {
+      "id": "password-generator",
+      "name": "Password Generator",
+      "description": "Generate strong passwords locally with configurable character sets and live strength feedback.",
+      "category": "Generators",
+      "path": "/password-generator"
+    },
+    {
+      "id": "color-palette-generator",
+      "name": "Color Palette Generator",
+      "description": "Generate a small palette from a base color for fast theme and UI exploration.",
+      "category": "Generators",
+      "path": "/color-palette-generator"
+    },
+    {
+      "id": "passphrase-generator",
+      "name": "Passphrase Generator",
+      "description": "Generate memorable multi-word passphrases locally for test accounts and human-friendly secrets.",
+      "category": "Generators",
+      "path": "/passphrase-generator"
+    },
+    {
+      "id": "url-studio",
+      "name": "URL Studio",
+      "description": "Encode or decode URL-safe strings while keeping source text private in the browser.",
+      "category": "Encoders",
+      "path": "/url-encoder"
+    },
+    {
+      "id": "quoted-printable-studio",
+      "name": "Quoted Printable Studio",
+      "description": "Encode or decode quoted-printable content for email bodies and legacy text payloads.",
+      "category": "Encoders",
+      "path": "/quoted-printable-studio"
+    },
+    {
+      "id": "data-url-studio",
+      "name": "Data URL Studio",
+      "description": "Turn text into data URLs or decode data URLs back into readable text locally.",
+      "category": "Encoders",
+      "path": "/data-url-studio"
+    },
+    {
+      "id": "basic-auth-studio",
+      "name": "Basic Auth Studio",
+      "description": "Encode credentials into Basic Auth headers or decode headers back into raw pairs.",
+      "category": "Encoders",
+      "path": "/basic-auth-studio"
+    },
+    {
+      "id": "character-code-studio",
+      "name": "Character Code Studio",
+      "description": "Convert text into decimal character codes and decode code-point lists back into text.",
+      "category": "Encoders",
+      "path": "/character-code-studio"
+    },
+    {
+      "id": "case-converter",
+      "name": "Case Converter",
+      "description": "Switch between common naming conventions for code, APIs, and docs.",
+      "category": "Converters",
+      "path": "/case-converter"
+    },
+    {
+      "id": "delimiter-converter",
+      "name": "Delimiter Converter",
+      "description": "Convert rows between comma, tab, pipe, and semicolon-delimited formats locally.",
+      "category": "Converters",
+      "path": "/delimiter-converter"
+    },
+    {
+      "id": "duration-converter",
+      "name": "Duration Converter",
+      "description": "Convert durations across milliseconds, seconds, minutes, and hours.",
+      "category": "Converters",
+      "path": "/duration-converter"
+    },
+    {
+      "id": "path-separator-converter",
+      "name": "Path Separator Converter",
+      "description": "Convert file paths between Windows and POSIX separators for docs and scripts.",
+      "category": "Converters",
+      "path": "/path-separator-converter"
+    },
+    {
+      "id": "byte-size-converter",
+      "name": "Byte Size Converter",
+      "description": "Convert payload and file sizes across bytes, KB, MB, and GB without leaving the browser.",
+      "category": "Converters",
+      "path": "/byte-size-converter"
+    },
+    {
+      "id": "color-format-converter",
+      "name": "Color Format Converter",
+      "description": "Translate between hex, RGB, and HSL values while working across design and code.",
+      "category": "Converters",
+      "path": "/color-format-converter"
+    },
+    {
+      "id": "line-ending-converter",
+      "name": "Line Ending Converter",
+      "description": "Normalize text between LF and CRLF line endings for scripts, docs, and config files.",
+      "category": "Converters",
+      "path": "/line-ending-converter"
+    },
+    {
+      "id": "tabs-spaces-converter",
+      "name": "Tabs Spaces Converter",
+      "description": "Convert indentation between tabs and spaces for cleaner pasted snippets and code blocks.",
+      "category": "Converters",
+      "path": "/tabs-spaces-converter"
+    },
+    {
+      "id": "list-json-converter",
+      "name": "List JSON Converter",
+      "description": "Turn one-item-per-line lists into JSON arrays and convert JSON arrays back into lists.",
+      "category": "Converters",
+      "path": "/list-json-converter"
+    },
+    {
+      "id": "timestamp-converter",
+      "name": "Timestamp Converter",
+      "description": "Convert Unix seconds or milliseconds into human-readable local and ISO dates.",
+      "category": "Converters",
+      "path": "/timestamp-converter"
+    },
+    {
+      "id": "number-base-converter",
+      "name": "Number Base Converter",
+      "description": "Convert integers across binary, octal, decimal, and hexadecimal representations.",
+      "category": "Converters",
+      "path": "/number-base-converter"
+    },
+    {
+      "id": "roman-numeral-converter",
+      "name": "Roman Numeral Converter",
+      "description": "Convert Arabic numbers to Roman numerals and Roman numerals back into integers.",
+      "category": "Converters",
+      "path": "/roman-numeral-converter"
+    },
+    {
+      "id": "jwt-decoder",
+      "name": "JWT Decoder",
+      "description": "Decode token headers and payloads locally with quick warnings for expiry and unsafe algorithms.",
+      "category": "Security",
+      "path": "/jwt-decoder"
+    },
+    {
+      "id": "jwt-expiry-checker",
+      "name": "JWT Expiry Checker",
+      "description": "Inspect JWT issued-at and expiry timestamps quickly when you only need token lifetime metadata.",
+      "category": "Security",
+      "path": "/jwt-expiry-checker"
+    },
+    {
+      "id": "regex-tester",
+      "name": "Regex Tester",
+      "description": "Test JavaScript patterns with live match counts, capture groups, and highlighted results.",
+      "category": "Testers",
+      "path": "/regex-tester"
+    },
+    {
+      "id": "json-pointer-tester",
+      "name": "JSON Pointer Tester",
+      "description": "Test JSON Pointer paths locally against payloads to confirm exact target locations.",
+      "category": "Testers",
+      "path": "/json-pointer-tester"
+    },
+    {
+      "id": "url-pattern-tester",
+      "name": "URL Pattern Tester",
+      "description": "Check route-like URL patterns against candidate paths and inspect extracted params.",
+      "category": "Testers",
+      "path": "/url-pattern-tester"
+    },
+    {
+      "id": "semver-range-tester",
+      "name": "Semver Range Tester",
+      "description": "Check whether a semantic version satisfies exact, caret, tilde, or comparison ranges.",
+      "category": "Testers",
+      "path": "/semver-range-tester"
+    },
+    {
+      "id": "http-status-tester",
+      "name": "HTTP Status Tester",
+      "description": "Validate whether a status code matches a response family, exact code, or numeric range.",
+      "category": "Testers",
+      "path": "/http-status-tester"
+    },
+    {
+      "id": "regex-replace-tester",
+      "name": "Regex Replace Tester",
+      "description": "Preview regex replacements locally before using them in scripts or migrations.",
+      "category": "Testers",
+      "path": "/regex-replace-tester"
+    },
+    {
+      "id": "email-validator",
+      "name": "Email Validator",
+      "description": "Validate line-separated email addresses when cleaning imports or invite lists.",
+      "category": "Testers",
+      "path": "/email-validator"
+    },
+    {
+      "id": "qr-code-generator",
+      "name": "QR Code Generator",
+      "description": "Create downloadable QR codes from text or links without sending content anywhere.",
+      "category": "Generators",
+      "path": "/qr-code-generator"
+    },
+    {
+      "id": "random-number-generator",
+      "name": "Random Number Generator",
+      "description": "Generate random integer batches locally for fixtures, sampling, and quick experiments.",
+      "category": "Generators",
+      "path": "/random-number-generator"
+    },
+    {
+      "id": "fake-user-generator",
+      "name": "Fake User Generator",
+      "description": "Generate fake user rows locally for fixtures, demos, and safe test data.",
+      "category": "Generators",
+      "path": "/fake-user-generator"
+    },
+    {
+      "id": "nano-id-generator",
+      "name": "Nano ID Generator",
+      "description": "Generate compact random IDs locally for fixtures, keys, and demo data.",
+      "category": "Generators",
+      "path": "/nano-id-generator"
+    },
+    {
+      "id": "username-generator",
+      "name": "Username Generator",
+      "description": "Create readable username suggestions from a seed phrase or project name.",
+      "category": "Generators",
+      "path": "/username-generator"
+    },
+    {
+      "id": "api-token-generator",
+      "name": "API Token Generator",
+      "description": "Generate token-like strings locally for mocks, fixtures, and development workflows.",
+      "category": "Generators",
+      "path": "/api-token-generator"
+    },
+    {
+      "id": "release-note-generator",
+      "name": "Release Note Generator",
+      "description": "Turn rough bullet changes into tidy release-note markdown for changelogs and deployments.",
+      "category": "Generators",
+      "path": "/release-note-generator"
+    },
+    {
+      "id": "test-case-title-generator",
+      "name": "Test Case Title Generator",
+      "description": "Generate BDD-style test titles from a feature phrase for planning and specs.",
+      "category": "Generators",
+      "path": "/test-case-title-generator"
+    },
+    {
+      "id": "lorem-ipsum-generator",
+      "name": "Lorem Ipsum Generator",
+      "description": "Generate placeholder paragraphs locally for layouts, docs, and demos.",
+      "category": "Generators",
+      "path": "/lorem-ipsum-generator"
+    },
+    {
+      "id": "uuid-generator",
+      "name": "UUID Generator",
+      "description": "Generate local UUID batches for identifiers, fixtures, and test data.",
+      "category": "Generators",
+      "path": "/uuid-generator"
+    },
+    {
+      "id": "ulid-generator",
+      "name": "ULID Generator",
+      "description": "Create sortable ULIDs locally for ordered records and compact identifiers.",
+      "category": "Generators",
+      "path": "/ulid-generator"
+    },
+    {
+      "id": "hmac-generator",
+      "name": "HMAC Generator",
+      "description": "Produce SHA-256 and SHA-512 HMAC signatures in-browser from a message and secret.",
+      "category": "Security",
+      "path": "/hmac-generator"
+    },
+    {
+      "id": "query-string-studio",
+      "name": "Query String Studio",
+      "description": "Round-trip JSON parameter objects and URL query strings without server calls.",
+      "category": "Converters",
+      "path": "/query-string-studio"
+    },
+    {
+      "id": "html-entity-studio",
+      "name": "HTML Entity Studio",
+      "description": "Encode or decode HTML entities safely for templates, docs, and copied snippets.",
+      "category": "Encoders",
+      "path": "/html-entity-studio"
+    },
+    {
+      "id": "rot13-studio",
+      "name": "ROT13 Studio",
+      "description": "Apply the reversible ROT13 transform locally for lightweight obfuscation.",
+      "category": "Encoders",
+      "path": "/rot13-studio"
+    },
+    {
+      "id": "binary-text-studio",
+      "name": "Binary Text Studio",
+      "description": "Encode text into 8-bit binary groups or decode binary back into readable text.",
+      "category": "Encoders",
+      "path": "/binary-text-studio"
+    },
+    {
+      "id": "morse-code-studio",
+      "name": "Morse Code Studio",
+      "description": "Encode text into Morse code or decode Morse back into readable text.",
+      "category": "Encoders",
+      "path": "/morse-code-studio"
+    },
+    {
+      "id": "hex-studio",
+      "name": "Hex Studio",
+      "description": "Encode text into hexadecimal bytes or decode hex back into readable text locally.",
+      "category": "Encoders",
+      "path": "/hex-studio"
+    },
+    {
+      "id": "slugify-studio",
+      "name": "Slugify Studio",
+      "description": "Create URL-friendly slugs and path-safe variants from titles, labels, and filenames.",
+      "category": "Converters",
+      "path": "/slugify-studio"
+    },
+    {
+      "id": "unicode-escape-studio",
+      "name": "Unicode Escape Studio",
+      "description": "Transform readable text into unicode escape sequences and decode them back again.",
+      "category": "Encoders",
+      "path": "/unicode-escape-studio"
+    },
+    {
+      "id": "csv-json-studio",
+      "name": "CSV JSON Studio",
+      "description": "Round-trip CSV tables and JSON arrays locally for fixtures, imports, and exports.",
+      "category": "Converters",
+      "path": "/csv-json-studio"
+    },
+    {
+      "id": "text-diff-checker",
+      "name": "Text Diff Checker",
+      "description": "Compare two text blocks line by line to inspect additions and removals privately.",
+      "category": "Testers",
+      "path": "/text-diff-checker"
+    },
+    {
+      "id": "docker-optimizer",
+      "name": "Docker Optimizer",
+      "description": "Review Dockerfiles for repeatability, image size, and runtime hygiene inside the browser.",
+      "category": "Developer",
+      "path": "/docker-optimizer"
+    },
+    {
+      "id": "gitignore-builder",
+      "name": "Gitignore Builder",
+      "description": "Generate a starter .gitignore locally from common stack sections like node, python, dotnet, and logs.",
+      "category": "Developer",
+      "path": "/gitignore-builder"
+    },
+    {
+      "id": "media-fixture-generator",
+      "name": "Fixture File Generator",
+      "description": "Generate local image, audio, video, PDF, CSV, and Excel fixtures for upload QA and boundary testing.",
+      "category": "Developer",
+      "path": "/media-fixture-generator"
+    },
+    {
+      "id": "xml-formatter",
+      "name": "XML Formatter",
+      "description": "Prettify compact XML into a cleaner review layout.",
+      "category": "Formatters",
+      "path": "/xml-formatter"
+    },
+    {
+      "id": "html-formatter",
+      "name": "HTML Formatter",
+      "description": "Turn dense HTML into readable markup for debugging and sharing.",
+      "category": "Formatters",
+      "path": "/html-formatter"
+    },
+    {
+      "id": "css-formatter",
+      "name": "CSS Formatter",
+      "description": "Format compact CSS into a cleaner block layout for review work.",
+      "category": "Formatters",
+      "path": "/css-formatter"
+    },
+    {
+      "id": "markdown-formatter",
+      "name": "Markdown Formatter",
+      "description": "Normalize spacing, bullets, and blank lines in markdown content.",
+      "category": "Formatters",
+      "path": "/markdown-formatter"
+    },
+    {
+      "id": "github-actions-validator",
+      "name": "GitHub Actions Validator",
+      "description": "Check workflow YAML for missing triggers, job wiring, checkout steps, and CI safety signals.",
+      "category": "Testers",
+      "path": "/github-actions-validator"
+    },
+    {
+      "id": "dependency-visualizer",
+      "name": "Dependency Visualizer",
+      "description": "Inspect package manifests for grouped dependencies, scripts, and duplicate package names.",
+      "category": "Developer",
+      "path": "/dependency-visualizer"
+    },
+    {
+      "id": "bundle-size-calculator",
+      "name": "Bundle Size Calculator",
+      "description": "Estimate asset totals, file mix, and rough gzip impact from pasted build output.",
+      "category": "Developer",
+      "path": "/bundle-size-calculator"
+    },
+    {
+      "id": "curl-to-code-converter",
+      "name": "cURL to Code Converter",
+      "description": "Turn a raw cURL request into fetch, axios, and Python starter snippets locally.",
+      "category": "Developer",
+      "path": "/curl-to-code-converter"
+    },
+    {
+      "id": "sql-beautifier",
+      "name": "SQL Beautifier",
+      "description": "Format pasted SQL into a cleaner review layout before you run or share the query.",
+      "category": "Formatters",
+      "path": "/sql-beautifier"
+    },
+    {
+      "id": "semantic-version-calculator",
+      "name": "Semantic Version Calculator",
+      "description": "Estimate patch, minor, and major bumps from release notes and compatibility signals.",
+      "category": "Developer",
+      "path": "/semantic-version-calculator"
+    },
+    {
+      "id": "breaking-change-detector",
+      "name": "Breaking Change Detector",
+      "description": "Compare two JSON shapes to surface removed fields and type shifts that may break consumers.",
+      "category": "Developer",
+      "path": "/breaking-change-detector"
+    },
+    {
+      "id": "http-header-inspector",
+      "name": "HTTP Header Inspector",
+      "description": "Review raw response headers for missing security controls, cache policy, and CORS posture.",
+      "category": "Security",
+      "path": "/http-header-inspector"
+    },
+    {
+      "id": "api-key-fingerprinter",
+      "name": "API Key Fingerprinter",
+      "description": "Mask and fingerprint secret-looking tokens locally so teams can compare them more safely.",
+      "category": "Security",
+      "path": "/api-key-fingerprinter"
+    },
+    {
+      "id": "sri-hash-generator",
+      "name": "SRI Hash Generator",
+      "description": "Generate Subresource Integrity hashes locally for scripts, styles, and copied asset content.",
+      "category": "Security",
+      "path": "/sri-hash-generator"
+    },
+    {
+      "id": "cors-policy-inspector",
+      "name": "CORS Policy Inspector",
+      "description": "Inspect raw CORS response headers and flag risky origin and credential combinations.",
+      "category": "Security",
+      "path": "/cors-policy-inspector"
+    },
+    {
+      "id": "cookie-security-inspector",
+      "name": "Cookie Security Inspector",
+      "description": "Inspect Set-Cookie headers for Secure, HttpOnly, and SameSite coverage.",
+      "category": "Security",
+      "path": "/cookie-security-inspector"
+    },
+    {
+      "id": "csp-policy-inspector",
+      "name": "CSP Policy Inspector",
+      "description": "Inspect CSP strings for missing directives and risky allowances like unsafe-inline.",
+      "category": "Security",
+      "path": "/csp-policy-inspector"
+    },
+    {
+      "id": "security-txt-inspector",
+      "name": "Security.txt Inspector",
+      "description": "Review security.txt content for expected disclosure fields like Contact and Expires.",
+      "category": "Security",
+      "path": "/security-txt-inspector"
+    },
+    {
+      "id": "open-redirect-checker",
+      "name": "Open Redirect Checker",
+      "description": "Inspect redirect targets locally and flag off-allowlist, script, or protocol-relative destinations.",
+      "category": "Security",
+      "path": "/open-redirect-checker"
+    },
+    {
+      "id": "password-policy-inspector",
+      "name": "Password Policy Inspector",
+      "description": "Analyze human-readable password policy text for minimum length, coverage, and risky guidance.",
+      "category": "Security",
+      "path": "/password-policy-inspector"
+    },
+    {
+      "id": "signed-url-inspector",
+      "name": "Signed URL Inspector",
+      "description": "Inspect presigned and SAS-style URLs for provider hints, expiry windows, and notable query params.",
+      "category": "Security",
+      "path": "/signed-url-inspector"
+    },
+    {
+      "id": "json-path-explorer",
+      "name": "JSON Path Explorer",
+      "description": "Inspect nested JSON with dot-path lookups so payload values are easier to find locally.",
+      "category": "Testers",
+      "path": "/json-path-explorer"
+    },
+    {
+      "id": "json-value-comparator",
+      "name": "JSON Value Comparator",
+      "description": "Compare two JSON payloads by path to review added, removed, and changed values.",
+      "category": "Testers",
+      "path": "/json-value-comparator"
+    },
+    {
+      "id": "header-diff-checker",
+      "name": "Header Diff Checker",
+      "description": "Compare two raw header blocks to spot added, removed, and changed headers quickly.",
+      "category": "Testers",
+      "path": "/header-diff-checker"
+    },
+    {
+      "id": "har-request-extractor",
+      "name": "HAR Request Extractor",
+      "description": "Summarize requests from a HAR file into methods, domains, and statuses.",
+      "category": "Testers",
+      "path": "/har-request-extractor"
+    },
+    {
+      "id": "webhook-payload-inspector",
+      "name": "Webhook Payload Inspector",
+      "description": "Inspect event names, top-level keys, and nested structures in webhook payloads.",
+      "category": "Testers",
+      "path": "/webhook-payload-inspector"
+    },
+    {
+      "id": "sql-result-to-markdown-table",
+      "name": "SQL Result to Markdown Table",
+      "description": "Convert aligned SQL results or tab-separated output into markdown tables.",
+      "category": "Formatters",
+      "path": "/sql-result-to-markdown-table"
+    },
+    {
+      "id": "log-level-analyzer",
+      "name": "Log Level Analyzer",
+      "description": "Count error, warning, info, and debug lines in pasted logs.",
+      "category": "Testers",
+      "path": "/log-level-analyzer"
+    },
+    {
+      "id": "uuid-extractor",
+      "name": "UUID Extractor",
+      "description": "Extract UUIDs from noisy logs or pasted text.",
+      "category": "Developer",
+      "path": "/uuid-extractor"
+    },
+    {
+      "id": "link-extractor",
+      "name": "Link Extractor",
+      "description": "Pull URLs and email addresses out of mixed pasted text.",
+      "category": "Developer",
+      "path": "/link-extractor"
+    },
+    {
+      "id": "secret-redactor",
+      "name": "Secret Redactor",
+      "description": "Mask likely tokens, credential-like strings, and emails before sharing text.",
+      "category": "Security",
+      "path": "/secret-redactor"
+    },
+    {
+      "id": "api-error-formatter",
+      "name": "API Error Formatter",
+      "description": "Turn JSON error payloads into markdown summaries for docs, PRs, and incidents.",
+      "category": "Formatters",
+      "path": "/api-error-formatter"
+    },
+    {
+      "id": "cron-expression-explainer",
+      "name": "Cron Expression Explainer",
+      "description": "Break down five-part cron expressions and preview the next matching run times.",
+      "category": "Developer",
+      "path": "/cron-expression-explainer"
+    },
+    {
+      "id": "docker-compose-auditor",
+      "name": "Docker Compose Auditor",
+      "description": "Inspect docker-compose service definitions for health, restart coverage, and image hygiene.",
+      "category": "Developer",
+      "path": "/docker-compose-auditor"
+    },
+    {
+      "id": "openapi-summary",
+      "name": "OpenAPI Summary",
+      "description": "Summarize an OpenAPI document into paths, methods, tags, and detected security schemes.",
+      "category": "Developer",
+      "path": "/openapi-summary"
+    },
+    {
+      "id": "json-lines-studio",
+      "name": "JSON Lines Studio",
+      "description": "Convert JSONL and JSON arrays back and forth for logs, eval fixtures, and batch inputs.",
+      "category": "Developer",
+      "path": "/json-lines-studio"
+    },
+    {
+      "id": "env-file-inspector",
+      "name": "ENV File Inspector",
+      "description": "Inspect dotenv files for duplicate keys, invalid lines, and masked secret-like values.",
+      "category": "Security",
+      "path": "/env-file-inspector"
+    },
+    {
+      "id": "ansi-escape-cleaner",
+      "name": "ANSI Escape Cleaner",
+      "description": "Strip terminal color codes and escape sequences from copied console output.",
+      "category": "Formatters",
+      "path": "/ansi-escape-cleaner"
+    },
+    {
+      "id": "markdown-checklist-builder",
+      "name": "Markdown Checklist Builder",
+      "description": "Turn rough bullets or notes into markdown task lists for issues, PRs, and release checklists.",
+      "category": "Formatters",
+      "path": "/markdown-checklist-builder"
+    },
+    {
+      "id": "line-deduplicator",
+      "name": "Line Deduplicator",
+      "description": "Remove repeated lines from pasted lists, package names, logs, or working notes.",
+      "category": "Developer",
+      "path": "/line-deduplicator"
+    },
+    {
+      "id": "markdown-studio",
+      "name": "Markdown Studio",
+      "description": "Clean up AI or CLI output into markdown with table detection, normalization, and live preview.",
+      "category": "Formatters",
+      "path": "/markdown-studio"
+    },
+    {
+      "id": "markdown-table-builder",
+      "name": "Markdown Table Builder",
+      "description": "Convert CSV rows or JSON arrays into markdown tables for docs, PRs, and release notes.",
+      "category": "Formatters",
+      "path": "/markdown-table-builder"
+    },
+    {
+      "id": "json-schema-generator",
+      "name": "JSON Schema Generator",
+      "description": "Infer a draft JSON Schema from a representative JSON sample entirely in the browser.",
+      "category": "Developer",
+      "path": "/json-schema-generator"
+    },
+    {
+      "id": "prompt-studio",
+      "name": "Prompt Studio",
+      "description": "Assemble reusable prompts with goals, variables, constraints, and output instructions.",
+      "category": "AI",
+      "path": "/prompt-studio"
+    },
+    {
+      "id": "prompt-diff-checker",
+      "name": "Prompt Diff Checker",
+      "description": "Compare two prompt versions to inspect changed wording, constraints, and emphasis.",
+      "category": "AI",
+      "path": "/prompt-diff-checker"
+    },
+    {
+      "id": "prompt-test-runner",
+      "name": "Prompt Test Runner",
+      "description": "Run one prompt against many local test cases and inspect coverage and risk heuristics.",
+      "category": "AI",
+      "path": "/prompt-test-runner"
+    },
+    {
+      "id": "prompt-eval-scorecard",
+      "name": "Prompt Eval Scorecard",
+      "description": "Score AI outputs for format, groundedness, safety, and completeness with a local rubric.",
+      "category": "AI",
+      "path": "/prompt-eval-scorecard"
+    },
+    {
+      "id": "structured-output-schema-builder",
+      "name": "Structured Output Schema Builder",
+      "description": "Infer structured-output schemas and test candidate model payloads locally.",
+      "category": "AI",
+      "path": "/structured-output-schema-builder"
+    },
+    {
+      "id": "output-repair-studio",
+      "name": "Output Repair Studio",
+      "description": "Repair malformed JSON-like model responses into valid structured output.",
+      "category": "AI",
+      "path": "/output-repair-studio"
+    },
+    {
+      "id": "jailbreak-prompt-injection-checker",
+      "name": "Jailbreak / Prompt Injection Checker",
+      "description": "Detect common jailbreak and indirect injection patterns before an agent consumes text.",
+      "category": "AI",
+      "path": "/jailbreak-prompt-injection-checker"
+    },
+    {
+      "id": "hallucination-review-workspace",
+      "name": "Hallucination Review Workspace",
+      "description": "Compare answers against source text and flag likely unsupported claims.",
+      "category": "AI",
+      "path": "/hallucination-review-workspace"
+    },
+    {
+      "id": "rag-chunk-previewer",
+      "name": "RAG Chunk Previewer",
+      "description": "Preview chunk boundaries, overlap, and token estimates for retrieval workflows.",
+      "category": "AI",
+      "path": "/rag-chunk-previewer"
+    },
+    {
+      "id": "embedding-similarity-explorer",
+      "name": "Embedding Similarity Explorer",
+      "description": "Compare text blocks with a local semantic-overlap approximation for RAG tuning.",
+      "category": "AI",
+      "path": "/embedding-similarity-explorer"
+    },
+    {
+      "id": "system-prompt-builder",
+      "name": "System Prompt Builder",
+      "description": "Draft system prompts with role, rules, allowed sources, and output requirements.",
+      "category": "AI",
+      "path": "/system-prompt-builder"
+    },
+    {
+      "id": "few-shot-example-organizer",
+      "name": "Few-shot Example Organizer",
+      "description": "Normalize few-shot examples into cleaner prompt-ready blocks.",
+      "category": "AI",
+      "path": "/few-shot-example-organizer"
+    },
+    {
+      "id": "prompt-variable-extractor",
+      "name": "Prompt Variable Extractor",
+      "description": "Extract prompt template variables so runtime bindings stay aligned.",
+      "category": "AI",
+      "path": "/prompt-variable-extractor"
+    },
+    {
+      "id": "token-cost-estimator",
+      "name": "Token / Cost Estimator",
+      "description": "Estimate token usage and cost with configurable pricing inputs.",
+      "category": "AI",
+      "path": "/token-cost-estimator"
+    },
+    {
+      "id": "latency-quality-planner",
+      "name": "Latency vs Quality Planner",
+      "description": "Balance speed, quality, and prompt design choices for AI workloads.",
+      "category": "AI",
+      "path": "/latency-quality-planner"
+    },
+    {
+      "id": "ai-response-comparator",
+      "name": "AI Response Comparator",
+      "description": "Compare two AI answers against the same goal to pick the stronger candidate.",
+      "category": "AI",
+      "path": "/ai-response-comparator"
+    },
+    {
+      "id": "safety-policy-tester",
+      "name": "Safety Policy Tester",
+      "description": "Check whether a safety policy clearly addresses risky AI scenarios.",
+      "category": "AI",
+      "path": "/safety-policy-tester"
+    },
+    {
+      "id": "tool-call-payload-validator",
+      "name": "Tool Call Payload Validator",
+      "description": "Validate tool-call payload shapes before they hit an agent runtime.",
+      "category": "AI",
+      "path": "/tool-call-payload-validator"
+    },
+    {
+      "id": "function-calling-schema-tester",
+      "name": "Function Calling Schema Tester",
+      "description": "Check function schemas and argument payloads together before live model use.",
+      "category": "AI",
+      "path": "/function-calling-schema-tester"
+    },
+    {
+      "id": "agent-loop-trace-viewer",
+      "name": "Agent Loop Trace Viewer",
+      "description": "Inspect agent traces for retries, tool churn, and failure loops.",
+      "category": "AI",
+      "path": "/agent-loop-trace-viewer"
+    },
+    {
+      "id": "grounded-answer-checker",
+      "name": "Grounded Answer Checker",
+      "description": "Review whether an AI answer stays anchored to its source material.",
+      "category": "AI",
+      "path": "/grounded-answer-checker"
+    },
+    {
+      "id": "citation-formatter-for-ai-answers",
+      "name": "Citation Formatter for AI Answers",
+      "description": "Append clean numbered citations to AI-generated answers.",
+      "category": "AI",
+      "path": "/citation-formatter-for-ai-answers"
+    },
+    {
+      "id": "conversation-state-simulator",
+      "name": "Conversation State Simulator",
+      "description": "Inspect conversation roles, open questions, and likely next responses.",
+      "category": "AI",
+      "path": "/conversation-state-simulator"
+    },
+    {
+      "id": "context-window-compactor",
+      "name": "Context Window Compactor",
+      "description": "Trim long context to a token budget for cheaper and cleaner prompts.",
+      "category": "AI",
+      "path": "/context-window-compactor"
+    },
+    {
+      "id": "prompt-leak-detector",
+      "name": "Prompt Leak Detector",
+      "description": "Catch prompt disclosure and secret exposure patterns before reuse.",
+      "category": "AI",
+      "path": "/prompt-leak-detector"
+    },
+    {
+      "id": "consistency-runner",
+      "name": "Consistency Runner",
+      "description": "Compare multiple AI outputs for repeated and diverging claims.",
+      "category": "AI",
+      "path": "/consistency-runner"
+    },
+    {
+      "id": "best-of-n-comparison-tool",
+      "name": "Best-of-N Comparison Tool",
+      "description": "Rank candidate outputs so the best AI answer is easier to choose.",
+      "category": "AI",
+      "path": "/best-of-n-comparison-tool"
+    },
+    {
+      "id": "batch-eval-dataset-builder",
+      "name": "Batch Eval Dataset Builder",
+      "description": "Convert shorthand eval cases into JSONL for AI test and batch workflows.",
+      "category": "AI",
+      "path": "/batch-eval-dataset-builder"
+    },
+    {
+      "id": "synthetic-test-case-generator",
+      "name": "Synthetic Test Case Generator",
+      "description": "Generate happy-path, missing-context, and adversarial AI test cases.",
+      "category": "AI",
+      "path": "/synthetic-test-case-generator"
+    },
+    {
+      "id": "red-team-scenario-builder",
+      "name": "Red Team Scenario Builder",
+      "description": "Generate prompt-injection, exfiltration, and tool-misuse scenarios.",
+      "category": "AI",
+      "path": "/red-team-scenario-builder"
+    }
   ]
 }

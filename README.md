@@ -1,6 +1,6 @@
-# Cobalt
+# UtilityHub
 
-Cobalt is a privacy-first React and Vite app with browser-based developer utilities for formatting data, reviewing diffs, inspecting delivery configs, and transforming payloads without server round-trips.
+UtilityHub is a privacy-first React and Vite app with browser-based developer utilities for formatting data, reviewing diffs, inspecting delivery configs, and transforming payloads without server round-trips.
 
 ## Local development
 
@@ -48,4 +48,4 @@ The app includes:
 
 ## Privacy model
 
-Cobalt is designed so pasted payloads, headers, tokens, diffs, and config snippets stay in the browser. The tools do not require a backend for normal use.
+UtilityHub is designed so pasted payloads, headers, tokens, diffs, and config snippets stay in the browser. The tools do not require a backend for normal use.

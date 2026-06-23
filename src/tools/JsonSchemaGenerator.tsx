@@ -5,7 +5,7 @@ import { generateJsonSchema } from '../lib/privacyTools';
 
 const sampleJson = `{
   "id": 1,
-  "name": "Cobalt",
+  "name": "UtilityHub",
   "active": true,
   "tags": ["privacy", "browser"],
   "owner": {

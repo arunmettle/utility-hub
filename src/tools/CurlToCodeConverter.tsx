@@ -7,7 +7,7 @@ const sampleCurl = `curl https://api.utilityhub.dev/tools \
   -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer test-token" \
-  --data '{"name":"Cobalt","mode":"preview"}'`;
+  --data '{"name":"UtilityHub","mode":"preview"}'`;
 
 export default function CurlToCodeConverter() {
   const [input, setInput] = useState(sampleCurl);

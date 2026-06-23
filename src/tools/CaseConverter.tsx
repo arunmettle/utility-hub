@@ -63,7 +63,13 @@ export default function CaseConverter() {
           <section key={type} className="editor-panel">
             <div className="editor-panel__head">
               <span>{type}</span>
-              <button type="button" className="action-button action-button--icon" onClick={() => copyConversion(type, output)} disabled={!output}>
+              <button
+                type="button"
+                className="action-button action-button--icon"
+                onClick={() => copyConversion(type, output)}
+                disabled={!output}
+                aria-label={`Copy ${type} output`}
+              >
                 {copied === type ? <Check size={16} /> : <Copy size={16} />}
               </button>
             </div>

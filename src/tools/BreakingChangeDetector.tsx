@@ -5,7 +5,7 @@ import { detectBreakingChanges } from '../lib/privacyTools';
 
 const previousSample = `{
   "id": 12,
-  "name": "Cobalt",
+  "name": "UtilityHub",
   "settings": {
     "theme": "light",
     "beta": false

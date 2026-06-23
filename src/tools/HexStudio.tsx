@@ -3,7 +3,7 @@ import { ArrowLeftRight, Binary, Check, Copy, Trash2 } from 'lucide-react';
 import ToolFrame from '../components/ToolFrame';
 import { transformHex, type QueryMode } from '../lib/privacyTools';
 
-const sampleText = 'Cobalt';
+const sampleText = 'UtilityHub';
 const sampleHex = transformHex(sampleText, 'encode').output;
 
 export default function HexStudio() {

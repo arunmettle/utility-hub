@@ -180,6 +180,16 @@ function keywordTokens(value: string) {
     .match(/[a-z0-9]{3,}/g)?.filter((token) => !stopWords.has(token)) ?? [];
 }
 
+function hasNegation(value: string) {
+  return /\b(no|not|never|without|none)\b/i.test(value);
+}
+
+function sharedContentTokens(left: string, right: string) {
+  const leftTokens = keywordTokens(left);
+  const rightTokens = keywordTokens(right);
+  return uniq(leftTokens.filter((token) => rightTokens.includes(token)));
+}
+
 function uniq<T>(values: T[]) {
   return Array.from(new Set(values));
 }
@@ -348,7 +358,12 @@ export function reviewGrounding(source: string, answer: string): GroundingReport
   for (const sentence of answerSentences) {
     const tokens = keywordTokens(sentence);
     const overlap = tokens.filter((token) => sourceTokens.includes(token)).length;
-    if (tokens.length === 0 || overlap >= Math.max(1, Math.floor(tokens.length * 0.35))) {
+    const contradiction = sourceSentences.some((sourceSentence) => {
+      const shared = sharedContentTokens(sourceSentence, sentence);
+      return shared.length >= 2 && hasNegation(sourceSentence) !== hasNegation(sentence);
+    });
+
+    if (!contradiction && (tokens.length === 0 || overlap >= Math.max(1, Math.floor(tokens.length * 0.35)))) {
       supportedClaims.push(sentence);
     } else {
       unsupportedClaims.push(sentence);

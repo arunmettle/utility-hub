@@ -4,7 +4,7 @@ import ToolFrame from '../components/ToolFrame';
 import { slugifyText } from '../lib/privacyTools';
 
 export default function SlugifyStudio() {
-  const [input, setInput] = useState('Privacy First Cobalt');
+  const [input, setInput] = useState('Privacy First UtilityHub');
   const [copied, setCopied] = useState<string | null>(null);
 
   const slug = useMemo(() => slugifyText(input), [input]);
@@ -62,7 +62,12 @@ export default function SlugifyStudio() {
             <section key={item.key} className="editor-panel">
               <div className="editor-panel__head">
                 <span>{item.label}</span>
-                <button type="button" className="action-button action-button--icon" onClick={() => copyValue(item.value, item.key)}>
+                <button
+                  type="button"
+                  className="action-button action-button--icon"
+                  onClick={() => copyValue(item.value, item.key)}
+                  aria-label={`Copy ${item.label}`}
+                >
                   {copied === item.key ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>

@@ -3,8 +3,8 @@ import { Check, Copy, EyeOff, GitCompareArrows, Trash2 } from 'lucide-react';
 import ToolFrame from '../components/ToolFrame';
 import { diffInlineText, diffText, type DiffLine } from '../lib/privacyTools';
 
-const leftSample = 'Cobalt\nprivacy-first\nbrowser tools';
-const rightSample = 'Cobalt\nprivacy-first\nbrowser workflows\nnew utility';
+const leftSample = 'UtilityHub\nprivacy-first\nbrowser tools';
+const rightSample = 'UtilityHub\nprivacy-first\nbrowser workflows\nnew utility';
 
 interface DiffRow {
   kind: 'unchanged' | 'added' | 'removed' | 'changed';
