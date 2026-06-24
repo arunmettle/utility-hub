@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { categories, tools, type ToolCategory } from '../data/tools';
 import BrandMark from './BrandMark';
+import AdNetworkLoader from './AdNetworkLoader';
 import SeoManager from './SeoManager';
 
 type ThemeMode = 'light' | 'dark';
@@ -50,6 +51,21 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMobileSidebarOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!location.hash) return;
+
+    const targetId = location.hash.replace('#', '');
+    const scrollToTarget = () => {
+      document.getElementById(targetId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    };
+
+    const frame = window.requestAnimationFrame(scrollToTarget);
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.hash, location.pathname]);
 
   useEffect(() => {
     const updateViewportMode = () => {
@@ -173,6 +189,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={`app-shell ${isDesktop && !desktopSidebarExpanded ? 'app-shell--sidebar-collapsed' : ''}`}>
       <SeoManager />
+      <AdNetworkLoader />
       <aside
         id="app-sidebar"
         className={`sidebar ${sidebarVisible ? 'sidebar--open' : ''} ${isDesktop && !desktopSidebarExpanded ? 'sidebar--collapsed' : ''}`}
@@ -288,9 +305,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="topbar__actions">
-            <a className="icon-button" href="/#faq" aria-label="About UtilityHub">
+            <Link className="icon-button" to="/#faq" aria-label="About UtilityHub">
               <Info size={20} />
-            </a>
+            </Link>
             <button
               type="button"
               className="icon-button"
@@ -300,9 +317,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <a className="cta-button" href="#all-tools">
+            <Link className="cta-button" to="/#all-tools">
               View tools
-            </a>
+            </Link>
           </div>
         </header>
 

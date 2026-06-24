@@ -567,6 +567,10 @@ textarea {
   gap: 28px;
 }
 
+.tool-page {
+  position: relative;
+}
+
 .hero-band {
   display: grid;
   grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
@@ -773,6 +777,60 @@ textarea {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 12px;
+}
+
+.ad-slot {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  border: 1px solid var(--surface-border-soft);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.ad-slot__eyebrow {
+  color: var(--muted-soft);
+  font: 600 0.7rem/1.2 'IBM Plex Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ad-slot strong {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.ad-slot--banner {
+  min-height: 72px;
+  padding: 14px 18px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 8%, transparent), transparent 28%),
+    color-mix(in srgb, var(--panel) 94%, transparent);
+}
+
+.ad-slot--floating {
+  position: fixed;
+  right: 28px;
+  bottom: 24px;
+  z-index: 18;
+  width: min(290px, calc(100vw - 36px));
+  min-height: 118px;
+  padding: 14px 16px;
+  backdrop-filter: blur(12px);
+}
+
+.ad-slot--fallback {
+  color: var(--text);
+}
+
+.ad-slot__unit {
+  min-height: 56px;
+}
+
+.ad-slot--floating .ad-slot__unit {
+  min-height: 92px;
 }
 
 .action-button {
@@ -1713,6 +1771,11 @@ textarea {
   .tool-actions {
     justify-content: flex-start;
   }
+
+  .ad-slot--floating {
+    right: 18px;
+    bottom: 18px;
+  }
 }
 
 @media (max-width: 960px) {
@@ -1767,6 +1830,13 @@ textarea {
 
   .workspace {
     padding: 10px 18px 28px;
+  }
+
+  .ad-slot--floating {
+    position: static;
+    width: 100%;
+    min-height: 88px;
+    margin-top: -6px;
   }
 }
 

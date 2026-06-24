@@ -1,3 +1,5 @@
+import AdSlot from './AdSlot';
+
 export default function ToolFrame({
   eyebrow,
   title,
@@ -24,6 +26,8 @@ export default function ToolFrame({
         {actions ? <div className="tool-actions">{actions}</div> : null}
       </div>
 
+      <AdSlot placement="banner" pageLabel={title} />
+
       {children}
 
       {note ? (
@@ -32,6 +36,8 @@ export default function ToolFrame({
           <p>{note.body}</p>
         </section>
       ) : null}
+
+      <AdSlot placement="floating" pageLabel={title} />
     </div>
   );
 }
