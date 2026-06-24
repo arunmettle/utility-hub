@@ -78,8 +78,8 @@ export default function AdSlot({
         style={{ display: 'block' }}
         data-ad-client={adsenseClient}
         data-ad-slot={slot}
-        data-ad-format={placement === 'banner' ? 'horizontal' : 'rectangle'}
-        data-full-width-responsive={placement === 'banner' ? 'true' : 'false'}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
       />
     </aside>
   );
