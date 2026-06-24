@@ -9,6 +9,7 @@ declare global {
 type AdSlotVariant = 'banner' | 'floating';
 
 const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT?.trim();
+const FALLBACK_ADSENSE_CLIENT = 'ca-pub-7971868534583867';
 const ADSENSE_TOP_SLOT = import.meta.env.VITE_ADSENSE_TOP_SLOT?.trim();
 const ADSENSE_FLOAT_SLOT = import.meta.env.VITE_ADSENSE_FLOAT_SLOT?.trim();
 
@@ -23,8 +24,9 @@ export default function AdSlot({
   placement: AdSlotVariant;
   pageLabel: string;
 }) {
+  const adsenseClient = ADSENSE_CLIENT || FALLBACK_ADSENSE_CLIENT;
   const slot = getSlotId(placement);
-  const isConfigured = Boolean(ADSENSE_CLIENT && slot);
+  const isConfigured = Boolean(adsenseClient && slot);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function AdSlot({
       <ins
         className="adsbygoogle ad-slot__unit"
         style={{ display: 'block' }}
-        data-ad-client={ADSENSE_CLIENT}
+        data-ad-client={adsenseClient}
         data-ad-slot={slot}
         data-ad-format={placement === 'banner' ? 'horizontal' : 'rectangle'}
         data-full-width-responsive={placement === 'banner' ? 'true' : 'false'}
