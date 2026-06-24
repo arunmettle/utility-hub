@@ -569,6 +569,7 @@ textarea {
 
 .tool-page {
   position: relative;
+  padding-bottom: 148px;
 }
 
 .hero-band {
@@ -812,13 +813,14 @@ textarea {
 
 .ad-slot--floating {
   position: fixed;
-  right: 28px;
-  bottom: 24px;
+  right: 20px;
+  bottom: 20px;
   z-index: 18;
-  width: min(290px, calc(100vw - 36px));
-  min-height: 118px;
-  padding: 14px 16px;
+  width: min(228px, calc(100vw - 40px));
+  min-height: 92px;
+  padding: 12px 14px;
   backdrop-filter: blur(12px);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16);
 }
 
 .ad-slot--fallback {
@@ -830,7 +832,7 @@ textarea {
 }
 
 .ad-slot--floating .ad-slot__unit {
-  min-height: 92px;
+  min-height: 72px;
 }
 
 .action-button {
@@ -1773,8 +1775,9 @@ textarea {
   }
 
   .ad-slot--floating {
-    right: 18px;
-    bottom: 18px;
+    right: 16px;
+    bottom: 16px;
+    width: min(208px, calc(100vw - 32px));
   }
 }
 
@@ -1833,10 +1836,11 @@ textarea {
   }
 
   .ad-slot--floating {
-    position: static;
-    width: 100%;
-    min-height: 88px;
-    margin-top: -6px;
+    display: none;
+  }
+
+  .tool-page {
+    padding-bottom: 0;
   }
 }
 
