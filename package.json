@@ -23,7 +23,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "prepare:adsense": "node scripts/prepare-adsense.mjs",
+    "build": "npm run prepare:adsense && tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest run --coverage",
     "test:unit": "vitest run --coverage",
