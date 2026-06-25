@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 declare global {
   interface Window {
@@ -28,6 +28,8 @@ export default function AdSlot({
   const slot = getSlotId(placement);
   const isConfigured = Boolean(adsenseClient && slot);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isUnfilled, setIsUnfilled] = useState(false);
+  const adUnitRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isConfigured || isLoaded) return;
@@ -39,6 +41,31 @@ export default function AdSlot({
     } catch {
       setIsLoaded(false);
     }
+  }, [isConfigured, isLoaded]);
+
+  useEffect(() => {
+    if (!isConfigured) {
+      setIsUnfilled(false);
+      return;
+    }
+
+    const adUnit = adUnitRef.current;
+    if (!adUnit) return;
+
+    const syncStatus = () => {
+      const adStatus = adUnit.getAttribute('data-ad-status');
+      setIsUnfilled(adStatus === 'unfilled');
+    };
+
+    syncStatus();
+
+    const observer = new MutationObserver(syncStatus);
+    observer.observe(adUnit, {
+      attributes: true,
+      attributeFilter: ['data-ad-status'],
+    });
+
+    return () => observer.disconnect();
   }, [isConfigured, isLoaded]);
 
   const fallbackCopy = useMemo(() => {
@@ -54,6 +81,10 @@ export default function AdSlot({
       title: `Sticky tool sponsor slot for ${pageLabel}`,
     };
   }, [pageLabel, placement]);
+
+  if (isConfigured && isUnfilled) {
+    return null;
+  }
 
   if (!isConfigured || !slot) {
     return (
@@ -74,6 +105,9 @@ export default function AdSlot({
     >
       <span className="ad-slot__eyebrow">Advertisement</span>
       <ins
+        ref={(node) => {
+          adUnitRef.current = node;
+        }}
         className="adsbygoogle ad-slot__unit"
         style={{ display: 'block' }}
         data-ad-client={adsenseClient}
