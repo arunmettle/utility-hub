@@ -9,9 +9,12 @@ lerna-debug.log*
 
 node_modules
 dist
+dist-*-check*/
+dist-published-temp/
 dist-ssr
 playwright-report
 playwright-results
+test-results/
 coverage
 *.local
 .wrangler/
