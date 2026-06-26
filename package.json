@@ -23,8 +23,13 @@
   ],
   "scripts": {
     "dev": "vite",
+    "dev:pages": "npm run build && wrangler pages dev dist",
     "prepare:adsense": "node scripts/prepare-adsense.mjs",
     "build": "npm run prepare:adsense && tsc -b && vite build",
+    "deploy:cloudflare": "npm run build && wrangler pages deploy dist --project-name utilityhub",
+    "cloudflare:whoami": "wrangler whoami",
+    "d1:migrate:local": "wrangler d1 migrations apply utilityhub-submissions --local",
+    "d1:migrate:remote": "wrangler d1 migrations apply utilityhub-submissions --remote",
     "lint": "eslint .",
     "test": "vitest run --coverage",
     "test:unit": "vitest run --coverage",
@@ -37,6 +42,7 @@
     "@breezystack/lamejs": "^1.2.7",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.4.0",
+    "gifenc": "^1.0.3",
     "js-md5": "^0.8.3",
     "js-sha256": "^0.11.1",
     "js-sha512": "^0.9.0",
@@ -72,6 +78,7 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "wrangler": "^4.86.0"
   }
 }

@@ -5,6 +5,7 @@ import {
   Braces,
   CalendarClock,
   CaseSensitive,
+  Film,
   Fingerprint,
   FlaskConical,
   GitCompareArrows,
@@ -539,6 +540,14 @@ export const tools: ToolDefinition[] = [
     category: 'Developer',
     path: '/media-fixture-generator',
     icon: Boxes,
+  },
+  {
+    id: 'video-to-gif-studio',
+    name: 'Video to GIF Studio',
+    description: 'Convert longer local videos into review-friendly GIFs with trim, FPS, scale, and color controls in the browser.',
+    category: 'Developer',
+    path: '/video-to-gif-studio',
+    icon: Film,
   },
   {
     id: 'xml-formatter',

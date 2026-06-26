@@ -62,12 +62,19 @@ import MarkdownFormatter from './tools/MarkdownFormatter';
 import MarkdownTableBuilder from './tools/MarkdownTableBuilder';
 import MarkdownStudio from './tools/MarkdownStudio';
 import MediaFixtureGenerator from './tools/MediaFixtureGenerator';
+import VideoToGifStudio from './tools/VideoToGifStudio';
 import MorseCodeStudio from './tools/MorseCodeStudio';
 import NanoIdGenerator from './tools/NanoIdGenerator';
 import NumberBaseConverter from './tools/NumberBaseConverter';
 import OpenApiSummary from './tools/OpenApiSummary';
 import OpenRedirectChecker from './tools/OpenRedirectChecker';
 import Home from './pages/Home';
+import CollectionsIndex from './pages/CollectionsIndex';
+import CollectionPage from './pages/CollectionPage';
+import GuidesIndex from './pages/GuidesIndex';
+import GuidePage from './pages/GuidePage';
+import FeedbackPage from './pages/FeedbackPage';
+import WishlistPage from './pages/WishlistPage';
 import IniFormatter from './tools/IniFormatter';
 import PasswordGenerator from './tools/PasswordGenerator';
 import PasswordPolicyInspector from './tools/PasswordPolicyInspector';
@@ -146,6 +153,12 @@ export default function App() {
       <AppShell>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/collections" element={<CollectionsIndex />} />
+          <Route path="/collections/:slug" element={<CollectionPage />} />
+          <Route path="/guides" element={<GuidesIndex />} />
+          <Route path="/guides/:slug" element={<GuidePage />} />
+          <Route path="/feedback" element={<FeedbackPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/json-formatter" element={<JsonFormatter />} />
           <Route path="/ini-formatter" element={<IniFormatter />} />
           <Route path="/http-request-formatter" element={<HttpRequestFormatter />} />
@@ -220,6 +233,7 @@ export default function App() {
           <Route path="/curl-to-code-converter" element={<CurlToCodeConverter />} />
           <Route path="/gitignore-builder" element={<GitignoreBuilder />} />
           <Route path="/media-fixture-generator" element={<MediaFixtureGenerator />} />
+          <Route path="/video-to-gif-studio" element={<VideoToGifStudio />} />
           <Route path="/sql-beautifier" element={<SqlBeautifier />} />
           <Route path="/semantic-version-calculator" element={<SemanticVersionCalculator />} />
           <Route path="/breaking-change-detector" element={<BreakingChangeDetector />} />

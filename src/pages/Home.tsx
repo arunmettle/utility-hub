@@ -1,6 +1,7 @@
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import BrandMark from '../components/BrandMark';
+import { featuredPersonaCollections, getPersonaCollectionTools } from '../data/collections';
 import { tools } from '../data/tools';
 
 const highlightPoints = [
@@ -71,6 +72,33 @@ export default function Home() {
             during coding, QA, documentation, pull request review, and release preparation.
           </p>
         </aside>
+      </section>
+
+      <section className="catalog-section">
+        <div className="section-heading">
+          <h2>Browse by role</h2>
+          <p>Jump straight into curated toolkits for the people doing the work, not just the file format in front of them.</p>
+        </div>
+
+        <div className="collection-grid">
+          {featuredPersonaCollections.map((collection) => {
+            const Icon = collection.icon;
+            const collectionTools = getPersonaCollectionTools(collection);
+
+            return (
+              <Link key={collection.slug} to={collection.path} className="tool-card collection-card">
+                <div className="tool-card__top">
+                  <div className="tool-card__icon">
+                    <Icon size={28} />
+                  </div>
+                  <span className="collection-card__count">{collectionTools.length} tools</span>
+                </div>
+                <h3>{collection.shortTitle}</h3>
+                <p>{collection.description}</p>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
       <section className="catalog-section">

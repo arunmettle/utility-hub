@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
+  BookOpenText,
   ChevronDown,
   Info,
+  Lightbulb,
   Menu,
-  Sun,
+  MessageSquarePlus,
   Moon,
   Search,
+  Sun,
   X,
 } from 'lucide-react';
 import { categories, tools, type ToolCategory } from '../data/tools';
@@ -51,6 +54,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMobileSidebarOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.hash) return;
+
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    });
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     if (!location.hash) return;
@@ -217,6 +230,39 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
+        <div className="sidebar__section">
+          <div className="sidebar__group">
+            <Link to="/guides" className={`sidebar__item sidebar__item--link ${location.pathname.startsWith('/guides') ? 'is-active' : ''}`}>
+              <BookOpenText size={18} />
+              <div>
+                <p>Guides</p>
+                <span>Learn and use cases</span>
+              </div>
+            </Link>
+            <Link to="/collections" className={`sidebar__item sidebar__item--link ${location.pathname.startsWith('/collections') ? 'is-active' : ''}`}>
+              <Lightbulb size={18} />
+              <div>
+                <p>Collections</p>
+                <span>Curated by role</span>
+              </div>
+            </Link>
+            <Link to="/feedback" className={`sidebar__item sidebar__item--link ${location.pathname === '/feedback' ? 'is-active' : ''}`}>
+              <MessageSquarePlus size={18} />
+              <div>
+                <p>Feedback</p>
+                <span>What was missing</span>
+              </div>
+            </Link>
+            <Link to="/wishlist" className={`sidebar__item sidebar__item--link ${location.pathname === '/wishlist' ? 'is-active' : ''}`}>
+              <Lightbulb size={18} />
+              <div>
+                <p>Wishlist</p>
+                <span>Request a tool</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+
         <div className="sidebar__section sidebar__section--grow">
           <div className="sidebar__scroll">
             <nav className="sidebar__accordion">
@@ -305,6 +351,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="topbar__actions">
+            <Link className="topbar__link" to="/guides">
+              Guides
+            </Link>
+            <Link className="topbar__link" to="/collections">
+              Collections
+            </Link>
+            <Link className="topbar__link" to="/wishlist">
+              Wishlist
+            </Link>
             <Link className="icon-button" to="/#faq" aria-label="About UtilityHub">
               <Info size={20} />
             </Link>

@@ -1,8 +1,16 @@
+import { personaCollections } from '../src/data/collections';
+
 export interface ToolDefinition {
   name: string;
   path: string;
   category: string;
   expectsCopyButton: boolean;
+}
+
+export interface CollectionDefinition {
+  title: string;
+  path: string;
+  toolCount: number;
 }
 
 export const toolDefinitions: ToolDefinition[] = [
@@ -76,6 +84,7 @@ export const toolDefinitions: ToolDefinition[] = [
   { name: 'Docker Optimizer', path: '/docker-optimizer', category: 'Developer', expectsCopyButton: true },
   { name: 'Gitignore Builder', path: '/gitignore-builder', category: 'Developer', expectsCopyButton: false },
   { name: 'Fixture File Generator', path: '/media-fixture-generator', category: 'Developer', expectsCopyButton: false },
+  { name: 'Video to GIF Studio', path: '/video-to-gif-studio', category: 'Developer', expectsCopyButton: false },
   { name: 'GitHub Actions Validator', path: '/github-actions-validator', category: 'Testers', expectsCopyButton: false },
   { name: 'Dependency Visualizer', path: '/dependency-visualizer', category: 'Developer', expectsCopyButton: false },
   { name: 'Bundle Size Calculator', path: '/bundle-size-calculator', category: 'Developer', expectsCopyButton: false },
@@ -147,3 +156,9 @@ export const toolDefinitions: ToolDefinition[] = [
 export const generators = toolDefinitions
   .filter((tool) => tool.category === 'Generators')
   .map((tool) => tool.name);
+
+export const collectionDefinitions: CollectionDefinition[] = personaCollections.map((collection) => ({
+  title: collection.title,
+  path: collection.path,
+  toolCount: collection.toolIds.length,
+}));

@@ -9,6 +9,8 @@ UtilityHub provides local, client-side tools for formatting, encoding, security 
 - Site: https://utilityhub.dev/
 - Sitemap: https://utilityhub.dev/sitemap.xml
 - Machine-readable catalog: https://utilityhub.dev/tool-catalog.json
+- Collections index: https://utilityhub.dev/collections
+- Guides index: https://utilityhub.dev/guides
 
 ## Privacy model
 
@@ -31,7 +33,28 @@ UtilityHub provides local, client-side tools for formatting, encoding, security 
 - OpenAPI tools
 - Developer workflow tools
 
+## Collections
+
+- /collections/web-designers: curated browser-local workflows for visual design and asset prep.
+- /collections/web-developers: curated workflows for everyday web implementation and request shaping.
+- /collections/frontend-developers: curated utilities for UI implementation, formatting, and browser-facing checks.
+- /collections/backend-developers: curated utilities for API contracts, signing, payloads, and headers.
+- /collections/business-analysts: curated utilities for structured notes, tables, comparisons, and summaries.
+- /collections/manual-testers: curated utilities for QA evidence, fixtures, and response inspection.
+- /collections/automation-testers: curated utilities for regex, payload paths, CI checks, and test data.
+- /collections/performance-testers: curated utilities for timing, size, logs, and result shaping.
+- /collections/load-stress-testers: curated utilities for capacity review, timing math, and run summaries.
+- /collections/penetration-testers: curated utilities for token, policy, redirect, and security-text review.
+- /collections/devops-engineers: curated utilities for Docker, workflow YAML, cron, env, and delivery hygiene.
+- /collections/secops-engineers: curated utilities for secret handling, policy checks, and auth-adjacent review.
+- /collections/ai-engineers: curated utilities for prompts, evals, schema testing, and AI safety workflows.
+- /collections/product-owners: curated utilities for release notes, diffs, tables, and planning artifacts.
+- /collections/scrum-masters: curated utilities for checklists, timing cleanup, and delivery communication.
+- /collections/data-engineers-and-analysts: curated utilities for CSV, JSON, JSONL, SQL, and reporting transforms.
+
 ## Tool catalog
+
+Every cataloged tool has a matching guide at `/guides/{tool-id}`.
 
 - /json-formatter: Validate, prettify, and minify JSON locally.
 - /base64-studio: Encode or decode Base64 text payloads.
@@ -54,6 +77,7 @@ UtilityHub provides local, client-side tools for formatting, encoding, security 
 - /csv-json-studio: Convert CSV rows and JSON arrays.
 - /text-diff-checker: Compare two text blocks in a side-by-side review layout.
 - /docker-optimizer: Review Dockerfiles for repeatability and runtime hygiene.
+- /video-to-gif-studio: Convert local videos into GIFs with trim, FPS, scale, and color controls for pull request sharing.
 - /github-actions-validator: Review GitHub Actions workflow structure and CI safety signals.
 - /dependency-visualizer: Summarize package manifests and grouped dependencies.
 - /bundle-size-calculator: Estimate bundle totals and asset mix from pasted build output.

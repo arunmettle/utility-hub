@@ -1,2 +1,4 @@
 # Redirect all routes to index.html for SPA routing
-/*    /index.html   200
+/base64          /base64-studio        301
+/qr-code         /qr-code-generator    301
+/timestamp       /timestamp-converter  301

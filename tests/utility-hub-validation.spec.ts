@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { toolDefinitions } from './validation-data';
+import { collectionDefinitions, toolDefinitions } from './validation-data';
 
 const jwtSample =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1dGlsaXR5LWh1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcxODYyMjAwMCwiZXhwIjoyMDMyNjIyMDAwfQ.signature';
@@ -22,8 +22,31 @@ test('Given the home page when it loads then the catalog and sidebar render with
   await expect(page).toHaveTitle(/UtilityHub/i);
   await expect(page.getByRole('heading', { level: 1, name: /Privacy-first browser tools/i })).toBeVisible();
   await expect(page.locator('#app-sidebar')).toBeVisible();
-  await expect(page.locator('.tool-card')).toHaveCount(toolDefinitions.length);
+  await expect(page.locator('#all-tools .tool-card')).toHaveCount(toolDefinitions.length);
   expect(consoleMessages).toEqual([]);
+});
+
+test('Given the home page when role-based collections are shown then the featured collection cards link to curated toolkits', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  await expect(page.getByRole('heading', { level: 2, name: 'Browse by role' })).toBeVisible();
+  await expect(page.locator('.collection-grid .collection-card')).toHaveCount(6);
+  await expect(page.getByRole('link', { name: /Backend Developers/i }).first()).toHaveAttribute('href', '/collections/backend-developers');
+});
+
+test('Given the collections index when it loads then every curated category is listed', async ({ page }) => {
+  await page.goto('/collections', { waitUntil: 'domcontentloaded' });
+
+  await expect(page.getByRole('heading', { level: 1, name: /Curated toolkits/i })).toBeVisible();
+  await expect(page.locator('.collection-grid .collection-card')).toHaveCount(collectionDefinitions.length + 6);
+});
+
+test('Given each collection route when it is visited then the role heading and mapped tool cards render', async ({ page }) => {
+  for (const collection of collectionDefinitions) {
+    await page.goto(collection.path, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('heading', { level: 1, name: collection.title })).toBeVisible();
+    await expect(page.locator('.tool-grid .tool-card')).toHaveCount(collection.toolCount);
+  }
 });
 
 test('Given the topbar info control when it is activated then the app jumps to the faq section', async ({ page }) => {
@@ -1477,4 +1500,69 @@ test('Given Fixture File Generator when custom settings and a generated preview 
   await expect(main.locator('[aria-label="Fixture size mode"] button.is-active')).toContainText('Preset');
   await expect(main.locator('[data-testid="media-fixture-preview"]')).toContainText('Generate a fixture to preview and download the file.');
   await expect(main.locator('.insight-row')).toContainText('Choose a file type, format, and size target, then generate a local fixture.');
+});
+
+test('Given Video to GIF Studio when it loads then the branded upload field replaces the native file picker chrome', async ({ page }) => {
+  await page.goto('/video-to-gif-studio', { waitUntil: 'domcontentloaded' });
+  const main = page.getByRole('main');
+  const uploadField = main.getByTestId('video-gif-upload-field');
+  const hiddenInput = main.locator('#video-to-gif-input');
+
+  await expect(main.getByRole('heading', { level: 1, name: 'Video to GIF Studio' })).toBeVisible();
+  await expect(uploadField.locator('.upload-field__copy strong')).toHaveText('Choose a video file');
+  await expect(uploadField.locator('.upload-field__cta')).toHaveText('Browse video');
+  await expect(uploadField).not.toContainText('No file chosen');
+  await expect(uploadField).toHaveCSS('display', 'grid');
+  await expect(uploadField).toHaveCSS('border-radius', '20px');
+  await expect(hiddenInput).toHaveCSS('opacity', '0');
+  await expect(main.getByRole('button', { name: /convert to gif/i })).toBeDisabled();
+  await expect(main.getByTestId('video-to-gif-preview')).toContainText('Upload a video to preview the source and export a GIF.');
+});
+
+test('Given Video to GIF Studio on mobile when no file is loaded then the upload field stays readable and conversion remains safely blocked', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/video-to-gif-studio', { waitUntil: 'domcontentloaded' });
+  const main = page.getByRole('main');
+  const uploadField = main.getByTestId('video-gif-upload-field');
+  const uploadFieldBox = await uploadField.boundingBox();
+  const ctaBox = await uploadField.locator('.upload-field__cta').boundingBox();
+
+  await expect(uploadField).toContainText('Drop in an MP4 or WebM, or browse locally to start the conversion.');
+  await expect(main.locator('.upload-field__meta span').first()).toHaveText('MP4 and WebM are the most reliable options.');
+  await expect(main.locator('.upload-field__meta span').nth(1)).toHaveText('The file stays in your browser.');
+  await expect(main.locator('.tool-note').first()).toContainText('Export planning');
+  await expect(main.locator('.tool-note').first()).toContainText('Load a video to estimate frame count and output size.');
+  await expect(main.getByRole('button', { name: /download gif/i })).toBeDisabled();
+  expect(uploadFieldBox?.width).toBeGreaterThan(250);
+  expect(ctaBox?.width).toBeGreaterThan(80);
+});
+
+test('Given Video to GIF Studio when no gif exists yet then only the source preview area is eligible to render', async ({ page }) => {
+  await page.goto('/video-to-gif-studio', { waitUntil: 'domcontentloaded' });
+  const main = page.getByRole('main');
+
+  await expect(main.getByTestId('video-to-gif-preview')).not.toContainText('GIF preview');
+});
+
+test('Given a guide page when it renders then the removed real-use-case and mistakes sections no longer appear in the page or local contents nav', async ({ page }) => {
+  await page.goto('/guides/json-formatter', { waitUntil: 'domcontentloaded' });
+  const main = page.getByRole('main');
+
+  await expect(page.getByRole('heading', { level: 1, name: 'How to use the JSON Formatter' })).toBeVisible();
+  await expect(main).not.toContainText('Real use cases');
+  await expect(main).not.toContainText('Common mistakes to avoid');
+  await expect(page.locator('.docs-sidebar')).not.toContainText('Real use cases');
+  await expect(page.locator('.docs-sidebar')).not.toContainText('Common mistakes');
+  await expect(main).toContainText(['When to use it', 'Step-by-step walkthrough', 'Privacy note', 'FAQ']);
+});
+
+test('Given a guide page when the core sections render then when-to-use and walkthrough items use the shared bordered card style', async ({ page }) => {
+  await page.goto('/guides/json-formatter', { waitUntil: 'domcontentloaded' });
+  const whenToUseCard = page.locator('.docs-plain-item').first();
+  const walkthroughCard = page.locator('.docs-step-item').first();
+
+  await expect(whenToUseCard).toHaveCSS('border-radius', '18px');
+  await expect(whenToUseCard).toHaveCSS('background-color', 'rgb(17, 24, 39)');
+  await expect(walkthroughCard).toHaveCSS('border-radius', '18px');
+  await expect(walkthroughCard).toHaveCSS('background-color', 'rgb(17, 24, 39)');
 });

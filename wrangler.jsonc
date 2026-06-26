@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "utilityhub",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-05-03",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "utilityhub-submissions",
+      "database_id": "63cefa6c-93dd-40be-859c-239a254e20a7",
+      "preview_database_id": "DB",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
