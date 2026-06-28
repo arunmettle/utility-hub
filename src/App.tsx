@@ -75,6 +75,9 @@ import GuidesIndex from './pages/GuidesIndex';
 import GuidePage from './pages/GuidePage';
 import FeedbackPage from './pages/FeedbackPage';
 import WishlistPage from './pages/WishlistPage';
+import AboutPage from './pages/AboutPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 import IniFormatter from './tools/IniFormatter';
 import PasswordGenerator from './tools/PasswordGenerator';
 import PasswordPolicyInspector from './tools/PasswordPolicyInspector';
@@ -159,6 +162,9 @@ export default function App() {
           <Route path="/guides/:slug" element={<GuidePage />} />
           <Route path="/feedback" element={<FeedbackPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route path="/json-formatter" element={<JsonFormatter />} />
           <Route path="/ini-formatter" element={<IniFormatter />} />
           <Route path="/http-request-formatter" element={<HttpRequestFormatter />} />

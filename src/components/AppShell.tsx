@@ -357,10 +357,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <Link className="topbar__link" to="/collections">
               Collections
             </Link>
+            <Link className="topbar__link" to="/about">
+              About
+            </Link>
             <Link className="topbar__link" to="/wishlist">
               Wishlist
             </Link>
-            <Link className="icon-button" to="/#faq" aria-label="About UtilityHub">
+            <Link className="icon-button" to="/about" aria-label="About UtilityHub">
               <Info size={20} />
             </Link>
             <button
@@ -379,6 +382,28 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="workspace">{children}</main>
+        <footer className="site-footer" aria-label="Site footer">
+          <div className="site-footer__inner">
+            <p className="site-footer__copy">UtilityHub is a privacy-first collection of browser-based workflow tools.</p>
+            <nav className="site-footer__nav" aria-label="Footer links">
+              <Link to="/about" className="site-footer__link">
+                About
+              </Link>
+              <Link to="/privacy" className="site-footer__link">
+                Privacy
+              </Link>
+              <Link to="/terms" className="site-footer__link">
+                Terms
+              </Link>
+              <Link to="/feedback" className="site-footer__link">
+                Feedback
+              </Link>
+              <Link to="/wishlist" className="site-footer__link">
+                Wishlist
+              </Link>
+            </nav>
+          </div>
+        </footer>
       </div>
     </div>
   );

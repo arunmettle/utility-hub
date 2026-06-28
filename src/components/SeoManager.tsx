@@ -74,6 +74,9 @@ export default function SeoManager() {
     const guideTool = activeGuide ? getToolById(activeGuide.toolId) : undefined;
     const isFeedbackPage = location.pathname === '/feedback';
     const isWishlistPage = location.pathname === '/wishlist';
+    const isAboutPage = location.pathname === '/about';
+    const isPrivacyPage = location.pathname === '/privacy';
+    const isTermsPage = location.pathname === '/terms';
     const isGuidesIndex = location.pathname === '/guides';
     const isCollectionsIndex = location.pathname === '/collections';
     const title = activeTool ? `${activeTool.name} | UtilityHub` : defaultTitle;
@@ -83,6 +86,12 @@ export default function SeoManager() {
         ? `${activeCollection.title} on UtilityHub curates ${activeCollectionTools.length} browser-local tools for ${activeCollection.audience.toLowerCase()} working through recurring day-to-day delivery pain.`
         : activeGuide
         ? activeGuide.metaDescription
+        : isAboutPage
+          ? 'Learn what UtilityHub is, who it is for, and why it exists as a privacy-first collection of browser-based workflow tools.'
+        : isPrivacyPage
+          ? 'Read the UtilityHub privacy policy and understand the local-first design approach behind its browser-based tools.'
+        : isTermsPage
+          ? 'Read the UtilityHub terms of use for the website, tools, guides, feedback submissions, and product availability.'
         : isFeedbackPage
           ? 'Leave product feedback for UtilityHub and tell us what workflow worked, what was missing, and what would make the tool more useful.'
           : isWishlistPage
@@ -98,6 +107,12 @@ export default function SeoManager() {
         ? `${activeCollection.shortTitle.toLowerCase()}, ${activeCollection.audience.toLowerCase()} tools, utilityhub collections, role-based browser utilities, privacy-first workflow tools`
         : activeGuide
         ? `${activeGuide.title.toLowerCase()}, ${guideTool?.name.toLowerCase() ?? 'tool guide'}, how to use ${guideTool?.name.toLowerCase() ?? 'utility tool'}, workflow guide, privacy-first developer tools`
+        : isAboutPage
+          ? 'about utilityhub, privacy-first developer tools, browser-based utility site, workflow tools'
+        : isPrivacyPage
+          ? 'utilityhub privacy policy, local-first browser tools, developer tool privacy'
+        : isTermsPage
+          ? 'utilityhub terms of use, website terms, browser tool terms'
         : isFeedbackPage
           ? 'product feedback form, utilityhub feedback, request improvement, workflow feedback'
           : isWishlistPage
@@ -114,6 +129,12 @@ export default function SeoManager() {
         ? `${activeGuide.title} | UtilityHub Guides`
         : activeCollection
           ? `${activeCollection.title} | UtilityHub Collections`
+        : isAboutPage
+          ? 'About UtilityHub'
+        : isPrivacyPage
+          ? 'Privacy Policy | UtilityHub'
+        : isTermsPage
+          ? 'Terms of Use | UtilityHub'
         : isFeedbackPage
           ? 'Feedback | UtilityHub'
           : isWishlistPage
@@ -214,6 +235,22 @@ export default function SeoManager() {
             })),
           },
         ],
+      });
+      return;
+    }
+
+    if (isAboutPage || isPrivacyPage || isTermsPage) {
+      upsertStructuredData({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: resolvedTitle,
+        url: canonicalUrl,
+        description,
+        isPartOf: {
+          '@type': 'WebSite',
+          name: 'UtilityHub',
+          url: siteUrl,
+        },
       });
       return;
     }
