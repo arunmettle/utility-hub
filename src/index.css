@@ -134,8 +134,10 @@ textarea {
   gap: 12px;
 }
 
-.brand-mark svg {
+.brand-mark__image {
   flex: 0 0 auto;
+  display: block;
+  object-fit: contain;
 }
 
 .brand-mark__wordmark {

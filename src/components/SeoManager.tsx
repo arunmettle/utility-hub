@@ -64,7 +64,7 @@ export default function SeoManager() {
 
   useEffect(() => {
     const siteUrl = getSiteUrl();
-    const socialImageUrl = `${siteUrl}/og-image.svg`;
+    const socialImageUrl = `${siteUrl}/og-image.png`;
     const activeTool = tools.find((tool) => tool.path === location.pathname);
     const guideSlug = location.pathname.startsWith('/guides/') ? location.pathname.replace('/guides/', '') : undefined;
     const collectionSlug = location.pathname.startsWith('/collections/') ? location.pathname.replace('/collections/', '') : undefined;
