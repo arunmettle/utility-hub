@@ -1,8 +1,10 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { CheckCircle2, MessageSquareHeart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import TurnstileWidget from '../components/TurnstileWidget';
 import { tools } from '../data/tools';
 import { submitFeedback } from '../lib/feedback';
+import { getPublicConfig } from '../lib/publicConfig';
 
 type Outcome = 'worked' | 'partly-worked' | 'did-not-work';
 
@@ -13,8 +15,20 @@ export default function FeedbackPage() {
   const [missing, setMissing] = useState('');
   const [email, setEmail] = useState('');
   const [canContact, setCanContact] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState('');
+  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const spamProtectionEnabled = Boolean(turnstileSiteKey);
+
+  useEffect(() => {
+    getPublicConfig().then((config) => {
+      setTurnstileSiteKey(config.turnstileSiteKey?.trim() ?? '');
+      setTurnstileLoaded(true);
+    });
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,6 +43,7 @@ export default function FeedbackPage() {
         missing: missing.trim(),
         email: email.trim() || undefined,
         canContact,
+        turnstileToken: turnstileToken || undefined,
       });
 
       setStatus('submitted');
@@ -37,6 +52,8 @@ export default function FeedbackPage() {
       setEmail('');
       setCanContact(false);
       setOutcome('worked');
+      setTurnstileToken('');
+      setTurnstileResetKey((value) => value + 1);
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Something went wrong while saving your feedback.');
@@ -152,7 +169,12 @@ export default function FeedbackPage() {
             </div>
 
             <div className="submission-form__actions">
-              <button type="submit" className="action-button action-button--primary" disabled={status === 'submitting'}>
+              <TurnstileWidget key={turnstileResetKey} action="feedback_submit" siteKey={turnstileSiteKey} onTokenChange={setTurnstileToken} />
+              <button
+                type="submit"
+                className="action-button action-button--primary"
+                disabled={status === 'submitting' || (turnstileLoaded && spamProtectionEnabled && !turnstileToken)}
+              >
                 {status === 'submitting' ? 'Sending...' : 'Submit feedback'}
               </button>
               {status === 'submitted' ? (

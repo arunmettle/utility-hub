@@ -56,6 +56,31 @@ npm run deploy:cloudflare
 
 Feedback and wishlist forms post to same-origin Pages Function routes at `/api/feedback` and `/api/wishlist`. The optional `VITE_FEEDBACK_ENDPOINT` and `VITE_WISHLIST_ENDPOINT` environment variables can override those paths.
 
+### Public launch hardening
+
+The public feedback form, wishlist form, and Planning Poker room creation flow now support Cloudflare Turnstile and lightweight D1-backed rate limiting.
+
+Configure these before a public launch:
+
+```bash
+# Build-time public site key for the Vite frontend
+VITE_TURNSTILE_SITE_KEY=your_turnstile_site_key
+
+# Runtime secret for Cloudflare Pages Functions
+TURNSTILE_SECRET_KEY=your_turnstile_secret_key
+```
+
+- Set `VITE_TURNSTILE_SITE_KEY` in the Pages project's production environment variables so the frontend can render the widget.
+- Set `TURNSTILE_SECRET_KEY` as a Pages secret so the server can verify tokens with Cloudflare.
+- Apply the latest D1 migration before deploying:
+
+```bash
+npm run d1:migrate:remote
+npm run deploy:cloudflare
+```
+
+Local Pages testing with the secret present can use [.dev.vars.example](/C:/Dev/Utility/utility-hub/.dev.vars.example) as a starting point.
+
 ## Deploying to Vercel
 
 This project is already configured for Vercel static deployment:

@@ -43,10 +43,94 @@ export interface PasswordStrength {
 }
 
 export interface TimestampDetails {
+  detectedUnit: TimestampUnit;
   iso: string;
+  rfc3339: string;
+  rfc2822: string;
+  utc: string;
   local: string;
+  relative: string;
   unixSeconds: number;
   unixMilliseconds: number;
+  unixMicroseconds: string;
+  unixNanoseconds: string;
+  precisionNote?: string;
+}
+
+export type TimestampUnit = 'seconds' | 'milliseconds' | 'microseconds' | 'nanoseconds';
+export type DurationUnit = 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+
+export interface DateDifferenceReport {
+  startIso: string;
+  endIso: string;
+  startLocal: string;
+  endLocal: string;
+  direction: 'same' | 'forward' | 'backward';
+  human: string;
+  milliseconds: string;
+  seconds: string;
+  minutes: string;
+  hours: string;
+  days: string;
+  weeks: string;
+}
+
+export interface TimestampOffsetReport {
+  baseIso: string;
+  baseLocal: string;
+  resultIso: string;
+  resultLocal: string;
+  direction: 'add' | 'subtract';
+  amount: string;
+  unit: DurationUnit;
+  deltaHuman: string;
+  unixSeconds: number;
+  unixMilliseconds: number;
+  unixMicroseconds: string;
+  unixNanoseconds: string;
+}
+
+export interface TimestampBatchRow {
+  raw: string;
+  detectedUnit?: TimestampUnit;
+  iso?: string;
+  local?: string;
+  relative?: string;
+  error?: string;
+}
+
+export interface TimestampBatchReport {
+  totalLines: number;
+  validCount: number;
+  invalidCount: number;
+  rows: TimestampBatchRow[];
+}
+
+export interface TimeZoneConversionRow {
+  timeZone: string;
+  label: string;
+  formatted: string;
+  dayPeriod: string;
+}
+
+export interface TimeZoneConversionReport {
+  sourceIso: string;
+  sourceLocal: string;
+  rows: TimeZoneConversionRow[];
+}
+
+export interface RelativeTimeReport {
+  targetIso: string;
+  targetLocal: string;
+  relative: string;
+  direction: 'past' | 'future' | 'now';
+  human: string;
+  milliseconds: string;
+  seconds: string;
+  minutes: string;
+  hours: string;
+  days: string;
+  weeks: string;
 }
 
 export interface DecodedJwtToken {
@@ -688,34 +772,241 @@ export function convertCase(value: string, type: CaseType): string {
   }
 }
 
-export function parseTimestamp(value: string): TransformResult<TimestampDetails | null> {
-  if (!value.trim()) {
-    return { error: '', output: null };
+const timestampInputError = 'Enter a valid Unix timestamp in seconds, milliseconds, microseconds, or nanoseconds.';
+const maxDateMilliseconds = 8_640_000_000_000_000n;
+
+const durationMillisecondsByUnit: Record<DurationUnit, number> = {
+  milliseconds: 1,
+  seconds: 1_000,
+  minutes: 60_000,
+  hours: 3_600_000,
+  days: 86_400_000,
+  weeks: 604_800_000,
+  months: 2_592_000_000,
+  years: 31_536_000_000,
+};
+
+function formatDecimal(value: number, digits = 4) {
+  if (!Number.isFinite(value)) return '0';
+  if (digits === 0) return Math.round(value).toString();
+  const rounded = value.toFixed(digits).replace(/\.?0+$/, '');
+  return rounded === '-0' ? '0' : rounded;
+}
+
+function formatQuantity(value: number, singular: string, plural = `${singular}s`) {
+  const rendered = formatDecimal(value);
+  return `${rendered} ${rendered === '1' ? singular : plural}`;
+}
+
+function formatDateInTimeZone(date: Date, timeZone: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  }).format(date);
+}
+
+function getDayPeriod(date: Date, timeZone: string) {
+  const hour = Number(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hour: 'numeric',
+      hour12: false,
+    }).format(date),
+  );
+
+  if (hour < 6) return 'night';
+  if (hour < 12) return 'morning';
+  if (hour < 18) return 'afternoon';
+  return 'evening';
+}
+
+function formatRelativeTimestamp(targetMilliseconds: number, referenceMilliseconds: number) {
+  const deltaSeconds = Math.round((targetMilliseconds - referenceMilliseconds) / 1000);
+  if (deltaSeconds === 0) return 'now';
+
+  const formatter = new Intl.RelativeTimeFormat('en', { numeric: 'always' });
+  const absoluteSeconds = Math.abs(deltaSeconds);
+
+  if (absoluteSeconds < 60) return formatter.format(deltaSeconds, 'second');
+
+  const deltaMinutes = Math.round(deltaSeconds / 60);
+  if (Math.abs(deltaMinutes) < 60) return formatter.format(deltaMinutes, 'minute');
+
+  const deltaHours = Math.round(deltaMinutes / 60);
+  if (Math.abs(deltaHours) < 24) return formatter.format(deltaHours, 'hour');
+
+  const deltaDays = Math.round(deltaHours / 24);
+  if (Math.abs(deltaDays) < 7) return formatter.format(deltaDays, 'day');
+
+  const deltaWeeks = Math.round(deltaDays / 7);
+  if (Math.abs(deltaWeeks) < 5) return formatter.format(deltaWeeks, 'week');
+
+  const deltaMonths = Math.round(deltaDays / 30);
+  if (Math.abs(deltaMonths) < 12) return formatter.format(deltaMonths, 'month');
+
+  const deltaYears = Math.round(deltaDays / 365);
+  return formatter.format(deltaYears, 'year');
+}
+
+function formatAbsoluteDuration(milliseconds: number) {
+  if (milliseconds === 0) return '0 seconds';
+
+  const absoluteSeconds = Math.abs(milliseconds) / 1000;
+  if (absoluteSeconds < 60) return formatQuantity(absoluteSeconds, 'second');
+
+  const absoluteMinutes = absoluteSeconds / 60;
+  if (absoluteMinutes < 60) return formatQuantity(absoluteMinutes, 'minute');
+
+  const absoluteHours = absoluteMinutes / 60;
+  if (absoluteHours < 24) return formatQuantity(absoluteHours, 'hour');
+
+  const absoluteDays = absoluteHours / 24;
+  if (absoluteDays < 7) return formatQuantity(absoluteDays, 'day');
+
+  const absoluteWeeks = absoluteDays / 7;
+  if (absoluteWeeks < 5) return formatQuantity(absoluteWeeks, 'week');
+
+  if (absoluteDays < 365) return formatQuantity(absoluteDays / 30, 'month');
+
+  return formatQuantity(absoluteDays / 365, 'year');
+}
+
+function detectTimestampUnit(value: bigint): TimestampUnit | null {
+  const digits = value.toString().replace('-', '').length;
+  if (digits <= 10) return 'seconds';
+  if (digits <= 13) return 'milliseconds';
+  if (digits <= 16) return 'microseconds';
+  if (digits <= 19) return 'nanoseconds';
+  return null;
+}
+
+function parseUnixTimestampValue(value: string) {
+  const trimmed = value.trim();
+  if (!/^-?\d+$/.test(trimmed)) {
+    return { error: timestampInputError, output: null as null };
   }
 
-  const numericTimestamp = Number.parseInt(value, 10);
-  if (Number.isNaN(numericTimestamp)) {
-    return {
-      error: 'Enter a valid Unix timestamp in seconds or milliseconds.',
-      output: null,
-    };
+  let raw: bigint;
+  try {
+    raw = BigInt(trimmed);
+  } catch {
+    return { error: timestampInputError, output: null as null };
   }
 
-  const date = numericTimestamp > 10_000_000_000 ? new Date(numericTimestamp) : new Date(numericTimestamp * 1000);
+  const detectedUnit = detectTimestampUnit(raw);
+  if (!detectedUnit) {
+    return { error: timestampInputError, output: null as null };
+  }
+
+  const divisor = detectedUnit === 'microseconds' ? 1_000n : detectedUnit === 'nanoseconds' ? 1_000_000n : 1n;
+  const unixMillisecondsBigInt =
+    detectedUnit === 'seconds'
+      ? raw * 1_000n
+      : detectedUnit === 'milliseconds'
+        ? raw
+        : raw / divisor;
+
+  if (unixMillisecondsBigInt > maxDateMilliseconds || unixMillisecondsBigInt < -maxDateMilliseconds) {
+    return { error: timestampInputError, output: null as null };
+  }
+
+  const date = new Date(Number(unixMillisecondsBigInt));
   if (Number.isNaN(date.getTime())) {
-    return {
-      error: 'Enter a valid Unix timestamp in seconds or milliseconds.',
-      output: null,
-    };
+    return { error: timestampInputError, output: null as null };
   }
 
   return {
     error: '',
     output: {
+      raw,
+      date,
+      detectedUnit,
+      unixMillisecondsBigInt,
+      precisionNote:
+        detectedUnit === 'microseconds' && raw % 1_000n !== 0n
+          ? 'Calendar output is rounded down to the nearest millisecond because browsers render dates at millisecond precision.'
+          : detectedUnit === 'nanoseconds' && raw % 1_000_000n !== 0n
+            ? 'Calendar output is rounded down to the nearest millisecond because browsers render dates at millisecond precision.'
+            : undefined,
+    },
+  };
+}
+
+function parseFlexibleDateValue(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return { error: 'Enter a valid timestamp or date value.', output: null as null };
+  }
+
+  if (/^-?\d+$/.test(trimmed)) {
+    const parsedTimestamp = parseUnixTimestampValue(trimmed);
+    if (parsedTimestamp.error || !parsedTimestamp.output) {
+      return { error: 'Enter a valid timestamp or date value.', output: null as null };
+    }
+
+    return {
+      error: '',
+      output: {
+        date: parsedTimestamp.output.date,
+        source: 'timestamp' as const,
+      },
+    };
+  }
+
+  const date = new Date(trimmed);
+  if (Number.isNaN(date.getTime())) {
+    return { error: 'Enter a valid timestamp or date value.', output: null as null };
+  }
+
+  return {
+    error: '',
+    output: {
+      date,
+      source: 'date' as const,
+    },
+  };
+}
+
+export function parseTimestamp(value: string, referenceTime = Date.now()): TransformResult<TimestampDetails | null> {
+  if (!value.trim()) {
+    return { error: '', output: null };
+  }
+
+  const parsed = parseUnixTimestampValue(value);
+  if (parsed.error || !parsed.output) {
+    return {
+      error: timestampInputError,
+      output: null,
+    };
+  }
+
+  const { date, detectedUnit, precisionNote } = parsed.output;
+  const unixMilliseconds = date.getTime();
+  const unixSeconds = Math.floor(unixMilliseconds / 1000);
+  const unixMicroseconds = `${BigInt(unixMilliseconds) * 1_000n}`;
+  const unixNanoseconds = `${BigInt(unixMilliseconds) * 1_000_000n}`;
+
+  return {
+    error: '',
+    output: {
+      detectedUnit,
       iso: date.toISOString(),
+      rfc3339: date.toISOString(),
+      rfc2822: date.toUTCString(),
+      utc: date.toUTCString(),
       local: format(date, 'PPpp'),
-      unixSeconds: Math.floor(date.getTime() / 1000),
-      unixMilliseconds: date.getTime(),
+      relative: formatRelativeTimestamp(unixMilliseconds, referenceTime),
+      unixSeconds,
+      unixMilliseconds,
+      unixMicroseconds,
+      unixNanoseconds,
+      precisionNote,
     },
   };
 }
@@ -4719,22 +5010,222 @@ export function convertDelimitedText(value: string, sourceDelimiter: string, tar
   return { error: '', output: rows.map((row) => row.join(to)).join('\n') };
 }
 
-export function convertDurationUnits(value: string, unit: 'milliseconds' | 'seconds' | 'minutes' | 'hours'): TransformResult<Record<string, string> | null> {
+export function convertDurationUnits(value: string, unit: DurationUnit): TransformResult<Record<string, string> | null> {
   const amount = Number.parseFloat(value);
   if (!Number.isFinite(amount)) {
     return { error: 'Enter a valid duration value.', output: null };
   }
 
-  const milliseconds =
-    unit === 'milliseconds' ? amount : unit === 'seconds' ? amount * 1000 : unit === 'minutes' ? amount * 60_000 : amount * 3_600_000;
+  const milliseconds = amount * durationMillisecondsByUnit[unit];
 
   return {
     error: '',
     output: {
-      milliseconds: milliseconds.toFixed(0),
-      seconds: (milliseconds / 1000).toFixed(4),
-      minutes: (milliseconds / 60_000).toFixed(4),
-      hours: (milliseconds / 3_600_000).toFixed(4),
+      milliseconds: formatDecimal(milliseconds, 0),
+      seconds: formatDecimal(milliseconds / durationMillisecondsByUnit.seconds),
+      minutes: formatDecimal(milliseconds / durationMillisecondsByUnit.minutes),
+      hours: formatDecimal(milliseconds / durationMillisecondsByUnit.hours),
+      days: formatDecimal(milliseconds / durationMillisecondsByUnit.days),
+      weeks: formatDecimal(milliseconds / durationMillisecondsByUnit.weeks),
+      months: formatDecimal(milliseconds / durationMillisecondsByUnit.months),
+      years: formatDecimal(milliseconds / durationMillisecondsByUnit.years),
+    },
+  };
+}
+
+export function calculateDateDifference(startValue: string, endValue: string): TransformResult<DateDifferenceReport | null> {
+  if (!startValue.trim() && !endValue.trim()) {
+    return { error: '', output: null };
+  }
+
+  const start = parseFlexibleDateValue(startValue);
+  if (start.error || !start.output) {
+    return { error: 'Enter a valid start timestamp or date.', output: null };
+  }
+
+  const end = parseFlexibleDateValue(endValue);
+  if (end.error || !end.output) {
+    return { error: 'Enter a valid end timestamp or date.', output: null };
+  }
+
+  const startDate = start.output.date;
+  const endDate = end.output.date;
+  const differenceMilliseconds = endDate.getTime() - startDate.getTime();
+  const absoluteMilliseconds = Math.abs(differenceMilliseconds);
+
+  return {
+    error: '',
+    output: {
+      startIso: startDate.toISOString(),
+      endIso: endDate.toISOString(),
+      startLocal: format(startDate, 'PPpp'),
+      endLocal: format(endDate, 'PPpp'),
+      direction: differenceMilliseconds === 0 ? 'same' : differenceMilliseconds > 0 ? 'forward' : 'backward',
+      human: formatAbsoluteDuration(absoluteMilliseconds),
+      milliseconds: formatDecimal(absoluteMilliseconds, 0),
+      seconds: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.seconds),
+      minutes: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.minutes),
+      hours: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.hours),
+      days: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.days),
+      weeks: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.weeks),
+    },
+  };
+}
+
+export function calculateTimestampOffset(
+  baseValue: string,
+  amountValue: string,
+  unit: DurationUnit,
+  direction: 'add' | 'subtract',
+): TransformResult<TimestampOffsetReport | null> {
+  if (!baseValue.trim() && !amountValue.trim()) {
+    return { error: '', output: null };
+  }
+
+  const base = parseFlexibleDateValue(baseValue);
+  if (base.error || !base.output) {
+    return { error: 'Enter a valid base timestamp or date.', output: null };
+  }
+
+  const amount = Number.parseFloat(amountValue);
+  if (!Number.isFinite(amount)) {
+    return { error: 'Enter a valid duration amount.', output: null };
+  }
+
+  const signedAmount = direction === 'add' ? amount : -amount;
+  const deltaMilliseconds = signedAmount * durationMillisecondsByUnit[unit];
+  const resultDate = new Date(base.output.date.getTime() + deltaMilliseconds);
+  if (Number.isNaN(resultDate.getTime())) {
+    return { error: 'The calculated result is outside the browser date range.', output: null };
+  }
+
+  const unixMilliseconds = resultDate.getTime();
+
+  return {
+    error: '',
+    output: {
+      baseIso: base.output.date.toISOString(),
+      baseLocal: format(base.output.date, 'PPpp'),
+      resultIso: resultDate.toISOString(),
+      resultLocal: format(resultDate, 'PPpp'),
+      direction,
+      amount: formatDecimal(amount),
+      unit,
+      deltaHuman: formatAbsoluteDuration(Math.abs(deltaMilliseconds)),
+      unixSeconds: Math.floor(unixMilliseconds / 1000),
+      unixMilliseconds,
+      unixMicroseconds: `${BigInt(unixMilliseconds) * 1_000n}`,
+      unixNanoseconds: `${BigInt(unixMilliseconds) * 1_000_000n}`,
+    },
+  };
+}
+
+export function inspectTimestampBatch(value: string, referenceTime = Date.now()): TransformResult<TimestampBatchReport | null> {
+  if (!value.trim()) {
+    return { error: '', output: null };
+  }
+
+  const lines = value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    return { error: '', output: null };
+  }
+
+  const rows = lines.map((raw) => {
+    const parsed = parseTimestamp(raw, referenceTime);
+    if (parsed.error || !parsed.output) {
+      return { raw, error: parsed.error || timestampInputError };
+    }
+
+    return {
+      raw,
+      detectedUnit: parsed.output.detectedUnit,
+      iso: parsed.output.iso,
+      local: parsed.output.local,
+      relative: parsed.output.relative,
+    };
+  });
+
+  const validCount = rows.filter((row) => !row.error).length;
+  const invalidCount = rows.length - validCount;
+
+  return {
+    error: '',
+    output: {
+      totalLines: rows.length,
+      validCount,
+      invalidCount,
+      rows,
+    },
+  };
+}
+
+export function convertTimeZones(value: string, timeZones: string[]): TransformResult<TimeZoneConversionReport | null> {
+  if (!value.trim()) {
+    return { error: '', output: null };
+  }
+
+  const parsed = parseFlexibleDateValue(value);
+  if (parsed.error || !parsed.output) {
+    return { error: 'Enter a valid timestamp or date value.', output: null };
+  }
+
+  const uniqueZones = Array.from(new Set(timeZones.filter(Boolean)));
+  if (uniqueZones.length === 0) {
+    return { error: 'Choose at least one time zone.', output: null };
+  }
+
+  try {
+    const rows = uniqueZones.map((timeZone) => ({
+      timeZone,
+      label: timeZone.replaceAll('_', ' '),
+      formatted: formatDateInTimeZone(parsed.output!.date, timeZone),
+      dayPeriod: getDayPeriod(parsed.output!.date, timeZone),
+    }));
+
+    return {
+      error: '',
+      output: {
+        sourceIso: parsed.output.date.toISOString(),
+        sourceLocal: format(parsed.output.date, 'PPpp'),
+        rows,
+      },
+    };
+  } catch {
+    return { error: 'One or more time zones are not supported in this browser.', output: null };
+  }
+}
+
+export function calculateRelativeTime(value: string, referenceTime = Date.now()): TransformResult<RelativeTimeReport | null> {
+  if (!value.trim()) {
+    return { error: '', output: null };
+  }
+
+  const parsed = parseFlexibleDateValue(value);
+  if (parsed.error || !parsed.output) {
+    return { error: 'Enter a valid timestamp or date value.', output: null };
+  }
+
+  const deltaMilliseconds = parsed.output.date.getTime() - referenceTime;
+  const absoluteMilliseconds = Math.abs(deltaMilliseconds);
+
+  return {
+    error: '',
+    output: {
+      targetIso: parsed.output.date.toISOString(),
+      targetLocal: format(parsed.output.date, 'PPpp'),
+      relative: formatRelativeTimestamp(parsed.output.date.getTime(), referenceTime),
+      direction: deltaMilliseconds === 0 ? 'now' : deltaMilliseconds < 0 ? 'past' : 'future',
+      human: formatAbsoluteDuration(absoluteMilliseconds),
+      milliseconds: formatDecimal(absoluteMilliseconds, 0),
+      seconds: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.seconds),
+      minutes: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.minutes),
+      hours: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.hours),
+      days: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.days),
+      weeks: formatDecimal(absoluteMilliseconds / durationMillisecondsByUnit.weeks),
     },
   };
 }

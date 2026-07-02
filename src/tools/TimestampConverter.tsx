@@ -15,6 +15,8 @@ export default function TimestampConverter() {
 
   const currentUnixSeconds = Math.floor(currentTime / 1000);
   const currentUnixMilliseconds = currentTime;
+  const currentUnixMicroseconds = `${BigInt(currentTime) * 1_000n}`;
+  const currentUnixNanoseconds = `${BigInt(currentTime) * 1_000_000n}`;
   const parsed = parseTimestamp(timestamp);
 
   const copyOutput = async () => {
@@ -28,7 +30,7 @@ export default function TimestampConverter() {
     <ToolFrame
       eyebrow="Converter"
       title="Timestamp Converter"
-      description="Convert Unix timestamps in seconds or milliseconds into human-readable date formats instantly."
+      description="Inspect Unix timestamps in seconds, milliseconds, microseconds, or nanoseconds and convert them into practical date formats."
       actions={
         <>
           <button type="button" className="action-button action-button--primary" onClick={() => setTimestamp(String(currentUnixSeconds))}>
@@ -60,18 +62,27 @@ export default function TimestampConverter() {
               <strong>Unix milliseconds</strong>
               <span>{currentUnixMilliseconds}</span>
             </div>
+            <div className="timestamp-card">
+              <strong>Unix microseconds</strong>
+              <span>{currentUnixMicroseconds}</span>
+            </div>
+            <div className="timestamp-card">
+              <strong>Unix nanoseconds</strong>
+              <span>{currentUnixNanoseconds}</span>
+            </div>
           </div>
 
           <div className="editor-panel__head editor-panel__head--spaced">
             <span>Input timestamp</span>
-            <span>Seconds or milliseconds</span>
+            <span>Seconds, milliseconds, microseconds, or nanoseconds</span>
           </div>
           <input
             type="text"
             value={timestamp}
             onChange={(event) => setTimestamp(event.target.value)}
             className="tool-input"
-            placeholder="1640000000 or 1640000000000"
+            aria-label="Timestamp input"
+            placeholder="1640000000, 1640000000000, 1640000000000000, or 1640000000000000000"
           />
         </section>
 
@@ -95,22 +106,56 @@ export default function TimestampConverter() {
               <p>{parsed.error}</p>
             </div>
           ) : parsed.output ? (
-            <div className="timestamp-output">
-              <div className="timestamp-output__item">
-                <strong>Local</strong>
-                <span>{parsed.output.local}</span>
+            <div className="stack-grid">
+              <div className="stat-grid">
+                <article className="stat-card">
+                  <span className="stat-card__label">Detected unit</span>
+                  <strong>{parsed.output.detectedUnit}</strong>
+                </article>
+                <article className="stat-card">
+                  <span className="stat-card__label">Relative</span>
+                  <strong>{parsed.output.relative}</strong>
+                </article>
+                <article className="stat-card">
+                  <span className="stat-card__label">Unix microseconds</span>
+                  <strong>{parsed.output.unixMicroseconds}</strong>
+                </article>
+                <article className="stat-card">
+                  <span className="stat-card__label">Unix nanoseconds</span>
+                  <strong>{parsed.output.unixNanoseconds}</strong>
+                </article>
               </div>
-              <div className="timestamp-output__item">
-                <strong>ISO</strong>
-                <span>{parsed.output.iso}</span>
-              </div>
-              <div className="timestamp-output__item">
-                <strong>Unix seconds</strong>
-                <span>{parsed.output.unixSeconds}</span>
-              </div>
-              <div className="timestamp-output__item">
-                <strong>Unix milliseconds</strong>
-                <span>{parsed.output.unixMilliseconds}</span>
+              {parsed.output.precisionNote ? (
+                <article className="insight-row insight-row--low">
+                  <strong>Precision note</strong>
+                  <p>{parsed.output.precisionNote}</p>
+                </article>
+              ) : null}
+              <div className="timestamp-output">
+                <div className="timestamp-output__item">
+                  <strong>Local</strong>
+                  <span>{parsed.output.local}</span>
+                </div>
+                <div className="timestamp-output__item">
+                  <strong>UTC</strong>
+                  <span>{parsed.output.utc}</span>
+                </div>
+                <div className="timestamp-output__item">
+                  <strong>ISO 8601 / RFC 3339</strong>
+                  <span>{parsed.output.iso}</span>
+                </div>
+                <div className="timestamp-output__item">
+                  <strong>RFC 2822</strong>
+                  <span>{parsed.output.rfc2822}</span>
+                </div>
+                <div className="timestamp-output__item">
+                  <strong>Unix seconds</strong>
+                  <span>{parsed.output.unixSeconds}</span>
+                </div>
+                <div className="timestamp-output__item">
+                  <strong>Unix milliseconds</strong>
+                  <span>{parsed.output.unixMilliseconds}</span>
+                </div>
               </div>
             </div>
           ) : (

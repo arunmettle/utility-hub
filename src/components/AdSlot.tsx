@@ -12,9 +12,13 @@ const ADSENSE_CLIENT = import.meta.env.VITE_ADSENSE_CLIENT?.trim();
 const FALLBACK_ADSENSE_CLIENT = 'ca-pub-7971868534583867';
 const ADSENSE_TOP_SLOT = import.meta.env.VITE_ADSENSE_TOP_SLOT?.trim();
 const ADSENSE_FLOAT_SLOT = import.meta.env.VITE_ADSENSE_FLOAT_SLOT?.trim();
+const FALLBACK_TOP_SLOT = '4866906762';
+const FALLBACK_FLOAT_SLOT = '1586137305';
 
 function getSlotId(placement: AdSlotVariant) {
-  return placement === 'banner' ? ADSENSE_TOP_SLOT : ADSENSE_FLOAT_SLOT;
+  return placement === 'banner'
+    ? ADSENSE_TOP_SLOT || FALLBACK_TOP_SLOT
+    : ADSENSE_FLOAT_SLOT || FALLBACK_FLOAT_SLOT;
 }
 
 export default function AdSlot({

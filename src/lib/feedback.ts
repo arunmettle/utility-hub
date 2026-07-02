@@ -7,6 +7,7 @@ export interface FeedbackSubmission {
   missing: string;
   email?: string;
   canContact: boolean;
+  turnstileToken?: string;
 }
 
 export interface WishlistSubmission {
@@ -19,6 +20,7 @@ export interface WishlistSubmission {
   idealOutcome: string;
   workaround?: string;
   email?: string;
+  turnstileToken?: string;
 }
 
 interface SubmissionResponse {

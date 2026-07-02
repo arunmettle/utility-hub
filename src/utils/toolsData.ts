@@ -5,6 +5,8 @@ import {
   QrCode, 
   Type, 
   Clock, 
+  CalendarRange,
+  TimerReset,
   Link2, 
   Key, 
   Shield, 
@@ -73,10 +75,50 @@ export const tools: Tool[] = [
   {
     id: 'timestamp-converter',
     name: 'Timestamp Converter',
-    description: 'Convert Unix timestamps to human-readable dates',
+    description: 'Inspect Unix timestamps in seconds, milliseconds, microseconds, or nanoseconds',
     category: 'Converters',
     icon: Clock,
     path: '/timestamp-converter'
+  },
+  {
+    id: 'date-difference-calculator',
+    name: 'Date Difference Calculator',
+    description: 'Compare two timestamps or date strings and see the exact gap',
+    category: 'Converters',
+    icon: CalendarRange,
+    path: '/date-difference-calculator'
+  },
+  {
+    id: 'expiry-time-calculator',
+    name: 'Expiry Time Calculator',
+    description: 'Add or subtract a duration from a timestamp or date',
+    category: 'Converters',
+    icon: TimerReset,
+    path: '/expiry-time-calculator'
+  },
+  {
+    id: 'time-zone-converter',
+    name: 'Time Zone Converter',
+    description: 'Render one timestamp across common time zones',
+    category: 'Converters',
+    icon: Link2,
+    path: '/time-zone-converter'
+  },
+  {
+    id: 'timestamp-batch-inspector',
+    name: 'Timestamp Batch Inspector',
+    description: 'Inspect a batch of Unix timestamps one per line',
+    category: 'Converters',
+    icon: Clock,
+    path: '/timestamp-batch-inspector'
+  },
+  {
+    id: 'relative-time-calculator',
+    name: 'Relative Time Calculator',
+    description: 'See how far away a target time is in human terms',
+    category: 'Converters',
+    icon: Clock,
+    path: '/relative-time-calculator'
   },
   {
     id: 'url-encoder',

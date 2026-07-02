@@ -83,6 +83,7 @@ import PasswordGenerator from './tools/PasswordGenerator';
 import PasswordPolicyInspector from './tools/PasswordPolicyInspector';
 import PassphraseGenerator from './tools/PassphraseGenerator';
 import PathSeparatorConverter from './tools/PathSeparatorConverter';
+import PlanningPoker from './tools/PlanningPoker';
 import QueryStringStudio from './tools/QueryStringStudio';
 import QRCodeGenerator from './tools/QRCodeGenerator';
 import QuotedPrintableStudio from './tools/QuotedPrintableStudio';
@@ -106,6 +107,11 @@ import TestCaseTitleGenerator from './tools/TestCaseTitleGenerator';
 import TextDiffChecker from './tools/TextDiffChecker';
 import TimestampConverter from './tools/TimestampConverter';
 import DurationConverter from './tools/DurationConverter';
+import DateDifferenceCalculator from './tools/DateDifferenceCalculator';
+import ExpiryTimeCalculator from './tools/ExpiryTimeCalculator';
+import RelativeTimeCalculator from './tools/RelativeTimeCalculator';
+import TimestampBatchInspector from './tools/TimestampBatchInspector';
+import TimeZoneConverter from './tools/TimeZoneConverter';
 import UlidGenerator from './tools/UlidGenerator';
 import UnicodeEscapeStudio from './tools/UnicodeEscapeStudio';
 import UrlPatternTester from './tools/UrlPatternTester';
@@ -188,6 +194,7 @@ export default function App() {
           <Route path="/password-generator" element={<PasswordGenerator />} />
           <Route path="/passphrase-generator" element={<PassphraseGenerator />} />
           <Route path="/random-number-generator" element={<RandomNumberGenerator />} />
+          <Route path="/planning-poker" element={<PlanningPoker />} />
           <Route path="/color-palette-generator" element={<ColorPaletteGenerator />} />
           <Route path="/nano-id-generator" element={<NanoIdGenerator />} />
           <Route path="/fake-user-generator" element={<FakeUserGenerator />} />
@@ -206,10 +213,15 @@ export default function App() {
           <Route path="/list-json-converter" element={<ListJsonConverter />} />
           <Route path="/delimiter-converter" element={<DelimiterConverter />} />
           <Route path="/duration-converter" element={<DurationConverter />} />
+          <Route path="/date-difference-calculator" element={<DateDifferenceCalculator />} />
+          <Route path="/expiry-time-calculator" element={<ExpiryTimeCalculator />} />
           <Route path="/path-separator-converter" element={<PathSeparatorConverter />} />
           <Route path="/number-base-converter" element={<NumberBaseConverter />} />
+          <Route path="/relative-time-calculator" element={<RelativeTimeCalculator />} />
           <Route path="/roman-numeral-converter" element={<RomanNumeralConverter />} />
+          <Route path="/time-zone-converter" element={<TimeZoneConverter />} />
           <Route path="/timestamp-converter" element={<TimestampConverter />} />
+          <Route path="/timestamp-batch-inspector" element={<TimestampBatchInspector />} />
           <Route path="/timestamp" element={<Navigate to="/timestamp-converter" replace />} />
           <Route path="/jwt-decoder" element={<JWTDecoder />} />
           <Route path="/jwt-expiry-checker" element={<JwtExpiryChecker />} />

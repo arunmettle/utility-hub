@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "vite",
     "dev:pages": "npm run build && wrangler pages dev dist",
+    "dev:pages:test": "npm run build && npm run d1:migrate:local && wrangler pages dev dist --ip 127.0.0.1 --port 4173",
     "prepare:adsense": "node scripts/prepare-adsense.mjs",
     "build": "npm run prepare:adsense && tsc -b && vite build",
     "deploy:cloudflare": "npm run build && wrangler pages deploy dist --project-name utilityhub",

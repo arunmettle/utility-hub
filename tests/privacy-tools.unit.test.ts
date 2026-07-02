@@ -6,10 +6,14 @@ import {
   analyzeRegex,
   analyzeLogLevels,
   buildGitignoreTemplate,
+  calculateDateDifference,
+  calculateRelativeTime,
+  calculateTimestampOffset,
   generateSriHashes,
   compareJsonValues,
   convertDelimitedText,
   convertDurationUnits,
+  convertTimeZones,
   convertByteSize,
   convertNumberBases,
   convertPathSeparators,
@@ -90,6 +94,7 @@ import {
   transformRot13,
   runRegexReplace,
   parseTimestamp,
+  inspectTimestampBatch,
   testHttpStatusRule,
   testJsonPointer,
   testSemverRange,
@@ -152,16 +157,30 @@ describe('privacyTools', () => {
     expect(convertCase('utility hub tools', 'Title Case')).toBe('Utility Hub Tools');
   });
 
-  it('parses seconds and milliseconds timestamps', () => {
-    const seconds = parseTimestamp('1718625600');
+  it('parses seconds, milliseconds, microseconds, and nanoseconds timestamps', () => {
+    const seconds = parseTimestamp('1718625600', Date.UTC(2024, 5, 16, 12, 0, 0));
     expect(seconds.error).toBe('');
+    expect(seconds.output?.detectedUnit).toBe('seconds');
     expect(seconds.output?.unixMilliseconds).toBe(1718625600000);
+    expect(seconds.output?.relative).toBe('in 1 day');
 
     const milliseconds = parseTimestamp('1718625600000');
     expect(milliseconds.error).toBe('');
+    expect(milliseconds.output?.detectedUnit).toBe('milliseconds');
     expect(milliseconds.output?.unixSeconds).toBe(1718625600);
 
-    expect(parseTimestamp('abc').error).toBe('Enter a valid Unix timestamp in seconds or milliseconds.');
+    const microseconds = parseTimestamp('1718625600123456');
+    expect(microseconds.error).toBe('');
+    expect(microseconds.output?.detectedUnit).toBe('microseconds');
+    expect(microseconds.output?.unixMilliseconds).toBe(1718625600123);
+    expect(microseconds.output?.precisionNote).toContain('rounded down');
+
+    const nanoseconds = parseTimestamp('1718625600123456789');
+    expect(nanoseconds.error).toBe('');
+    expect(nanoseconds.output?.detectedUnit).toBe('nanoseconds');
+    expect(nanoseconds.output?.unixMilliseconds).toBe(1718625600123);
+
+    expect(parseTimestamp('abc').error).toBe('Enter a valid Unix timestamp in seconds, milliseconds, microseconds, or nanoseconds.');
   });
 
   it('builds secure password output from options and random values', () => {
@@ -958,11 +977,64 @@ index 1..2 100644
     const result = convertDurationUnits('90', 'seconds');
     expect(result.error).toBe('');
     expect(result.output?.milliseconds).toBe('90000');
-    expect(result.output?.minutes).toBe('1.5000');
+    expect(result.output?.minutes).toBe('1.5');
+    expect(result.output?.days).toBe('0.001');
+  });
+
+  it('converts days and weeks into longer human-readable units', () => {
+    const result = convertDurationUnits('14', 'days');
+    expect(result.error).toBe('');
+    expect(result.output?.hours).toBe('336');
+    expect(result.output?.weeks).toBe('2');
+    expect(result.output?.months).toBe('0.4667');
   });
 
   it('rejects invalid duration values', () => {
     expect(convertDurationUnits('abc', 'minutes').error).toBe('Enter a valid duration value.');
+  });
+
+  it('calculates the difference between two timestamps or date strings', () => {
+    const result = calculateDateDifference('1718625600', '2024-06-18T12:00:00.000Z');
+    expect(result.error).toBe('');
+    expect(result.output?.direction).toBe('forward');
+    expect(result.output?.hours).toBe('24');
+    expect(result.output?.days).toBe('1');
+    expect(result.output?.human).toBe('1 day');
+  });
+
+  it('calculates an expiry time by adding a duration to a base timestamp', () => {
+    const result = calculateTimestampOffset('1718625600', '90', 'minutes', 'add');
+    expect(result.error).toBe('');
+    expect(result.output?.resultIso).toBe('2024-06-17T13:30:00.000Z');
+    expect(result.output?.unixSeconds).toBe(1718631000);
+    expect(result.output?.deltaHuman).toBe('1.5 hours');
+  });
+
+  it('inspects a mixed batch of timestamps line by line', () => {
+    const result = inspectTimestampBatch(['1718625600', '1718625600123', 'nope'].join('\n'), Date.UTC(2024, 5, 17, 12, 0, 0));
+    expect(result.error).toBe('');
+    expect(result.output?.totalLines).toBe(3);
+    expect(result.output?.validCount).toBe(2);
+    expect(result.output?.invalidCount).toBe(1);
+    expect(result.output?.rows[0]).toMatchObject({ detectedUnit: 'seconds', iso: '2024-06-17T12:00:00.000Z' });
+    expect(result.output?.rows[2].error).toBe('Enter a valid Unix timestamp in seconds, milliseconds, microseconds, or nanoseconds.');
+  });
+
+  it('renders a time across preset time zones', () => {
+    const result = convertTimeZones('2026-07-02T09:00:00Z', ['UTC', 'Australia/Brisbane']);
+    expect(result.error).toBe('');
+    expect(result.output?.rows).toHaveLength(2);
+    expect(result.output?.rows[0].formatted).toContain('UTC');
+    expect(result.output?.rows[1].timeZone).toBe('Australia/Brisbane');
+  });
+
+  it('calculates relative time from now', () => {
+    const result = calculateRelativeTime('2026-07-03T09:00:00.000Z', Date.UTC(2026, 6, 2, 9, 0, 0));
+    expect(result.error).toBe('');
+    expect(result.output?.direction).toBe('future');
+    expect(result.output?.relative).toBe('in 1 day');
+    expect(result.output?.days).toBe('1');
+    expect(result.output?.human).toBe('1 day');
   });
 
   it('converts path separators', () => {

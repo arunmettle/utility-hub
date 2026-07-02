@@ -1,3 +1,5 @@
+import { enforceRateLimit, verifyTurnstileToken } from './_requestGuards.js';
+
 const jsonHeaders = {
   'Content-Type': 'application/json; charset=utf-8',
   'Cache-Control': 'no-store',
@@ -157,12 +159,24 @@ export async function onRequest(context) {
 
   try {
     const payload = await readPayload(request);
+    await enforceRateLimit(env, request, {
+      scope: `submission:${submissionType}`,
+      maxRequests: 5,
+      windowSeconds: 15 * 60,
+    });
+    await verifyTurnstileToken(
+      env,
+      request,
+      payload.turnstileToken,
+      submissionType === 'feedback' ? 'feedback_submit' : 'wishlist_submit',
+    );
     const submission =
       submissionType === 'feedback' ? await createFeedback(env, payload) : await createWishlist(env, payload);
 
     return jsonResponse({ ok: true, submission });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to save submission.';
-    return jsonResponse({ ok: false, error: message }, 400);
+    const status = message.includes('Too many requests') ? 429 : 400;
+    return jsonResponse({ ok: false, error: message }, status);
   }
 }

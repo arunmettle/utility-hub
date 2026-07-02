@@ -1,8 +1,10 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { CheckCircle2, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import TurnstileWidget from '../components/TurnstileWidget';
 import { tools } from '../data/tools';
 import { submitWishlistItem } from '../lib/feedback';
+import { getPublicConfig } from '../lib/publicConfig';
 
 type RequestType = 'new-tool' | 'improve-tool' | 'workflow';
 
@@ -14,8 +16,20 @@ export default function WishlistPage() {
   const [idealOutcome, setIdealOutcome] = useState('');
   const [workaround, setWorkaround] = useState('');
   const [email, setEmail] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState('');
+  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'submitted' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const spamProtectionEnabled = Boolean(turnstileSiteKey);
+
+  useEffect(() => {
+    getPublicConfig().then((config) => {
+      setTurnstileSiteKey(config.turnstileSiteKey?.trim() ?? '');
+      setTurnstileLoaded(true);
+    });
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,6 +45,7 @@ export default function WishlistPage() {
         idealOutcome: idealOutcome.trim(),
         workaround: workaround.trim() || undefined,
         email: email.trim() || undefined,
+        turnstileToken: turnstileToken || undefined,
       });
 
       setStatus('submitted');
@@ -41,6 +56,8 @@ export default function WishlistPage() {
       setWorkaround('');
       setEmail('');
       setRequestType('new-tool');
+      setTurnstileToken('');
+      setTurnstileResetKey((value) => value + 1);
     } catch (error) {
       setStatus('error');
       setErrorMessage(error instanceof Error ? error.message : 'Something went wrong while saving your request.');
@@ -164,7 +181,12 @@ export default function WishlistPage() {
             </label>
 
             <div className="submission-form__actions">
-              <button type="submit" className="action-button action-button--primary" disabled={status === 'submitting'}>
+              <TurnstileWidget key={turnstileResetKey} action="wishlist_submit" siteKey={turnstileSiteKey} onTokenChange={setTurnstileToken} />
+              <button
+                type="submit"
+                className="action-button action-button--primary"
+                disabled={status === 'submitting' || (turnstileLoaded && spamProtectionEnabled && !turnstileToken)}
+              >
                 {status === 'submitting' ? 'Saving...' : 'Submit request'}
               </button>
               {status === 'submitted' ? (

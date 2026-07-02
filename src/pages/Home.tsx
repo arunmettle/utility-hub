@@ -4,6 +4,27 @@ import BrandMark from '../components/BrandMark';
 import { featuredPersonaCollections, getPersonaCollectionTools } from '../data/collections';
 import { tools } from '../data/tools';
 
+const entryPaths = [
+  {
+    title: 'Start with your role',
+    body: 'Use curated collections when you want the shortest path to useful tools for backend work, AI workflows, DevOps, SecOps, QA, Scrum ceremonies, and more.',
+    cta: 'Browse collections',
+    to: '/collections',
+  },
+  {
+    title: 'Start with a guide',
+    body: 'Use workflow guides when you want examples, context, and a calmer explanation of how a tool fits into real day-to-day work.',
+    cta: 'Read guides',
+    to: '/guides',
+  },
+  {
+    title: 'Start with the catalog',
+    body: 'Jump straight into the full tool catalog when you already know the job to be done and want the fastest path from messy input to clean output.',
+    cta: 'View all tools',
+    to: '/#all-tools',
+  },
+];
+
 const highlightPoints = [
   {
     title: 'Browser-local by default',
@@ -16,6 +37,29 @@ const highlightPoints = [
   {
     title: 'Useful for people and machines',
     body: 'Routes, metadata, sitemap entries, `llms.txt`, and the tool catalog are aligned so crawlers and assistants can identify what each page is for.',
+  },
+];
+
+const roadmapItems = [
+  {
+    audience: 'Scrum Masters',
+    title: 'Team facilitation and ceremony helpers',
+    body: 'Spinner wheel, retro prompt generator, ceremony timer, and delivery-friendly summaries for Azure DevOps and other ALM workflows.',
+  },
+  {
+    audience: 'Backend and API teams',
+    title: 'Deeper API review workflows',
+    body: 'More direct helpers for request replay, webhook triage, safer sharing, and API incident cleanup around payloads and auth artifacts.',
+  },
+  {
+    audience: 'AI teams',
+    title: 'Prompt and evaluation operations',
+    body: 'More structured tools for prompt review, eval dataset prep, output inspection, and safety workflow support across practical AI delivery work.',
+  },
+  {
+    audience: 'Operations and platform teams',
+    title: 'Delivery visibility and config hygiene',
+    body: 'Helpers that make CI, release, environment, and infrastructure artifacts easier to summarize and review without context switching.',
   },
 ];
 
@@ -51,27 +95,46 @@ export default function Home() {
             <BrandMark size={34} />
           </div>
           <div>
-            <h1>Privacy-first browser tools for daily engineering work.</h1>
+            <h1>Privacy-first browser tools for real delivery work.</h1>
             <p>
-              UtilityHub keeps repetitive transformations calm, quick, and local. Start with a formatter for structured
-              payloads, inspect secure tokens, compare text, shape data, and transform encoded content without server
-              round-trips.
+              UtilityHub helps teams move from messy inputs to usable outputs faster. Format payloads, inspect tokens,
+              compare text, shape data, review config, and support delivery workflows without depending on a pile of
+              disconnected browser tools.
             </p>
           </div>
         </article>
 
         <aside className="hero-copy">
-          <span className="hero-copy__eyebrow">Browser-based developer utility suite</span>
-          <h2>Built for payloads, diffs, configs, and delivery workflows that should stay readable.</h2>
+          <span className="hero-copy__eyebrow">Privacy-first browser tools</span>
+          <h2>Start by role, start by guide, or jump straight into the tool you need.</h2>
           <p>
-            UtilityHub helps teams move through everyday engineering chores faster: formatting JSON, decoding Base64,
-            checking regexes, comparing text, reviewing headers, tightening Docker config, and exploring API specs.
+            UtilityHub is built for the raw material of software delivery: payloads, prompts, diffs, configs,
+            spreadsheets, headers, workflow exports, and all the messy artifacts that slow teams down.
           </p>
           <p>
-            The experience is intentionally lightweight and privacy-aware so developers can use it as a practical companion
-            during coding, QA, documentation, pull request review, and release preparation.
+            The experience is intentionally lightweight and local-first so people can use it during coding, QA, reviews,
+            facilitation, incident response, sprint work, and release preparation without unnecessary noise.
           </p>
         </aside>
+      </section>
+
+      <section className="catalog-section">
+        <div className="section-heading">
+          <h2>Choose how to enter UtilityHub</h2>
+          <p>The fastest path depends on whether you think in roles, workflows, or individual tasks.</p>
+        </div>
+
+        <div className="workflow-copy">
+          {entryPaths.map((entry) => (
+            <article key={entry.title} className="tool-note guide-cta-card">
+              <h2>{entry.title}</h2>
+              <p>{entry.body}</p>
+              <Link to={entry.to} className="guide-inline-link">
+                {entry.cta}
+              </Link>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="catalog-section">
@@ -104,7 +167,7 @@ export default function Home() {
       <section className="catalog-section">
         <div className="section-heading">
           <h2>Why teams use it</h2>
-          <p>UtilityHub is shaped around local-first utility work rather than one-off marketing demos.</p>
+          <p>UtilityHub is shaped around practical workflow friction rather than one-off marketing demos.</p>
         </div>
 
         <div className="insight-grid">
@@ -167,6 +230,26 @@ export default function Home() {
               semantic version guidance, and JSON schema bootstrapping.
             </p>
           </article>
+        </div>
+      </section>
+
+      <section className="catalog-section">
+        <div className="section-heading">
+          <h2>Coming next</h2>
+          <p>These are the workflow gaps to close next based on audience fit, feedback direction, and where the current catalog still feels incomplete.</p>
+        </div>
+
+        <div className="insight-grid">
+          {roadmapItems.map((item) => (
+            <article key={item.title} className="insight-card">
+              <div className="insight-card__head">
+                <strong className="insight-card__title">{item.title}</strong>
+              </div>
+              <p className="insight-card__body">
+                <strong>{item.audience}:</strong> {item.body}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
 
