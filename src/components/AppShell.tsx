@@ -25,6 +25,13 @@ const toolCategories = categories.filter(
 
 const themeStorageKey = 'utility-hub-theme';
 
+function createCategoryOpenState(isExpandedByDefault: boolean) {
+  return Object.fromEntries(toolCategories.map((category) => [category, isExpandedByDefault])) as Record<
+    Exclude<ToolCategory, 'All tools'>,
+    boolean
+  >;
+}
+
 function getInitialTheme(): ThemeMode {
   if (typeof window === 'undefined') {
     return 'light';
@@ -47,7 +54,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [openCategories, setOpenCategories] = useState<Record<Exclude<ToolCategory, 'All tools'>, boolean>>(() =>
-    Object.fromEntries(toolCategories.map((category) => [category, true])) as Record<Exclude<ToolCategory, 'All tools'>, boolean>,
+    createCategoryOpenState(typeof window !== 'undefined' ? window.innerWidth > 960 : true),
   );
   const location = useLocation();
 
@@ -106,6 +113,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     document.documentElement.style.colorScheme = theme;
     window.localStorage.setItem(themeStorageKey, theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (isDesktop || query.trim().length > 0) {
+      return;
+    }
+
+    setOpenCategories((current) => {
+      const collapsedState = createCategoryOpenState(false);
+      const hasDifferentValue = toolCategories.some((category) => current[category] !== collapsedState[category]);
+      return hasDifferentValue ? collapsedState : current;
+    });
+  }, [isDesktop, query]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -380,6 +399,41 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
         </header>
+
+        {!isDesktop && query.trim().length > 0 ? (
+          <section className="mobile-search-results" aria-label="Search results">
+            <div className="mobile-search-results__head">
+              <strong>Matching tools</strong>
+              <span>{filteredTools.length}</span>
+            </div>
+            {filteredTools.length > 0 ? (
+              <div className="mobile-search-results__list">
+                {filteredTools.slice(0, 8).map((tool) => {
+                  const Icon = tool.icon;
+                  return (
+                    <Link
+                      key={tool.id}
+                      to={tool.path}
+                      className={`mobile-search-results__item ${location.pathname === tool.path ? 'is-active' : ''}`}
+                      onClick={() => {
+                        setQuery('');
+                        setMobileSidebarOpen(false);
+                      }}
+                    >
+                      <Icon size={18} />
+                      <div>
+                        <p>{tool.name}</p>
+                        <span>{tool.category}</span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="mobile-search-results__empty">No matching tools yet. Try another keyword.</p>
+            )}
+          </section>
+        ) : null}
 
         <main className="workspace">{children}</main>
         <footer className="site-footer" aria-label="Site footer">
