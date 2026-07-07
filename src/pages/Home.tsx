@@ -31,8 +31,8 @@ const highlightPoints = [
     body: 'Most workflows are designed so pasted payloads, tokens, headers, diffs, and snippets stay on the page instead of bouncing through a backend.',
   },
   {
-    title: 'Built for everyday engineering',
-    body: 'Format JSON, inspect JWTs, compare text, review Docker and workflow config, generate IDs, and transform request data without leaving the browser.',
+    title: 'Built for everyday technical work',
+    body: 'Use UtilityHub for software delivery, field handovers, revision review, pressure-drop checks, and the small transformation jobs that slow real teams down.',
   },
   {
     title: 'Useful for people and machines',
@@ -42,24 +42,24 @@ const highlightPoints = [
 
 const roadmapItems = [
   {
-    audience: 'Scrum Masters',
-    title: 'Team facilitation and ceremony helpers',
-    body: 'Spinner wheel, retro prompt generator, ceremony timer, and delivery-friendly summaries for Azure DevOps and other ALM workflows.',
+    audience: 'Medical and operations teams',
+    title: 'Structured handover workflows',
+    body: 'More local-first tools for shift notes, incident reconstruction, and action-focused summaries that help work move cleanly between people.',
   },
   {
-    audience: 'Backend and API teams',
-    title: 'Deeper API review workflows',
-    body: 'More direct helpers for request replay, webhook triage, safer sharing, and API incident cleanup around payloads and auth artifacts.',
+    audience: 'Civil, mechanical, and mining teams',
+    title: 'Field and engineering review tools',
+    body: 'Planned tools include material takeoff support, carbon estimation, pump and fan visualizers, and other practical engineering utilities.',
   },
   {
-    audience: 'AI teams',
-    title: 'Prompt and evaluation operations',
-    body: 'More structured tools for prompt review, eval dataset prep, output inspection, and safety workflow support across practical AI delivery work.',
+    audience: 'Electrical and facilities teams',
+    title: 'Drawing and schedule consistency checks',
+    body: 'Panel and single-line review helpers, revision analysis, and safer local workflows for outage and field documentation work.',
   },
   {
-    audience: 'Operations and platform teams',
-    title: 'Delivery visibility and config hygiene',
-    body: 'Helpers that make CI, release, environment, and infrastructure artifacts easier to summarize and review without context switching.',
+    audience: 'AI and software teams',
+    title: 'Deeper local-first build and review tooling',
+    body: 'The IT side keeps growing too, especially where prompt work, delivery checks, and config review still benefit from small focused browser tools.',
   },
 ];
 
@@ -67,7 +67,7 @@ const homepageFaqs = [
   {
     question: 'What is UtilityHub?',
     answer:
-      'UtilityHub is a privacy-first collection of browser-based utilities for developers, reviewers, and platform teams. It focuses on quick local transformations, inspections, and workflow checks.',
+      'UtilityHub is a privacy-first collection of browser-based utilities for software teams, engineers, field crews, and clinical or operational workflows. It focuses on quick local transformations, inspections, and workflow checks.',
   },
   {
     question: 'Does UtilityHub send my data to a server?',
@@ -77,12 +77,12 @@ const homepageFaqs = [
   {
     question: 'Who is UtilityHub for?',
     answer:
-      'It is useful for frontend and backend developers, DevOps and platform engineers, reviewers, QA engineers, and anyone who regularly needs small transformation tools during daily delivery work.',
+      'It is useful for software teams, QA and platform engineers, civil and mechanical teams, electrical and mining operations, and clinical or field staff who need small privacy-first utilities during daily work.',
   },
   {
     question: 'What kinds of tools are included in UtilityHub?',
     answer:
-      'The current catalog covers formatters, encoders, converters, generators, security tools, testers, and a growing set of developer workflow utilities such as OpenAPI summaries, Docker audits, cron explainers, and schema generation.',
+      'The current catalog covers formatters, encoders, converters, generators, security tools, testers, and a growing set of workflow utilities such as OpenAPI summaries, revision diffing, pressure-drop checks, handover builders, and schema generation.',
   },
 ];
 
@@ -98,8 +98,8 @@ export default function Home() {
             <h1>Privacy-first browser tools for real delivery work.</h1>
             <p>
               UtilityHub helps teams move from messy inputs to usable outputs faster. Format payloads, inspect tokens,
-              compare text, shape data, review config, and support delivery workflows without depending on a pile of
-              disconnected browser tools.
+              compare text, structure handovers, review revisions, run quick engineering checks, and support delivery
+              workflows without depending on a pile of disconnected browser tools.
             </p>
           </div>
         </article>
@@ -108,12 +108,12 @@ export default function Home() {
           <span className="hero-copy__eyebrow">Privacy-first browser tools</span>
           <h2>Start by role, start by guide, or jump straight into the tool you need.</h2>
           <p>
-            UtilityHub is built for the raw material of software delivery: payloads, prompts, diffs, configs,
-            spreadsheets, headers, workflow exports, and all the messy artifacts that slow teams down.
+            UtilityHub is built for the raw material of technical work: payloads, prompts, diffs, configs,
+            spreadsheets, field notes, extracted revisions, handovers, and all the messy artifacts that slow teams down.
           </p>
           <p>
-            The experience is intentionally lightweight and local-first so people can use it during coding, QA, reviews,
-            facilitation, incident response, sprint work, and release preparation without unnecessary noise.
+            The experience is intentionally lightweight and local-first so people can use it during coding, QA, design
+            review, field operations, handover prep, incident response, and shift work without unnecessary noise.
           </p>
         </aside>
       </section>
@@ -210,7 +210,7 @@ export default function Home() {
       <section className="catalog-section">
         <div className="section-heading">
           <h2>How UtilityHub fits into developer workflows</h2>
-          <p>Use it as a browser-side scratchpad for transforming or reviewing working material before it lands in code, docs, or delivery systems.</p>
+          <p>Use it as a browser-side scratchpad for transforming or reviewing working material before it lands in code, docs, shift logs, or delivery systems.</p>
         </div>
 
         <div className="workflow-copy">

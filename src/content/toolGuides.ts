@@ -364,6 +364,207 @@ const authoredToolGuides: ToolGuide[] = [
     ],
     relatedToolIds: ['api-key-fingerprinter', 'http-header-inspector', 'header-diff-checker'],
   },
+  {
+    slug: 'shift-handover-builder',
+    toolId: 'shift-handover-builder',
+    title: 'How to use the Shift Handover Builder',
+    summary: 'Turn rough shift notes into grouped actions, urgent watch-outs, and a cleaner handover that stays in the browser.',
+    metaDescription:
+      'Learn how to use UtilityHub Shift Handover Builder to structure raw handover notes for operations, medical, mining, and field workflows.',
+    intro:
+      'Shift handovers often start as rushed notes. The real problem is not capturing more detail. It is making sure the right detail is visible to the next person fast. This tool helps by grouping notes into practical sections without pushing the content through a remote service.',
+    whenToUse: [
+      'You have rough shift notes from a ward, site, plant, or control room that need structure quickly.',
+      'You want urgent items and timed follow-ups to stand out before the next shift begins.',
+      'You need a markdown-ready handover summary for chat, docs, or internal notes.',
+    ],
+    steps: [
+      {
+        title: 'Paste one note per line',
+        body: 'Use the raw notes exactly as they were captured during the shift. The tool works best when each line contains one action, observation, or risk item.',
+      },
+      {
+        title: 'Review the grouped sections',
+        body: 'Check how the tool classified items into safety, operations, equipment, pending actions, or general notes. This gives you a faster first pass than manually restructuring every point.',
+      },
+      {
+        title: 'Scan urgent items before sharing',
+        body: 'If a note includes urgent or critical language, use that callout area to confirm the next shift can see the highest-risk work immediately.',
+      },
+      {
+        title: 'Copy the markdown summary into your handover channel',
+        body: 'Once the structure looks right, copy the generated markdown into your chat, documentation, or shift log workflow.',
+      },
+    ],
+    useCases: [
+      {
+        title: 'Clinical handover',
+        body: 'Ward and on-call teams can use the tool to turn freeform notes into something easier to read during time-sensitive transitions.',
+      },
+      {
+        title: 'Mining and plant operations',
+        body: 'Supervisors and operators can group equipment issues, risks, and pending actions without losing the original wording of the observation.',
+      },
+      {
+        title: 'Field maintenance',
+        body: 'Maintenance teams can convert rough shutdown or service notes into clearer follow-up actions for the incoming shift.',
+      },
+    ],
+    mistakes: [
+      'Combining multiple unrelated issues into one long line instead of giving each issue its own note.',
+      'Treating the grouped output as final without checking whether an item belongs in a different section.',
+      'Leaving names, IDs, or other sensitive information in a handover that will be shared more broadly than intended.',
+    ],
+    privacyNote:
+      'Shift notes can contain sensitive operational or clinical detail. Keeping the first-pass structuring workflow in the browser reduces unnecessary exposure.',
+    faqs: [
+      {
+        question: 'Is the grouping fully automatic and always correct?',
+        answer:
+          'No. The current version uses keyword-based heuristics for a practical first pass, so teams should still review the grouped output before using it as an official handover.',
+      },
+      {
+        question: 'What should I use if I need to remove sensitive values first?',
+        answer:
+          'Use Secret Redactor first when names, IDs, account numbers, or other sensitive details should be masked before the handover is shared.',
+      },
+    ],
+    relatedToolIds: ['secret-redactor', 'markdown-checklist-builder', 'timestamp-converter'],
+  },
+  {
+    slug: 'pressure-drop-head-loss-calculator',
+    toolId: 'pressure-drop-head-loss-calculator',
+    title: 'How to use the Pressure Drop & Head Loss Calculator',
+    summary: 'Run fast Darcy-Weisbach sanity checks for water-like pipe systems without leaving the browser.',
+    metaDescription:
+      'Learn how to use UtilityHub Pressure Drop & Head Loss Calculator for quick civil, mechanical, and mining pipe-flow checks.',
+    intro:
+      'Pressure-drop calculations show up everywhere from civil water checks to HVAC and plant troubleshooting. The goal of this tool is not to replace full hydraulic design software. It is to answer the faster question: does this flow path still look reasonable after a change?',
+    whenToUse: [
+      'You need a quick pipe-flow or dewatering sanity check during early design or troubleshooting.',
+      'You want to understand how fittings, diameter, or elevation changes affect total pressure loss.',
+      'You need a browser-local estimate before moving the scenario into a fuller engineering model.',
+    ],
+    steps: [
+      {
+        title: 'Enter the line geometry and flow conditions',
+        body: 'Start with flow rate, pipe diameter, run length, roughness, and any fittings loss coefficient you already know.',
+      },
+      {
+        title: 'Confirm the fluid assumptions',
+        body: 'The calculator is aimed at water-like fluids, so density and viscosity should be reviewed before you rely on the result.',
+      },
+      {
+        title: 'Inspect the head-loss breakdown',
+        body: 'Look separately at friction head, minor loss, and static head. The split is often more useful than only seeing the final total.',
+      },
+      {
+        title: 'Use the output as a screening check',
+        body: 'Treat the result as a local first-pass estimate that helps decide whether more detailed design work is needed next.',
+      },
+    ],
+    useCases: [
+      {
+        title: 'Civil and water transfer work',
+        body: 'Quickly sense-check line losses before a design pack or pump selection is updated.',
+      },
+      {
+        title: 'Mechanical and HVAC troubleshooting',
+        body: 'Estimate whether a change in flow path or fittings is likely to explain a pressure or performance issue.',
+      },
+      {
+        title: 'Mining dewatering review',
+        body: 'Run a fast browser-local check on transfer lines without exposing operational details to a remote service.',
+      },
+    ],
+    mistakes: [
+      'Using the tool for non-water-like fluids without validating the density and viscosity assumptions.',
+      'Treating a sanity check as the same thing as a signed design calculation.',
+      'Ignoring elevation change when the route includes a meaningful static lift.',
+    ],
+    privacyNote:
+      'Even simple engineering scenarios can contain commercially sensitive project details. Local execution keeps those values on the page during early review.',
+    faqs: [
+      {
+        question: 'Does this replace a full hydraulic model?',
+        answer:
+          'No. It is a first-pass calculator for quick checks and comparisons. Detailed design still belongs in the tools and processes your discipline uses for final engineering decisions.',
+      },
+      {
+        question: 'What should I do after a surprising result?',
+        answer:
+          'Double-check the units first, then verify roughness, fittings K, and elevation assumptions before escalating into a more detailed model.',
+      },
+    ],
+    relatedToolIds: ['drawing-revision-diff-checker', 'markdown-table-builder', 'date-difference-calculator'],
+  },
+  {
+    slug: 'drawing-revision-diff-checker',
+    toolId: 'drawing-revision-diff-checker',
+    title: 'How to use the Drawing Revision Diff Checker',
+    summary: 'Compare extracted drawing notes and schedules so revision changes are easier to spot and summarize.',
+    metaDescription:
+      'Learn how to use UtilityHub Drawing Revision Diff Checker to compare extracted notes, schedules, and revision text locally.',
+    intro:
+      'Many revision reviews are still painfully manual. Teams scan PDFs, markups, or schedules line by line just to answer one question: what changed? This tool shrinks that question into a smaller browser-side review surface using pasted or extracted text.',
+    whenToUse: [
+      'You copied notes, schedules, or OCR text from two revisions and want a focused diff.',
+      'You need to detect numeric changes in sizes, ratings, flows, or dimensions quickly.',
+      'You want a simple summary before a coordination or review meeting.',
+    ],
+    steps: [
+      {
+        title: 'Paste the old revision on the left and the new revision on the right',
+        body: 'Use extracted notes, schedules, callouts, or other revision text that should be compared line by line.',
+      },
+      {
+        title: 'Hide unchanged rows if you only care about change',
+        body: 'This is especially useful when long note sets only contain a few revised lines.',
+      },
+      {
+        title: 'Review numeric changes separately',
+        body: 'The tool highlights changed lines and also surfaces rows where the numbers changed, which is useful for ratings, dimensions, and equipment duties.',
+      },
+      {
+        title: 'Copy the summary into your review notes',
+        body: 'Use the summary output to speed up coordination, markup review, or follow-up actions after the revision check.',
+      },
+    ],
+    useCases: [
+      {
+        title: 'Civil, mechanical, and electrical drawing review',
+        body: 'Teams can compare extracted sheet notes and schedules without relying on a heavyweight CAD workflow for every small change review.',
+      },
+      {
+        title: 'Procedure and permit revisions',
+        body: 'Field operations and mining teams can use the same surface for text-first revision checks outside of formal drawing sets.',
+      },
+      {
+        title: 'Facilities and hospital works',
+        body: 'Extracted notes from maintenance or refurbishment documents can be reviewed locally before sign-off or discussion.',
+      },
+    ],
+    mistakes: [
+      'Pasting whole documents with inconsistent formatting when a smaller extracted section would produce a clearer comparison.',
+      'Assuming the text diff replaces visual review of the original sheet or markup.',
+      'Ignoring context around a changed number when the unit or related note may also have changed.',
+    ],
+    privacyNote:
+      'Revision text can include project-specific details, contractor notes, or site references. Local comparison keeps the first pass inside the browser.',
+    faqs: [
+      {
+        question: 'Can I upload PDFs directly in this version?',
+        answer:
+          'Not yet. The current MVP is designed for pasted or extracted text from drawings, schedules, and markups so it stays fast and easy to ship fully client-side.',
+      },
+      {
+        question: 'What should I pair this with during a review?',
+        answer:
+          'Use Markdown Checklist Builder or Shift Handover Builder after the diff if you want to turn the changes into actions, review notes, or a clean follow-up list.',
+      },
+    ],
+    relatedToolIds: ['text-diff-checker', 'markdown-checklist-builder', 'shift-handover-builder'],
+  },
 ];
 
 const categoryWorkflowCopy: Record<ToolDefinition['category'], {

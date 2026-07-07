@@ -2,7 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://utilityhub.dev/</loc><lastmod>2026-06-25</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://utilityhub.dev/guides</loc><lastmod>2026-06-25</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://utilityhub.dev/guides/shift-handover-builder</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/pressure-drop-head-loss-calculator</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/drawing-revision-diff-checker</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/tolerance-stackup-analyzer</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/bom-diff-checker</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/hole-shaft-fit-calculator</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://utilityhub.dev/guides/mechanical-formula-finder</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://utilityhub.dev/collections</loc><lastmod>2026-06-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://utilityhub.dev/collections/civil-construction</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/mechanical-manufacturing</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/electrical-power</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/medical-clinical</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/mining-resources</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/operations-field-teams</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/web-designers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/web-developers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/frontend-developers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
@@ -20,6 +33,13 @@
   <url><loc>https://utilityhub.dev/collections/scrum-masters</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/data-engineers-and-analysts</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/json-formatter</loc><lastmod>2026-06-25</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/shift-handover-builder</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/pressure-drop-head-loss-calculator</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/drawing-revision-diff-checker</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/tolerance-stackup-analyzer</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/bom-diff-checker</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/hole-shaft-fit-calculator</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/mechanical-formula-finder</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/ini-formatter</loc><lastmod>2026-06-25</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/http-request-formatter</loc><lastmod>2026-06-25</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/stack-trace-formatter</loc><lastmod>2026-06-25</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>

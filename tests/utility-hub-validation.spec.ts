@@ -31,7 +31,7 @@ test('Given the home page when role-based collections are shown then the feature
 
   await expect(page.getByRole('heading', { level: 2, name: 'Browse by role' })).toBeVisible();
   await expect(page.locator('.collection-grid .collection-card')).toHaveCount(6);
-  await expect(page.getByRole('link', { name: /Backend Developers/i }).first()).toHaveAttribute('href', '/collections/backend-developers');
+  await expect(page.getByRole('link', { name: /Civil & Construction/i }).first()).toHaveAttribute('href', '/collections/civil-construction');
 });
 
 test('Given the collections index when it loads then every curated category is listed', async ({ page }) => {

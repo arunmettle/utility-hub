@@ -14,6 +14,186 @@ export interface CollectionGuideContent {
 
 export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
   [
+    'civil-construction',
+    {
+      summary: 'A civil and construction collection for revision review, hydraulic checks, and cleaner field handovers.',
+      intro:
+        'Civil and construction teams often work across drawings, markups, field notes, and quick engineering checks that are too important for guesswork but too small for heavyweight software every time. This collection gives those recurring tasks a lighter browser-local home.',
+      useCases: [
+        'You need to compare revision text from drawings, notes, or schedules before a coordination meeting.',
+        'You want a fast pressure-drop or head-loss sense check during concept, tender, or site troubleshooting work.',
+        'You need to turn rough site notes into a cleaner handover without sending project data to another service.',
+      ],
+      sections: [
+        {
+          title: 'Review revisions before they become rework',
+          body: 'Drawing Revision Diff Checker helps compare extracted notes, callouts, and schedule fragments so teams can focus on what actually changed.',
+          toolIds: ['drawing-revision-diff-checker'],
+        },
+        {
+          title: 'Handle quick hydraulic checks locally',
+          body: 'Pressure Drop & Head Loss Calculator covers the fast sanity-check workflow that often happens before a model or formal calc pack is updated.',
+          toolIds: ['pressure-drop-head-loss-calculator'],
+        },
+        {
+          title: 'Turn site detail into clearer handovers',
+          body: 'Shift Handover Builder helps convert rough updates into something supervisors, contractors, and reviewers can work from.',
+          toolIds: ['shift-handover-builder'],
+        },
+      ],
+      closing:
+        'For civil and construction teams, the value is speed with less leakage: smaller jobs stay lightweight, local, and easier to share cleanly.',
+    },
+  ],
+  [
+    'mechanical-manufacturing',
+    {
+      summary: 'A mechanical-native toolkit for tolerance stacks, fits, BOM changes, revision review, formula lookup, and recurring design calculations.',
+      intro:
+        'Mechanical engineering work often happens in the gap between expensive CAD/CAE suites and ad hoc spreadsheets. This collection focuses on the repetitive calculation and review workflows that engineers already do in Excel, PDFs, and macros, but in a cleaner browser-local form.',
+      useCases: [
+        'You need to build or review a tolerance stack without inheriting another messy workbook.',
+        'You want to compare two BOM or drawing revisions before release.',
+        'You need a fast fit or pressure-drop sanity check before stepping into heavier tools.',
+      ],
+      sections: [
+        {
+          title: 'Own the Excel-heavy tolerance work',
+          body: 'Tolerance Stack-Up Analyzer and Hole/Shaft Fit Calculator cover the dimensional-analysis work that often ends up scattered across spreadsheets, hand calcs, and handbook lookups.',
+          toolIds: ['tolerance-stackup-analyzer', 'hole-shaft-fit-calculator'],
+        },
+        {
+          title: 'Review release changes faster',
+          body: 'BOM Diff Checker and Drawing Revision Diff Checker reduce the manual comparison work around released parts, changed quantities, and updated notes.',
+          toolIds: ['bom-diff-checker', 'drawing-revision-diff-checker'],
+        },
+        {
+          title: 'Handle recurring design calculations without opening heavyweight software',
+          body: 'Pressure Drop & Head Loss Calculator gives a quick browser-local answer for one recurring sizing check, while Mechanical Formula Finder shortens the formula lookup work that still lives in old notes, textbooks, and personal files.',
+          toolIds: ['pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
+        },
+      ],
+      closing:
+        'For mechanical teams, the wedge is not replacing CAD. It is making the spreadsheet-and-review layer around CAD faster, clearer, and easier to trust.',
+    },
+  ],
+  [
+    'electrical-power',
+    {
+      summary: 'A practical electrical collection for revision spotting, outage handovers, and cleaner field-ready artifacts.',
+      intro:
+        'Electrical teams work with revision-heavy schedules, panel notes, permits, outage planning, and field observations that often need structure more than they need another bulky platform.',
+      useCases: [
+        'You are checking what changed between two extracted single-line or panel-related notes.',
+        'You need a tighter shift or outage handover with risk visibility preserved.',
+        'You want to prepare cleaner issue evidence before it lands in a work pack or incident review.',
+      ],
+      sections: [
+        {
+          title: 'Reduce manual revision scanning',
+          body: 'Drawing Revision Diff Checker is useful when schedules or revision notes change in small but important ways.',
+          toolIds: ['drawing-revision-diff-checker'],
+        },
+        {
+          title: 'Keep handovers focused on what matters',
+          body: 'Shift Handover Builder structures pending actions, safety risks, and operational notes so the next shift gets a clearer picture faster.',
+          toolIds: ['shift-handover-builder'],
+        },
+        {
+          title: 'Clean field notes before sharing',
+          body: 'This first version stays focused on revision review and handover. More electrical-native tools like panel schedule checks belong in the next phase.',
+          toolIds: [],
+        },
+      ],
+      closing:
+        'This collection helps electrical teams spend less time reformatting context and more time resolving the real issue behind the work.',
+    },
+  ],
+  [
+    'medical-clinical',
+    {
+      summary: 'A privacy-first clinical starting point focused on structured handovers instead of generic reused utilities.',
+      intro:
+        'Medical and clinical teams often need fast, structured communication, but that does not mean every generic text or security utility belongs in their toolkit. Right now the strongest fit is a handover-focused workflow, so this collection stays intentionally narrow until more truly clinical-native tools are added.',
+      useCases: [
+        'You need to convert rough ward, on-call, or imaging notes into a cleaner handover.',
+      ],
+      sections: [
+        {
+          title: 'Structure the shift handover first',
+          body: 'Shift Handover Builder is the anchor workflow here because it turns rough notes into grouped actions, urgent items, and a cleaner markdown summary.',
+          toolIds: ['shift-handover-builder'],
+        },
+      ],
+      closing:
+        'For clinical teams, a thinner but honest collection is better than a broader one filled with tools that do not match how clinicians actually describe their work.',
+    },
+  ],
+  [
+    'mining-resources',
+    {
+      summary: 'A mining and resources collection for shift control, dewatering checks, revision review, and incident-ready notes.',
+      intro:
+        'Mining work is operational, shift-based, and document-heavy. Teams regularly need quick calculations, cleaner handovers, and better revision visibility without passing site details through extra systems.',
+      useCases: [
+        'You are managing shift handovers across operations, maintenance, and safety teams.',
+        'You need a fast dewatering or transfer-line pressure check during troubleshooting.',
+        'You want extracted revision notes from drawings or procedures to be easier to compare.',
+      ],
+      sections: [
+        {
+          title: 'Treat handover as a first-class workflow',
+          body: 'Shift Handover Builder gives supervisors and crews a faster way to convert rough shift notes into clearer actions and risk highlights.',
+          toolIds: ['shift-handover-builder'],
+        },
+        {
+          title: 'Keep hydraulic checks lightweight',
+          body: 'Pressure Drop & Head Loss Calculator is a practical first-wave fit for mining because water transfer and dewatering checks happen often and benefit from local execution.',
+          toolIds: ['pressure-drop-head-loss-calculator'],
+        },
+        {
+          title: 'Compare what changed before the job starts',
+          body: 'Drawing Revision Diff Checker helps with procedure, permit, and drawing-pack review before the change reaches the field.',
+          toolIds: ['drawing-revision-diff-checker'],
+        },
+      ],
+      closing:
+        'For mining teams, the collection is strongest where field practicality and information sensitivity overlap.',
+    },
+  ],
+  [
+    'operations-field-teams',
+    {
+      summary: 'A field-oriented collection for structured shift communication, revision comparison, and cleaner work-pack notes.',
+      intro:
+        'Operations teams often inherit the messiest inputs: rough notes, version drift, job packs, follow-ups, and timestamps. This collection is about making those artifacts more useful before they create downstream confusion.',
+      useCases: [
+        'You need a cleaner shift handover with pending actions and risk items separated clearly.',
+        'You are comparing two procedures, permits, or note sets and only care about what changed.',
+        'You want field notes to become a shareable checklist or table without more manual formatting.',
+      ],
+      sections: [
+        {
+          title: 'Structure operational context quickly',
+          body: 'Shift Handover Builder helps turn freeform notes into a format the next shift can act on immediately.',
+          toolIds: ['shift-handover-builder'],
+        },
+        {
+          title: 'Focus reviews on change instead of noise',
+          body: 'Drawing Revision Diff Checker creates a smaller review surface for procedures, permits, and extracted revision notes.',
+          toolIds: ['drawing-revision-diff-checker'],
+        },
+        {
+          title: 'Package rough notes into cleaner artifacts',
+          body: 'Secret Redactor helps the handover or work-pack output stay safer to share when sensitive identifiers or internal references appear in the notes.',
+          toolIds: ['secret-redactor'],
+        },
+      ],
+      closing:
+        'This collection is useful whenever operational work is slowed down less by missing systems and more by messy inputs between systems.',
+    },
+  ],
+  [
     'web-designers',
     {
       summary: 'A browser-local collection for design polish, lightweight asset prep, and cleaner handoff material.',

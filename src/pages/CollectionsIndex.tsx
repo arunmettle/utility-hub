@@ -11,10 +11,10 @@ export default function CollectionsIndex() {
             <BriefcaseBusiness size={30} />
           </div>
           <div>
-            <h1>Curated toolkits for the roles that keep delivery moving.</h1>
+            <h1>Curated toolkits for the roles that keep technical work moving.</h1>
             <p>
-              UtilityHub now groups browser-local workflows by persona so teams can start from the problems they solve
-              every day instead of searching a flat catalog first.
+              UtilityHub now groups browser-local workflows by persona so software, engineering, field, and clinical
+              teams can start from the problems they solve every day instead of searching a flat catalog first.
             </p>
           </div>
         </article>
@@ -23,8 +23,8 @@ export default function CollectionsIndex() {
           <span className="hero-copy__eyebrow">Role-based collections</span>
           <h2>Choose a published collection guide built around recurring day-to-day friction.</h2>
           <p>
-            Each collection includes at least 10 tools mapped to practical pain points for that role, from payload
-            cleanup and security review to AI prompt evaluation and fixture generation.
+            Each collection now stays intentionally tighter, with only the tools that clearly belong to that role's
+            workflow instead of padded catalog bundles or generic utility spillover.
           </p>
           <p>
             Every curated category now has live guide content behind it, so people can start with a role-based use

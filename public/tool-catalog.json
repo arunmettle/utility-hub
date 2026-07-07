@@ -2,9 +2,9 @@
   "name": "UtilityHub",
   "siteUrl": "https://utilityhub.dev",
   "privacyModel": "browser-local",
-  "toolCount": 137,
-  "guideCount": 137,
-  "collectionCount": 16,
+  "toolCount": 144,
+  "guideCount": 144,
+  "collectionCount": 22,
   "categories": [
     "Formatters",
     "Encoders",
@@ -16,6 +16,12 @@
     "AI"
   ],
   "collections": [
+    { "slug": "civil-construction", "title": "Civil & Construction Toolkit", "path": "/collections/civil-construction", "toolCount": 3 },
+    { "slug": "mechanical-manufacturing", "title": "Mechanical & Manufacturing Toolkit", "path": "/collections/mechanical-manufacturing", "toolCount": 6 },
+    { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 2 },
+    { "slug": "medical-clinical", "title": "Medical & Clinical Toolkit", "path": "/collections/medical-clinical", "toolCount": 1 },
+    { "slug": "mining-resources", "title": "Mining & Resources Toolkit", "path": "/collections/mining-resources", "toolCount": 3 },
+    { "slug": "operations-field-teams", "title": "Operations & Field Teams Toolkit", "path": "/collections/operations-field-teams", "toolCount": 3 },
     { "slug": "web-designers", "title": "Web Designer Toolkit", "path": "/collections/web-designers", "toolCount": 10 },
     { "slug": "web-developers", "title": "Web Developer Toolkit", "path": "/collections/web-developers", "toolCount": 10 },
     { "slug": "frontend-developers", "title": "Frontend Developer Toolkit", "path": "/collections/frontend-developers", "toolCount": 10 },
@@ -34,6 +40,56 @@
     { "slug": "data-engineers-and-analysts", "title": "Data Engineer & Analyst Toolkit", "path": "/collections/data-engineers-and-analysts", "toolCount": 10 }
   ],
   "tools": [
+    {
+      "id": "shift-handover-builder",
+      "name": "Shift Handover Builder",
+      "description": "Turn raw shift notes into a structured local handover for hospitals, crews, and operations teams.",
+      "category": "Developer",
+      "path": "/shift-handover-builder"
+    },
+    {
+      "id": "pressure-drop-head-loss-calculator",
+      "name": "Pressure Drop & Head Loss Calculator",
+      "description": "Estimate flow velocity, head loss, and pressure drop for water-like pipe runs directly in the browser.",
+      "category": "Converters",
+      "path": "/pressure-drop-head-loss-calculator"
+    },
+    {
+      "id": "drawing-revision-diff-checker",
+      "name": "Drawing Revision Diff Checker",
+      "description": "Compare extracted drawing notes, schedules, and revision text to spot changed lines and number deltas.",
+      "category": "Testers",
+      "path": "/drawing-revision-diff-checker"
+    },
+    {
+      "id": "tolerance-stackup-analyzer",
+      "name": "Tolerance Stack-Up Analyzer",
+      "description": "Review worst-case and RSS tolerance stacks from simple tabular inputs instead of maintaining fragile spreadsheets.",
+      "category": "Testers",
+      "path": "/tolerance-stackup-analyzer"
+    },
+    {
+      "id": "bom-diff-checker",
+      "name": "BOM Diff Checker",
+      "description": "Compare two BOM exports locally to find added, removed, and changed parts faster.",
+      "category": "Testers",
+      "path": "/bom-diff-checker"
+    },
+    {
+      "id": "hole-shaft-fit-calculator",
+      "name": "Hole/Shaft Fit Calculator",
+      "description": "Calculate clearance, interference, and fit windows for hole and shaft tolerance pairs.",
+      "category": "Converters",
+      "path": "/hole-shaft-fit-calculator"
+    },
+    {
+      "id": "mechanical-formula-finder",
+      "name": "Mechanical Formula Finder",
+      "description": "Search recurring mechanical formulas locally instead of hunting through notes, textbooks, or brittle spreadsheets.",
+      "category": "Developer",
+      "path": "/mechanical-formula-finder",
+      "guidePath": "/guides/mechanical-formula-finder"
+    },
     {
       "id": "json-formatter",
       "name": "JSON Formatter",

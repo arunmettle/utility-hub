@@ -8,11 +8,11 @@ import {
 import { tools } from '../src/data/tools';
 
 describe('persona collections', () => {
-  it('maps every curated collection to at least ten unique existing tools', () => {
+  it('maps every curated collection to a focused set of unique existing tools', () => {
     const allToolIds = new Set(tools.map((tool) => tool.id));
 
     for (const collection of personaCollections) {
-      expect(collection.toolIds.length).toBeGreaterThanOrEqual(10);
+      expect(collection.toolIds.length).toBeGreaterThanOrEqual(1);
       expect(new Set(collection.toolIds).size).toBe(collection.toolIds.length);
 
       for (const toolId of collection.toolIds) {
@@ -41,6 +41,12 @@ describe('persona collections', () => {
     expect(slugs).toEqual(
       new Set([
         'web-designers',
+        'civil-construction',
+        'mechanical-manufacturing',
+        'electrical-power',
+        'medical-clinical',
+        'mining-resources',
+        'operations-field-teams',
         'web-developers',
         'frontend-developers',
         'backend-developers',

@@ -3,17 +3,21 @@ import {
   BadgeCheck,
   BrainCircuit,
   BriefcaseBusiness,
+  Building2,
   Bug,
   ClipboardCheck,
   ClipboardList,
   CloudCog,
   Code2,
+  Cog,
   DatabaseZap,
   Gauge,
+  HeartPulse,
   LockKeyhole,
   Palette,
   ServerCog,
   ShieldAlert,
+  Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { tools, type ToolDefinition } from './tools';
@@ -33,6 +37,120 @@ export interface PersonaCollectionDefinition {
 const toolLookup = new Map(tools.map((tool) => [tool.id, tool]));
 
 export const personaCollections: PersonaCollectionDefinition[] = [
+  {
+    slug: 'civil-construction',
+    title: 'Civil & Construction Toolkit',
+    shortTitle: 'Civil & Construction',
+    audience: 'Civil and construction teams',
+    description: 'Browser-local workflows for revision review, hydraulic checks, field notes, and clearer handover artifacts.',
+    path: '/collections/civil-construction',
+    icon: Building2,
+    painPoints: [
+      'Reviewing drawing changes, schedules, and site notes with too much manual comparison work.',
+      'Needing quick hydraulic sanity checks before switching into heavier design software.',
+      'Passing site information between office, contractor, and field teams without exposing project data.',
+    ],
+    toolIds: [
+      'pressure-drop-head-loss-calculator',
+      'drawing-revision-diff-checker',
+      'shift-handover-builder',
+    ],
+  },
+  {
+    slug: 'mechanical-manufacturing',
+    title: 'Mechanical & Manufacturing Toolkit',
+    shortTitle: 'Mechanical & Manufacturing',
+    audience: 'Mechanical and manufacturing teams',
+    description: 'Mechanical-native browser tools for tolerance work, fit checks, BOM review, revision comparison, and recurring design calculations.',
+    path: '/collections/mechanical-manufacturing',
+    icon: Cog,
+    painPoints: [
+      'Doing tolerance analysis, fit checks, and what-if reviews in messy spreadsheets.',
+      'Comparing revision notes or BOM changes by hand across mechanical releases.',
+      'Running recurring design calculations outside expensive CAD or simulation packages.',
+      'Hunting for the right formula across textbooks, old notes, and personal files.',
+    ],
+    toolIds: [
+      'tolerance-stackup-analyzer',
+      'hole-shaft-fit-calculator',
+      'bom-diff-checker',
+      'pressure-drop-head-loss-calculator',
+      'drawing-revision-diff-checker',
+      'mechanical-formula-finder',
+    ],
+  },
+  {
+    slug: 'electrical-power',
+    title: 'Electrical & Power Toolkit',
+    shortTitle: 'Electrical & Power',
+    audience: 'Electrical and power teams',
+    description: 'Revision spotting, handover cleanup, and browser-side helpers for panels, schedules, field work, and safety review.',
+    path: '/collections/electrical-power',
+    icon: Zap,
+    painPoints: [
+      'Checking revision changes across single-line notes, schedules, and markup extracts.',
+      'Keeping shift and outage handovers concise while preserving risks and pending actions.',
+      'Cleaning field evidence and notes before they move into work packs or incident reviews.',
+    ],
+    toolIds: [
+      'drawing-revision-diff-checker',
+      'shift-handover-builder',
+    ],
+  },
+  {
+    slug: 'medical-clinical',
+    title: 'Medical & Clinical Toolkit',
+    shortTitle: 'Medical & Clinical',
+    audience: 'Medical and clinical teams',
+    description: 'Privacy-first browser tools for structured clinical handovers without forcing healthcare users into generic tech-style utilities.',
+    path: '/collections/medical-clinical',
+    icon: HeartPulse,
+    painPoints: [
+      'Turning rough ward, imaging, or on-call notes into structured handovers quickly.',
+      'Needing a simple browser-local workflow that feels natural for clinical coordination rather than technical documentation.',
+    ],
+    toolIds: [
+      'shift-handover-builder',
+    ],
+  },
+  {
+    slug: 'mining-resources',
+    title: 'Mining & Resources Toolkit',
+    shortTitle: 'Mining & Resources',
+    audience: 'Mining and resources teams',
+    description: 'Browser-local utilities for shift handover, dewatering checks, drawing revisions, and incident-ready field notes.',
+    path: '/collections/mining-resources',
+    icon: Activity,
+    painPoints: [
+      'Managing shift handovers across crews, control rooms, maintenance, and safety teams.',
+      'Doing quick dewatering or transfer-line checks without exposing site data.',
+      'Reviewing revision extracts from site drawings, procedures, and permit notes with less manual churn.',
+    ],
+    toolIds: [
+      'shift-handover-builder',
+      'pressure-drop-head-loss-calculator',
+      'drawing-revision-diff-checker',
+    ],
+  },
+  {
+    slug: 'operations-field-teams',
+    title: 'Operations & Field Teams Toolkit',
+    shortTitle: 'Operations & Field Teams',
+    audience: 'Operations and field teams',
+    description: 'A local-first toolkit for structured handovers, revision checks, timelines, and field-friendly documentation cleanup.',
+    path: '/collections/operations-field-teams',
+    icon: ClipboardList,
+    painPoints: [
+      'Needing a cleaner way to pass work between shifts without losing critical context.',
+      'Comparing procedure, permit, or work-pack revisions quickly in the field.',
+      'Turning messy notes into shareable artifacts while protecting operational detail.',
+    ],
+    toolIds: [
+      'shift-handover-builder',
+      'drawing-revision-diff-checker',
+      'secret-redactor',
+    ],
+  },
   {
     slug: 'web-designers',
     title: 'Web Designer Toolkit',
@@ -464,12 +582,12 @@ export const personaCollections: PersonaCollectionDefinition[] = [
 ];
 
 export const featuredPersonaCollectionSlugs = [
-  'backend-developers',
-  'frontend-developers',
-  'manual-testers',
-  'devops-engineers',
-  'secops-engineers',
-  'ai-engineers',
+  'civil-construction',
+  'mechanical-manufacturing',
+  'electrical-power',
+  'medical-clinical',
+  'mining-resources',
+  'operations-field-teams',
 ] as const;
 
 const missingToolIds = personaCollections.flatMap((collection) =>

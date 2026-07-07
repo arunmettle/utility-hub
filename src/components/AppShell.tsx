@@ -11,8 +11,10 @@ import {
   Search,
   Sun,
   X,
+  type LucideIcon,
 } from 'lucide-react';
-import { categories, tools, type ToolCategory } from '../data/tools';
+import { getIndustryToolPath, getIndustryWorkspaceByPathname } from '../data/industryWorkspaces';
+import { categories, tools, type ToolCategory, type ToolDefinition } from '../data/tools';
 import BrandMark from './BrandMark';
 import AdNetworkLoader from './AdNetworkLoader';
 import SeoManager from './SeoManager';
@@ -25,11 +27,26 @@ const toolCategories = categories.filter(
 
 const themeStorageKey = 'utility-hub-theme';
 
-function createCategoryOpenState(isExpandedByDefault: boolean) {
-  return Object.fromEntries(toolCategories.map((category) => [category, isExpandedByDefault])) as Record<
-    Exclude<ToolCategory, 'All tools'>,
-    boolean
-  >;
+type SidebarToolEntry = ToolDefinition & {
+  navigationPath: string;
+};
+
+type SidebarGroup = {
+  id: string;
+  title: string;
+  tools: SidebarToolEntry[];
+};
+
+type NavEntry = {
+  label: string;
+  to: string;
+  match: (pathname: string) => boolean;
+  description: string;
+  icon: LucideIcon;
+};
+
+function createGroupOpenState(groups: SidebarGroup[], isExpandedByDefault: boolean) {
+  return Object.fromEntries(groups.map((group) => [group.id, isExpandedByDefault])) as Record<string, boolean>;
 }
 
 function getInitialTheme(): ThemeMode {
@@ -53,10 +70,49 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [desktopSidebarExpanded, setDesktopSidebarExpanded] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [openCategories, setOpenCategories] = useState<Record<Exclude<ToolCategory, 'All tools'>, boolean>>(() =>
-    createCategoryOpenState(typeof window !== 'undefined' ? window.innerWidth > 960 : true),
-  );
   const location = useLocation();
+  const workspace = useMemo(() => getIndustryWorkspaceByPathname(location.pathname), [location.pathname]);
+
+  const scopedTools = useMemo<SidebarToolEntry[]>(() => {
+    if (!workspace) {
+      return tools.map((tool) => ({
+        ...tool,
+        navigationPath: tool.path,
+      }));
+    }
+
+    return workspace.toolIds.flatMap((toolId) => {
+      const tool = tools.find((entry) => entry.id === toolId);
+      return tool
+        ? [
+            {
+              ...tool,
+              navigationPath: getIndustryToolPath(workspace.slug, tool.id),
+            },
+          ]
+        : [];
+    });
+  }, [workspace]);
+
+  const groupedTools = useMemo<SidebarGroup[]>(() => {
+    if (workspace) {
+      return workspace.sections.map((section) => ({
+        id: section.id,
+        title: section.title,
+        tools: section.toolIds.flatMap((toolId) => scopedTools.filter((tool) => tool.id === toolId)),
+      }));
+    }
+
+    return toolCategories.map((category) => ({
+      id: category,
+      title: category,
+      tools: scopedTools.filter((tool) => tool.category === category),
+    }));
+  }, [scopedTools, workspace]);
+
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+    createGroupOpenState(groupedTools, typeof window !== 'undefined' ? window.innerWidth > 960 : true),
+  );
 
   useEffect(() => {
     setMobileSidebarOpen(false);
@@ -119,12 +175,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    setOpenCategories((current) => {
-      const collapsedState = createCategoryOpenState(false);
-      const hasDifferentValue = toolCategories.some((category) => current[category] !== collapsedState[category]);
+    setOpenGroups((current) => {
+      const collapsedState = createGroupOpenState(groupedTools, false);
+      const hasDifferentValue = groupedTools.some((group) => current[group.id] !== collapsedState[group.id]);
       return hasDifferentValue ? collapsedState : current;
     });
-  }, [isDesktop, query]);
+  }, [groupedTools, isDesktop, query]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -142,9 +198,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    setOpenGroups((current) => {
+      const nextState = createGroupOpenState(groupedTools, isDesktop);
+      for (const group of groupedTools) {
+        if (group.id in current) {
+          nextState[group.id] = current[group.id];
+        }
+      }
+
+      const currentKeys = Object.keys(current);
+      const nextKeys = Object.keys(nextState);
+      const sameKeys =
+        currentKeys.length === nextKeys.length && nextKeys.every((key) => currentKeys.includes(key) && current[key] === nextState[key]);
+
+      return sameKeys ? current : nextState;
+    });
+  }, [groupedTools, isDesktop]);
+
   const filteredTools = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return tools.filter((tool) => {
+    return scopedTools.filter((tool) => {
       const matchesQuery =
         normalizedQuery.length === 0 ||
         tool.name.toLowerCase().includes(normalizedQuery) ||
@@ -153,61 +227,141 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       return matchesQuery;
     });
-  }, [query]);
+  }, [query, scopedTools]);
 
-  const groupedTools = useMemo(() => {
-    return toolCategories
-      .map((category) => ({
-        category,
-        tools: filteredTools.filter((tool) => tool.category === category),
-      }))
-      .filter((group) => group.tools.length > 0 || query.trim().length === 0);
-  }, [filteredTools, query]);
+  const visibleGroups = useMemo(
+    () =>
+      groupedTools
+        .map((group) => ({
+          ...group,
+          tools: group.tools.filter((tool) => filteredTools.some((entry) => entry.id === tool.id)),
+        }))
+        .filter((group) => group.tools.length > 0 || query.trim().length === 0),
+    [filteredTools, groupedTools, query],
+  );
 
   useEffect(() => {
-    const activeTool = tools.find((tool) => tool.path === location.pathname);
+    const activeTool = scopedTools.find((tool) => tool.navigationPath === location.pathname);
     if (!activeTool) return;
 
-    setOpenCategories((current) => {
-      if (current[activeTool.category]) {
+    const activeGroup = groupedTools.find((group) => group.tools.some((tool) => tool.id === activeTool.id));
+    if (!activeGroup) return;
+
+    setOpenGroups((current) => {
+      if (current[activeGroup.id]) {
         return current;
       }
 
       return {
         ...current,
-        [activeTool.category]: true,
+        [activeGroup.id]: true,
       };
     });
-  }, [location.pathname]);
+  }, [groupedTools, location.pathname, scopedTools]);
 
   useEffect(() => {
     const hasSearch = query.trim().length > 0;
     if (!hasSearch) return;
 
-    setOpenCategories((current) => {
+    setOpenGroups((current) => {
       const nextState = { ...current };
       let changed = false;
 
-      for (const category of toolCategories) {
-        const hasMatchingTools = filteredTools.some((tool) => tool.category === category);
-        if (current[category] !== hasMatchingTools) {
-          nextState[category] = hasMatchingTools;
+      for (const group of groupedTools) {
+        const hasMatchingTools = group.tools.some((tool) => filteredTools.some((entry) => entry.id === tool.id));
+        if (current[group.id] !== hasMatchingTools) {
+          nextState[group.id] = hasMatchingTools;
           changed = true;
         }
       }
 
       return changed ? nextState : current;
     });
-  }, [filteredTools, query]);
+  }, [filteredTools, groupedTools, query]);
 
-  const toggleCategory = (category: Exclude<ToolCategory, 'All tools'>) => {
-    setOpenCategories((current) => ({
+  const toggleGroup = (groupId: string) => {
+    setOpenGroups((current) => ({
       ...current,
-      [category]: !current[category],
+      [groupId]: !current[groupId],
     }));
   };
 
   const sidebarVisible = isDesktop ? desktopSidebarExpanded : mobileSidebarOpen;
+  const sidebarNavEntries: NavEntry[] = workspace
+    ? [
+        {
+          label: `${workspace.shortTitle} workspace`,
+          to: workspace.path,
+          match: (pathname) => pathname === workspace.path || pathname.startsWith(`${workspace.path}/tools/`),
+          description: 'Industry-specific tool shell',
+          icon: workspace.icon,
+        },
+        {
+          label: 'Collection guide',
+          to: workspace.collectionPath,
+          match: (pathname) => pathname === workspace.collectionPath,
+          description: 'Editorial workflow guide',
+          icon: Lightbulb,
+        },
+        {
+          label: 'Feedback',
+          to: '/feedback',
+          match: (pathname) => pathname === '/feedback',
+          description: 'Tell us what is missing',
+          icon: MessageSquarePlus,
+        },
+        {
+          label: 'Wishlist',
+          to: '/wishlist',
+          match: (pathname) => pathname === '/wishlist',
+          description: 'Request the next tool',
+          icon: Lightbulb,
+        },
+      ]
+    : [
+        {
+          label: 'Guides',
+          to: '/guides',
+          match: (pathname) => pathname.startsWith('/guides'),
+          description: 'Learn and use cases',
+          icon: BookOpenText,
+        },
+        {
+          label: 'Collections',
+          to: '/collections',
+          match: (pathname) => pathname.startsWith('/collections'),
+          description: 'Curated by role',
+          icon: Lightbulb,
+        },
+        {
+          label: 'Feedback',
+          to: '/feedback',
+          match: (pathname) => pathname === '/feedback',
+          description: 'What was missing',
+          icon: MessageSquarePlus,
+        },
+        {
+          label: 'Wishlist',
+          to: '/wishlist',
+          match: (pathname) => pathname === '/wishlist',
+          description: 'Request a tool',
+          icon: Lightbulb,
+        },
+      ];
+
+  const topbarLinks = workspace
+    ? [
+        { label: `${workspace.shortTitle} workspace`, to: workspace.path },
+        { label: 'Collection guide', to: workspace.collectionPath },
+        { label: 'All collections', to: '/collections' },
+        { label: 'About', to: '/about' },
+      ]
+    : [
+        { label: 'Guides', to: '/guides' },
+        { label: 'Collections', to: '/collections' },
+        { label: 'About', to: '/about' },
+        { label: 'Wishlist', to: '/wishlist' },
+      ];
 
   const handleSidebarToggle = () => {
     if (isDesktop) {
@@ -238,7 +392,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </button>
           <div className="sidebar__brand-copy">
             <BrandMark withWordmark />
-            <p className="sidebar__subtitle">Minimal browser-side utilities for developers, reviewers, and platform teams</p>
+            <p className="sidebar__subtitle">
+              {workspace?.subtitle ?? 'Minimal browser-side utilities for developers, reviewers, and platform teams'}
+            </p>
           </div>
         </div>
 
@@ -251,58 +407,46 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         <div className="sidebar__section">
           <div className="sidebar__group">
-            <Link to="/guides" className={`sidebar__item sidebar__item--link ${location.pathname.startsWith('/guides') ? 'is-active' : ''}`}>
-              <BookOpenText size={18} />
-              <div>
-                <p>Guides</p>
-                <span>Learn and use cases</span>
-              </div>
-            </Link>
-            <Link to="/collections" className={`sidebar__item sidebar__item--link ${location.pathname.startsWith('/collections') ? 'is-active' : ''}`}>
-              <Lightbulb size={18} />
-              <div>
-                <p>Collections</p>
-                <span>Curated by role</span>
-              </div>
-            </Link>
-            <Link to="/feedback" className={`sidebar__item sidebar__item--link ${location.pathname === '/feedback' ? 'is-active' : ''}`}>
-              <MessageSquarePlus size={18} />
-              <div>
-                <p>Feedback</p>
-                <span>What was missing</span>
-              </div>
-            </Link>
-            <Link to="/wishlist" className={`sidebar__item sidebar__item--link ${location.pathname === '/wishlist' ? 'is-active' : ''}`}>
-              <Lightbulb size={18} />
-              <div>
-                <p>Wishlist</p>
-                <span>Request a tool</span>
-              </div>
-            </Link>
+            {sidebarNavEntries.map((entry) => {
+              const Icon = entry.icon;
+              return (
+                <Link
+                  key={entry.label}
+                  to={entry.to}
+                  className={`sidebar__item sidebar__item--link ${entry.match(location.pathname) ? 'is-active' : ''}`}
+                >
+                  <Icon size={18} />
+                  <div>
+                    <p>{entry.label}</p>
+                    <span>{entry.description}</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
 
         <div className="sidebar__section sidebar__section--grow">
           <div className="sidebar__scroll">
             <nav className="sidebar__accordion">
-              {groupedTools.map((group) => {
-                const isOpen = openCategories[group.category];
+              {visibleGroups.map((group) => {
+                const isOpen = openGroups[group.id];
 
                 return (
-                  <section key={group.category} className="sidebar__accordion-section">
+                  <section key={group.id} className="sidebar__accordion-section">
                     <button
                       type="button"
                       className={`sidebar__accordion-trigger ${isOpen ? 'is-open' : ''}`}
-                      onClick={() => toggleCategory(group.category)}
+                      onClick={() => toggleGroup(group.id)}
                       aria-expanded={isOpen}
-                      aria-controls={`sidebar-panel-${group.category.toLowerCase()}`}
+                      aria-controls={`sidebar-panel-${group.id.toLowerCase()}`}
                     >
                       <ChevronDown size={18} />
-                      <span>{group.category}</span>
+                      <span>{group.title}</span>
                     </button>
 
                     <div
-                      id={`sidebar-panel-${group.category.toLowerCase()}`}
+                      id={`sidebar-panel-${group.id.toLowerCase()}`}
                       className={`sidebar__accordion-panel ${isOpen ? 'is-open' : ''}`}
                       hidden={!isOpen}
                     >
@@ -310,13 +454,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                       <div className="sidebar__group sidebar__group--nested">
                         {group.tools.map((tool) => {
                           const Icon = tool.icon;
-                          const active = location.pathname === tool.path;
 
                           return (
                             <Link
                               key={tool.id}
-                              to={tool.path}
-                              className={`sidebar__item sidebar__item--link ${active ? 'is-active' : ''}`}
+                              to={tool.navigationPath}
+                              className={`sidebar__item sidebar__item--link ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
                               onClick={() => setMobileSidebarOpen(false)}
                             >
                               <Icon size={18} />
@@ -363,25 +506,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search"
+                placeholder={workspace?.searchPlaceholder ?? 'Search'}
               />
               <span className="searchbar__hint">Ctrl + K</span>
             </label>
           </div>
 
           <div className="topbar__actions">
-            <Link className="topbar__link" to="/guides">
-              Guides
-            </Link>
-            <Link className="topbar__link" to="/collections">
-              Collections
-            </Link>
-            <Link className="topbar__link" to="/about">
-              About
-            </Link>
-            <Link className="topbar__link" to="/wishlist">
-              Wishlist
-            </Link>
+            {topbarLinks.map((entry) => (
+              <Link key={entry.label} className="topbar__link" to={entry.to}>
+                {entry.label}
+              </Link>
+            ))}
             <Link className="icon-button" to="/about" aria-label="About UtilityHub">
               <Info size={20} />
             </Link>
@@ -394,8 +530,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <Link className="cta-button" to="/#all-tools">
-              View tools
+            <Link className="cta-button" to={workspace ? `${workspace.path}#mechanical-tool-groups` : '/#all-tools'}>
+              {workspace?.ctaLabel ?? 'View tools'}
             </Link>
           </div>
         </header>
@@ -413,8 +549,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                   return (
                     <Link
                       key={tool.id}
-                      to={tool.path}
-                      className={`mobile-search-results__item ${location.pathname === tool.path ? 'is-active' : ''}`}
+                      to={tool.navigationPath}
+                      className={`mobile-search-results__item ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
                       onClick={() => {
                         setQuery('');
                         setMobileSidebarOpen(false);

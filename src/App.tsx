@@ -18,6 +18,7 @@ function lazyNamed<T extends ComponentType>(loader: () => Promise<Record<string,
 const Home = lazy(() => import('./pages/Home'));
 const CollectionsIndex = lazy(() => import('./pages/CollectionsIndex'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
+const MechanicalWorkspacePage = lazy(() => import('./pages/MechanicalWorkspacePage'));
 const GuidesIndex = lazy(() => import('./pages/GuidesIndex'));
 const GuidePage = lazy(() => import('./pages/GuidePage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
@@ -139,6 +140,13 @@ const LineDeduplicator = lazy(() => import('./tools/LineDeduplicator'));
 const MarkdownTableBuilder = lazy(() => import('./tools/MarkdownTableBuilder'));
 const MarkdownStudio = lazy(() => import('./tools/MarkdownStudio'));
 const JsonSchemaGenerator = lazy(() => import('./tools/JsonSchemaGenerator'));
+const ShiftHandoverBuilder = lazy(() => import('./tools/ShiftHandoverBuilder'));
+const PressureDropHeadLossCalculator = lazy(() => import('./tools/PressureDropHeadLossCalculator'));
+const DrawingRevisionDiffChecker = lazy(() => import('./tools/DrawingRevisionDiffChecker'));
+const ToleranceStackupAnalyzer = lazy(() => import('./tools/ToleranceStackupAnalyzer'));
+const BomDiffChecker = lazy(() => import('./tools/BomDiffChecker'));
+const HoleShaftFitCalculator = lazy(() => import('./tools/HoleShaftFitCalculator'));
+const MechanicalFormulaFinder = lazy(() => import('./tools/MechanicalFormulaFinder'));
 
 const loadAiWorkbench = () => import('./tools/AiWorkbench');
 const PromptStudio = lazyNamed(loadAiWorkbench, 'PromptStudio');
@@ -176,6 +184,7 @@ const appRoutes: AppRoute[] = [
   { path: '/', Component: Home },
   { path: '/collections', Component: CollectionsIndex },
   { path: '/collections/:slug', Component: CollectionPage },
+  { path: '/industries/mechanical', Component: MechanicalWorkspacePage },
   { path: '/guides', Component: GuidesIndex },
   { path: '/guides/:slug', Component: GuidePage },
   { path: '/feedback', Component: FeedbackPage },
@@ -296,6 +305,19 @@ const appRoutes: AppRoute[] = [
   { path: '/markdown-table-builder', Component: MarkdownTableBuilder },
   { path: '/markdown-studio', Component: MarkdownStudio },
   { path: '/json-schema-generator', Component: JsonSchemaGenerator },
+  { path: '/shift-handover-builder', Component: ShiftHandoverBuilder },
+  { path: '/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/industries/mechanical/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/industries/mechanical/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
+  { path: '/industries/mechanical/tools/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
+  { path: '/bom-diff-checker', Component: BomDiffChecker },
+  { path: '/industries/mechanical/tools/bom-diff-checker', Component: BomDiffChecker },
+  { path: '/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
+  { path: '/industries/mechanical/tools/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
+  { path: '/mechanical-formula-finder', Component: MechanicalFormulaFinder },
+  { path: '/industries/mechanical/tools/mechanical-formula-finder', Component: MechanicalFormulaFinder },
   { path: '/prompt-studio', Component: PromptStudio },
   { path: '/prompt-diff-checker', Component: PromptDiffChecker },
   { path: '/prompt-test-runner', Component: PromptTestRunner },
