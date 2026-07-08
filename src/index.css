@@ -462,6 +462,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .topbar__left {
@@ -471,6 +472,8 @@ textarea {
 
 .topbar__actions {
   flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .topbar__nav-toggle {
@@ -3421,7 +3424,7 @@ textarea {
   }
 }
 
-@media (max-width: 1440px) and (min-width: 961px) {
+@media (max-width: 1600px) and (min-width: 961px) {
   .topbar {
     flex-wrap: wrap;
     align-items: flex-start;
@@ -3439,6 +3442,7 @@ textarea {
 
   .topbar__actions {
     justify-content: flex-end;
+    row-gap: 10px;
   }
 
   .topbar__link,
@@ -3450,6 +3454,10 @@ textarea {
     max-width: none;
     min-width: 0;
     flex: 1 1 auto;
+  }
+
+  .searchbar__hint {
+    display: none;
   }
 
   .icon-button--brand {
