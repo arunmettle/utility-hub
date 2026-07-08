@@ -501,6 +501,11 @@ textarea {
   transform: scale(0.92);
 }
 
+.icon-button--brand .brand-mark__image {
+  width: 30px;
+  height: 30px;
+}
+
 .searchbar {
   flex: 1;
   min-width: 260px;
@@ -3413,6 +3418,47 @@ textarea {
 
   .hero-band--collections {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 0.95fr);
+  }
+}
+
+@media (max-width: 1440px) and (min-width: 961px) {
+  .topbar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .topbar__left,
+  .topbar__actions {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  .topbar__left {
+    gap: 12px;
+  }
+
+  .topbar__actions {
+    justify-content: flex-end;
+  }
+
+  .topbar__link,
+  .cta-button {
+    display: none;
+  }
+
+  .searchbar {
+    max-width: none;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .icon-button--brand {
+    width: 58px;
+    height: 58px;
+  }
+
+  .icon-button--brand .brand-mark {
+    transform: none;
   }
 }
 
