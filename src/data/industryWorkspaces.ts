@@ -1,5 +1,5 @@
-import { BarChart3, Building2, Factory, FileSearch, Gauge, PackageSearch, Sigma, type LucideIcon } from 'lucide-react';
-import { tools, type ToolDefinition } from './tools';
+import { BarChart3, Blocks, Building2, Factory, FileSearch, Gauge, PackageSearch, Sigma, Table2, Wrench, Zap, type LucideIcon } from 'lucide-react';
+import { categories, tools, type ToolDefinition, type ToolCategory } from './tools';
 
 export interface IndustryWorkspaceSection {
   id: string;
@@ -14,7 +14,7 @@ export interface IndustryWorkspace {
   shortTitle: string;
   audience: string;
   path: string;
-  collectionPath: string;
+  collectionPath?: string;
   subtitle: string;
   description: string;
   searchPlaceholder: string;
@@ -22,6 +22,7 @@ export interface IndustryWorkspace {
   icon: LucideIcon;
   toolIds: string[];
   sections: IndustryWorkspaceSection[];
+  aliases?: string[];
 }
 
 export interface IndustryWorkspaceToolLink extends ToolDefinition {
@@ -29,13 +30,48 @@ export interface IndustryWorkspaceToolLink extends ToolDefinition {
 }
 
 const toolLookup = new Map(tools.map((tool) => [tool.id, tool]));
+const toolCategories = categories.filter(
+  (category): category is Exclude<ToolCategory, 'All tools'> => category !== 'All tools',
+);
+
+function uniqueToolIds(toolIds: string[]) {
+  return Array.from(new Set(toolIds));
+}
+
+const electricalWorkspaceToolIds = [
+  'voltage-drop-calculator',
+  'cable-sizing-assistant',
+  'conduit-fill-calculator',
+  'panel-schedule-builder',
+  'electrical-formula-finder',
+];
+
+function buildWorkspaceSections(toolIds: string[]) {
+  return toolCategories
+    .map((category) => {
+      const sectionToolIds = toolIds.filter((toolId) => toolLookup.get(toolId)?.category === category);
+      if (sectionToolIds.length === 0) {
+        return null;
+      }
+
+      const section: IndustryWorkspaceSection = {
+            id: category.toLowerCase(),
+            title: category,
+            description: `Tools grouped under ${category.toLowerCase()} for recurring day-to-day technology workflows.`,
+            toolIds: sectionToolIds,
+          };
+
+      return section;
+    })
+    .filter((section): section is IndustryWorkspaceSection => section !== null);
+}
 
 export const mechanicalWorkspace: IndustryWorkspace = {
   slug: 'mechanical',
   title: 'Mechanical Engineering Workspace',
   shortTitle: 'Mechanical',
   audience: 'Mechanical, manufacturing, and design engineers',
-  path: '/industries/mechanical',
+  path: '/workspaces/mechanical',
   collectionPath: '/collections/mechanical-manufacturing',
   subtitle: 'Mechanical-first browser tools for fit checks, design review, formula lookup, and recurring shop-floor calculations.',
   description:
@@ -71,6 +107,7 @@ export const mechanicalWorkspace: IndustryWorkspace = {
       toolIds: ['pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
     },
   ],
+  aliases: ['/industries/mechanical'],
 };
 
 export const civilWorkspace: IndustryWorkspace = {
@@ -78,7 +115,7 @@ export const civilWorkspace: IndustryWorkspace = {
   title: 'Civil Engineering Workspace',
   shortTitle: 'Civil',
   audience: 'Civil, site, and construction engineers',
-  path: '/industries/civil',
+  path: '/workspaces/civil',
   collectionPath: '/collections/civil-construction',
   subtitle: 'Civil-first browser tools for revision review, quantity comparison, hydraulic checks, and takeoff sanity checks.',
   description:
@@ -119,22 +156,111 @@ export const civilWorkspace: IndustryWorkspace = {
       toolIds: ['civil-formula-finder'],
     },
   ],
+  aliases: ['/industries/civil'],
 };
 
-const workspaces = [mechanicalWorkspace, civilWorkspace];
+export const electricalWorkspace: IndustryWorkspace = {
+  slug: 'electrical',
+  title: 'Electrical & Power Workspace',
+  shortTitle: 'Electrical',
+  audience: 'Electrical, MEP, and power engineers',
+  path: '/workspaces/electrical',
+  collectionPath: '/collections/electrical-power',
+  subtitle: 'Electrical-first browser tools for voltage drop, cable sizing, conduit fill, panel review, and formula lookup.',
+  description:
+    'A focused electrical workspace that keeps load checks, cable sizing, conduit fill, panel schedules, and formula lookup in one browser-local home without the generic catalog noise.',
+  searchPlaceholder: 'Search electrical tools',
+  ctaLabel: 'Electrical workspace',
+  icon: Zap,
+  toolIds: electricalWorkspaceToolIds,
+  sections: [
+    {
+      id: 'load-and-cable-checks',
+      title: 'Load and cable checks',
+      description: 'Start here when current, drop limits, and routing decisions need a quick browser-local sanity check.',
+      toolIds: ['voltage-drop-calculator', 'cable-sizing-assistant', 'conduit-fill-calculator'],
+    },
+    {
+      id: 'panel-review',
+      title: 'Panel review',
+      description: 'Use this when circuit loads, spare ways, or phase balance need a cleaner schedule view.',
+      toolIds: ['panel-schedule-builder'],
+    },
+    {
+      id: 'formula-lookup',
+      title: 'Formula lookup',
+      description: 'Keep recurring electrical equations close to the review workflow instead of buried in old notes or tabs.',
+      toolIds: ['electrical-formula-finder'],
+    },
+  ],
+  aliases: ['/industries/electrical', '/industries/electrical-power'],
+};
+
+const industrySpecificToolIds = uniqueToolIds([
+  ...mechanicalWorkspace.toolIds,
+  ...civilWorkspace.toolIds,
+  ...electricalWorkspaceToolIds,
+]);
+
+const technologyToolIds = tools
+  .filter((tool) => !industrySpecificToolIds.includes(tool.id))
+  .map((tool) => tool.id);
+
+export const technologyWorkspace: IndustryWorkspace = {
+  slug: 'technology',
+  title: 'Technology Workspace',
+  shortTitle: 'Technology',
+  audience: 'Developers, platform teams, QA, delivery leads, and technical reviewers',
+  path: '/workspaces/technology',
+  collectionPath: '/collections',
+  subtitle: 'Technology-first browser tools for delivery workflows, review loops, data cleanup, API work, and practical day-to-day engineering support.',
+  description:
+    'A focused technology workspace that keeps software delivery tools together so teams can search, transform, inspect, and review without starting from a generic utility catalog.',
+  searchPlaceholder: 'Search technology tools',
+  ctaLabel: 'Technology workspace',
+  icon: Blocks,
+  toolIds: technologyToolIds,
+  sections: buildWorkspaceSections(technologyToolIds),
+};
+
+export const workspaces = [technologyWorkspace, mechanicalWorkspace, civilWorkspace, electricalWorkspace];
+
+function matchesWorkspacePath(workspace: IndustryWorkspace, pathname: string) {
+  if (pathname === workspace.path) {
+    return true;
+  }
+
+  if (workspace.aliases?.includes(pathname)) {
+    return true;
+  }
+
+  if (workspace.slug === 'technology') {
+    return workspace.toolIds.some((toolId) => toolLookup.get(toolId)?.path === pathname);
+  }
+
+  return pathname.startsWith(`/workspaces/${workspace.slug}/tools/`) || pathname.startsWith(`/industries/${workspace.slug}/tools/`);
+}
 
 export function getIndustryWorkspaceBySlug(slug: string) {
   return workspaces.find((workspace) => workspace.slug === slug);
 }
 
 export function getIndustryWorkspaceByPathname(pathname: string) {
-  return workspaces.find(
-    (workspace) => pathname === workspace.path || pathname.startsWith(`${workspace.path}/tools/`),
-  );
+  return workspaces.find((workspace) => matchesWorkspacePath(workspace, pathname));
 }
 
 export function getIndustryToolPath(workspaceSlug: string, toolId: string) {
-  return `/industries/${workspaceSlug}/tools/${toolId}`;
+  const workspace = getIndustryWorkspaceBySlug(workspaceSlug);
+  const tool = toolLookup.get(toolId);
+  if (!workspace) {
+    return tool?.path ?? `/tools/${toolId}`;
+  }
+
+  if (workspace.slug === 'technology') {
+    return tool?.path ?? '/';
+  }
+
+  return `/workspaces/${workspaceSlug}/tools/${toolId}`;
 }
 
 export function getIndustryWorkspaceTools(workspace: IndustryWorkspace): IndustryWorkspaceToolLink[] {
@@ -194,5 +320,51 @@ export const civilWorkspaceHighlights = [
     title: 'Stay civil-only here',
     body: 'This workspace deliberately hides unrelated utilities so civil engineers only see the tools that clearly match their work.',
     icon: PackageSearch,
+  },
+];
+
+export const electricalWorkspaceHighlights = [
+  {
+    title: 'Start with the load checks first',
+    body: 'Voltage Drop Calculator, Cable Sizing Assistant, and Conduit Fill Calculator cover the quick planning questions that usually happen before a deeper design review.',
+    icon: Gauge,
+  },
+  {
+    title: 'Keep the panel view readable',
+    body: 'Panel Schedule Builder turns a small circuit list into phase totals, spare ways, and a cleaner review surface.',
+    icon: Table2,
+  },
+  {
+    title: 'Keep recurring formulas close',
+    body: 'Electrical Formula Finder shortens the lookup work for the common equations engineers keep reusing in notes and spreadsheets.',
+    icon: PackageSearch,
+  },
+  {
+    title: 'Stay electrical-only here',
+    body: 'This workspace deliberately hides unrelated utilities so electrical users only see tools that clearly match their workflow.',
+    icon: Zap,
+  },
+];
+
+export const technologyWorkspaceHighlights = [
+  {
+    title: 'Start with the work, not the file type',
+    body: 'The technology workspace keeps API review, formatting, validation, conversion, and delivery support tools together so teams can move faster without hunting through a generic catalog.',
+    icon: Wrench,
+  },
+  {
+    title: 'Keep the biggest workflow clusters close',
+    body: 'Formatters, encoders, converters, security checks, and developer utilities stay grouped in one workspace where the search bar and sidebar follow the same scope.',
+    icon: Blocks,
+  },
+  {
+    title: 'Stay browser-local by default',
+    body: 'Payloads, logs, snippets, configs, and notes can stay on the page instead of bouncing into random third-party tools during delivery work.',
+    icon: Gauge,
+  },
+  {
+    title: 'Branch into industry workspaces when needed',
+    body: 'Mechanical and civil workspaces now sit alongside technology so people can switch context without dragging unrelated tools into the sidebar or search results.',
+    icon: BarChart3,
   },
 ];

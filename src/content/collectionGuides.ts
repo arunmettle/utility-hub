@@ -90,33 +90,33 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
   [
     'electrical-power',
     {
-      summary: 'A practical electrical collection for revision spotting, outage handovers, and cleaner field-ready artifacts.',
+      summary: 'A practical electrical collection for voltage drop, cable sizing, conduit fill, panel schedules, and formula lookup.',
       intro:
-        'Electrical teams work with revision-heavy schedules, panel notes, permits, outage planning, and field observations that often need structure more than they need another bulky platform.',
+        'Electrical teams work with load checks, conductor sizing, conduit routing, panel schedules, and recurring formulas that are often faster to trust when they stay local and readable.',
       useCases: [
-        'You are checking what changed between two extracted single-line or panel-related notes.',
-        'You need a tighter shift or outage handover with risk visibility preserved.',
-        'You want to prepare cleaner issue evidence before it lands in a work pack or incident review.',
+        'You need to check voltage drop and cable size before a design review or field coordination call.',
+        'You want conduit fill and panel schedules to stay readable without opening a spreadsheet forest.',
+        'You need a quick formula lookup that stays close to the engineering workflow instead of buried in notes.',
       ],
       sections: [
         {
-          title: 'Reduce manual revision scanning',
-          body: 'Drawing Revision Diff Checker is useful when schedules or revision notes change in small but important ways.',
-          toolIds: ['drawing-revision-diff-checker'],
+          title: 'Start with load and cable checks',
+          body: 'Voltage Drop Calculator and Cable Sizing Assistant cover the quickest sizing questions that usually come first.',
+          toolIds: ['voltage-drop-calculator', 'cable-sizing-assistant'],
         },
         {
-          title: 'Keep handovers focused on what matters',
-          body: 'Shift Handover Builder structures pending actions, safety risks, and operational notes so the next shift gets a clearer picture faster.',
-          toolIds: ['shift-handover-builder'],
+          title: 'Keep conduit and panel review readable',
+          body: 'Conduit Fill Calculator and Panel Schedule Builder help turn routing and circuit checks into something easier to scan and share.',
+          toolIds: ['conduit-fill-calculator', 'panel-schedule-builder'],
         },
         {
-          title: 'Clean field notes before sharing',
-          body: 'This first version stays focused on revision review and handover. More electrical-native tools like panel schedule checks belong in the next phase.',
-          toolIds: [],
+          title: 'Keep formulas close at hand',
+          body: 'Electrical Formula Finder gives a clean browser-local lookup for the equations engineers reuse in daily checks.',
+          toolIds: ['electrical-formula-finder'],
         },
       ],
       closing:
-        'This collection helps electrical teams spend less time reformatting context and more time resolving the real issue behind the work.',
+        'This collection helps electrical teams spend less time reformatting context and more time making the next sizing or review decision with confidence.',
     },
   ],
   [

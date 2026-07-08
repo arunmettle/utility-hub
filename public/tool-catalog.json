@@ -2,7 +2,7 @@
   "name": "UtilityHub",
   "siteUrl": "https://utilityhub.dev",
   "privacyModel": "browser-local",
-  "toolCount": 144,
+  "toolCount": 149,
   "guideCount": 144,
   "collectionCount": 22,
   "categories": [
@@ -18,7 +18,7 @@
   "collections": [
     { "slug": "civil-construction", "title": "Civil & Construction Toolkit", "path": "/collections/civil-construction", "toolCount": 3 },
     { "slug": "mechanical-manufacturing", "title": "Mechanical & Manufacturing Toolkit", "path": "/collections/mechanical-manufacturing", "toolCount": 6 },
-    { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 2 },
+    { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 5 },
     { "slug": "medical-clinical", "title": "Medical & Clinical Toolkit", "path": "/collections/medical-clinical", "toolCount": 1 },
     { "slug": "mining-resources", "title": "Mining & Resources Toolkit", "path": "/collections/mining-resources", "toolCount": 3 },
     { "slug": "operations-field-teams", "title": "Operations & Field Teams Toolkit", "path": "/collections/operations-field-teams", "toolCount": 3 },

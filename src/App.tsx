@@ -15,11 +15,13 @@ function lazyNamed<T extends ComponentType>(loader: () => Promise<Record<string,
   });
 }
 
-const Home = lazy(() => import('./pages/Home'));
 const CollectionsIndex = lazy(() => import('./pages/CollectionsIndex'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
+const WorkspacesIndex = lazy(() => import('./pages/WorkspacesIndex'));
+const TechnologyWorkspacePage = lazy(() => import('./pages/TechnologyWorkspacePage'));
 const MechanicalWorkspacePage = lazy(() => import('./pages/MechanicalWorkspacePage'));
 const CivilWorkspacePage = lazy(() => import('./pages/CivilWorkspacePage'));
+const ElectricalWorkspacePage = lazy(() => import('./pages/ElectricalWorkspacePage'));
 const GuidesIndex = lazy(() => import('./pages/GuidesIndex'));
 const GuidePage = lazy(() => import('./pages/GuidePage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
@@ -151,6 +153,11 @@ const MechanicalFormulaFinder = lazy(() => import('./tools/MechanicalFormulaFind
 const MaterialTakeoffCarbonEstimator = lazy(() => import('./tools/MaterialTakeoffCarbonEstimator'));
 const BoqDiffChecker = lazy(() => import('./tools/BoqDiffChecker'));
 const CivilFormulaFinder = lazy(() => import('./tools/CivilFormulaFinder'));
+const VoltageDropCalculator = lazy(() => import('./tools/VoltageDropCalculator'));
+const CableSizingAssistant = lazy(() => import('./tools/CableSizingAssistant'));
+const ConduitFillCalculator = lazy(() => import('./tools/ConduitFillCalculator'));
+const PanelScheduleBuilder = lazy(() => import('./tools/PanelScheduleBuilder'));
+const ElectricalFormulaFinder = lazy(() => import('./tools/ElectricalFormulaFinder'));
 
 const loadAiWorkbench = () => import('./tools/AiWorkbench');
 const PromptStudio = lazyNamed(loadAiWorkbench, 'PromptStudio');
@@ -185,11 +192,14 @@ const SyntheticTestCaseGenerator = lazyNamed(loadAiWorkbench, 'SyntheticTestCase
 const RedTeamScenarioBuilder = lazyNamed(loadAiWorkbench, 'RedTeamScenarioBuilder');
 
 const appRoutes: AppRoute[] = [
-  { path: '/', Component: Home },
+  { path: '/', Component: WorkspacesIndex },
+  { path: '/workspaces', Component: WorkspacesIndex },
+  { path: '/workspaces/technology', Component: TechnologyWorkspacePage },
   { path: '/collections', Component: CollectionsIndex },
   { path: '/collections/:slug', Component: CollectionPage },
-  { path: '/industries/mechanical', Component: MechanicalWorkspacePage },
-  { path: '/industries/civil', Component: CivilWorkspacePage },
+  { path: '/workspaces/mechanical', Component: MechanicalWorkspacePage },
+  { path: '/workspaces/civil', Component: CivilWorkspacePage },
+  { path: '/workspaces/electrical', Component: ElectricalWorkspacePage },
   { path: '/guides', Component: GuidesIndex },
   { path: '/guides/:slug', Component: GuidePage },
   { path: '/feedback', Component: FeedbackPage },
@@ -312,25 +322,35 @@ const appRoutes: AppRoute[] = [
   { path: '/json-schema-generator', Component: JsonSchemaGenerator },
   { path: '/shift-handover-builder', Component: ShiftHandoverBuilder },
   { path: '/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
-  { path: '/industries/mechanical/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
-  { path: '/industries/civil/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/workspaces/mechanical/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/workspaces/civil/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
-  { path: '/industries/mechanical/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
-  { path: '/industries/civil/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/workspaces/mechanical/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/workspaces/civil/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
   { path: '/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
-  { path: '/industries/mechanical/tools/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
+  { path: '/workspaces/mechanical/tools/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
   { path: '/bom-diff-checker', Component: BomDiffChecker },
-  { path: '/industries/mechanical/tools/bom-diff-checker', Component: BomDiffChecker },
+  { path: '/workspaces/mechanical/tools/bom-diff-checker', Component: BomDiffChecker },
   { path: '/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
-  { path: '/industries/mechanical/tools/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
+  { path: '/workspaces/mechanical/tools/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
   { path: '/mechanical-formula-finder', Component: MechanicalFormulaFinder },
-  { path: '/industries/mechanical/tools/mechanical-formula-finder', Component: MechanicalFormulaFinder },
+  { path: '/workspaces/mechanical/tools/mechanical-formula-finder', Component: MechanicalFormulaFinder },
   { path: '/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
-  { path: '/industries/civil/tools/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
+  { path: '/workspaces/civil/tools/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
   { path: '/boq-diff-checker', Component: BoqDiffChecker },
-  { path: '/industries/civil/tools/boq-diff-checker', Component: BoqDiffChecker },
+  { path: '/workspaces/civil/tools/boq-diff-checker', Component: BoqDiffChecker },
   { path: '/civil-formula-finder', Component: CivilFormulaFinder },
-  { path: '/industries/civil/tools/civil-formula-finder', Component: CivilFormulaFinder },
+  { path: '/workspaces/civil/tools/civil-formula-finder', Component: CivilFormulaFinder },
+  { path: '/voltage-drop-calculator', Component: VoltageDropCalculator },
+  { path: '/workspaces/electrical/tools/voltage-drop-calculator', Component: VoltageDropCalculator },
+  { path: '/cable-sizing-assistant', Component: CableSizingAssistant },
+  { path: '/workspaces/electrical/tools/cable-sizing-assistant', Component: CableSizingAssistant },
+  { path: '/conduit-fill-calculator', Component: ConduitFillCalculator },
+  { path: '/workspaces/electrical/tools/conduit-fill-calculator', Component: ConduitFillCalculator },
+  { path: '/panel-schedule-builder', Component: PanelScheduleBuilder },
+  { path: '/workspaces/electrical/tools/panel-schedule-builder', Component: PanelScheduleBuilder },
+  { path: '/electrical-formula-finder', Component: ElectricalFormulaFinder },
+  { path: '/workspaces/electrical/tools/electrical-formula-finder', Component: ElectricalFormulaFinder },
   { path: '/prompt-studio', Component: PromptStudio },
   { path: '/prompt-diff-checker', Component: PromptDiffChecker },
   { path: '/prompt-test-runner', Component: PromptTestRunner },
@@ -367,6 +387,26 @@ const redirectRoutes = [
   { path: '/base64', to: '/base64-studio' },
   { path: '/qr-code', to: '/qr-code-generator' },
   { path: '/timestamp', to: '/timestamp-converter' },
+  { path: '/industries/mechanical', to: '/workspaces/mechanical' },
+  { path: '/industries/civil', to: '/workspaces/civil' },
+  { path: '/industries/electrical', to: '/workspaces/electrical' },
+  { path: '/industries/electrical-power', to: '/workspaces/electrical' },
+  { path: '/industries/mechanical/tools/pressure-drop-head-loss-calculator', to: '/workspaces/mechanical/tools/pressure-drop-head-loss-calculator' },
+  { path: '/industries/civil/tools/pressure-drop-head-loss-calculator', to: '/workspaces/civil/tools/pressure-drop-head-loss-calculator' },
+  { path: '/industries/mechanical/tools/drawing-revision-diff-checker', to: '/workspaces/mechanical/tools/drawing-revision-diff-checker' },
+  { path: '/industries/civil/tools/drawing-revision-diff-checker', to: '/workspaces/civil/tools/drawing-revision-diff-checker' },
+  { path: '/industries/mechanical/tools/tolerance-stackup-analyzer', to: '/workspaces/mechanical/tools/tolerance-stackup-analyzer' },
+  { path: '/industries/mechanical/tools/bom-diff-checker', to: '/workspaces/mechanical/tools/bom-diff-checker' },
+  { path: '/industries/mechanical/tools/hole-shaft-fit-calculator', to: '/workspaces/mechanical/tools/hole-shaft-fit-calculator' },
+  { path: '/industries/mechanical/tools/mechanical-formula-finder', to: '/workspaces/mechanical/tools/mechanical-formula-finder' },
+  { path: '/industries/civil/tools/material-takeoff-carbon-estimator', to: '/workspaces/civil/tools/material-takeoff-carbon-estimator' },
+  { path: '/industries/civil/tools/boq-diff-checker', to: '/workspaces/civil/tools/boq-diff-checker' },
+  { path: '/industries/civil/tools/civil-formula-finder', to: '/workspaces/civil/tools/civil-formula-finder' },
+  { path: '/industries/electrical/tools/voltage-drop-calculator', to: '/workspaces/electrical/tools/voltage-drop-calculator' },
+  { path: '/industries/electrical/tools/cable-sizing-assistant', to: '/workspaces/electrical/tools/cable-sizing-assistant' },
+  { path: '/industries/electrical/tools/conduit-fill-calculator', to: '/workspaces/electrical/tools/conduit-fill-calculator' },
+  { path: '/industries/electrical/tools/panel-schedule-builder', to: '/workspaces/electrical/tools/panel-schedule-builder' },
+  { path: '/industries/electrical/tools/electrical-formula-finder', to: '/workspaces/electrical/tools/electrical-formula-finder' },
 ];
 
 export default function App() {

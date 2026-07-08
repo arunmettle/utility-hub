@@ -39,6 +39,7 @@ UtilityHub provides local, client-side tools for formatting, encoding, security 
 - /collections/web-developers: curated workflows for everyday web implementation and request shaping.
 - /collections/frontend-developers: curated utilities for UI implementation, formatting, and browser-facing checks.
 - /collections/backend-developers: curated utilities for API contracts, signing, payloads, and headers.
+- /collections/electrical-power: curated utilities for voltage drop, cable sizing, conduit fill, panel schedules, and formula lookup.
 - /collections/business-analysts: curated utilities for structured notes, tables, comparisons, and summaries.
 - /collections/manual-testers: curated utilities for QA evidence, fixtures, and response inspection.
 - /collections/automation-testers: curated utilities for regex, payload paths, CI checks, and test data.

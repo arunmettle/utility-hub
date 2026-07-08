@@ -76,3 +76,42 @@ Output format:
 - what the MVP should and should not do
 - whether it can become a “can’t live without it” utility
 ```
+
+## Electrical Utility Ideation Prompt
+
+Use this when evaluating the next UtilityHub electrical or MEP tool:
+
+```md
+You are evaluating browser-based utility tools for working electrical, MEP, and power engineers.
+
+Context:
+- UtilityHub is privacy-first and client-side
+- The goal is not to clone a full electrical design suite or power-system simulator
+- The goal is to replace messy spreadsheets, repetitive load checks, panel review, conduit checks, and formula lookup
+- Prefer workflows engineers repeat weekly or daily
+
+Instructions:
+1. Start from real electrical-engineering pain points, not generic productivity ideas.
+2. Prioritize workflows engineers already do in Excel, schedules, markups, hand calculations, or reference tabs.
+3. Reject ideas that mainly belong inside a full design package unless a smaller browser-local wedge exists.
+4. For each idea, score:
+   - frequency of use
+   - pain severity
+   - trust requirement
+   - client-side feasibility
+   - shareability / SEO traction
+5. Prefer tools that:
+   - save time immediately
+   - make assumptions visible
+   - reduce review risk
+   - are easy to trust in a fast check
+   - can be used without training
+6. Avoid tools that only sound impressive but do not beat a spreadsheet or handbook lookup in day-to-day value.
+
+Output format:
+- ranked pain points
+- ranked tool concepts
+- why this tool wins now
+- what the MVP should and should not do
+- whether it can become a “can’t live without it” utility
+```
