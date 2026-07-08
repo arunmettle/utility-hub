@@ -16,13 +16,13 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
   [
     'civil-construction',
     {
-      summary: 'A civil and construction collection for revision review, hydraulic checks, and cleaner field handovers.',
+      summary: 'A civil and construction collection for revision review, hydraulic checks, takeoff comparisons, and clearer formula lookup.',
       intro:
-        'Civil and construction teams often work across drawings, markups, field notes, and quick engineering checks that are too important for guesswork but too small for heavyweight software every time. This collection gives those recurring tasks a lighter browser-local home.',
+        'Civil and construction teams often work across drawings, BOQ exports, takeoffs, hydraulic checks, and quick engineering formulas that are too important for guesswork but too small for heavyweight software every time. This collection gives those recurring tasks a lighter browser-local home.',
       useCases: [
         'You need to compare revision text from drawings, notes, or schedules before a coordination meeting.',
         'You want a fast pressure-drop or head-loss sense check during concept, tender, or site troubleshooting work.',
-        'You need to turn rough site notes into a cleaner handover without sending project data to another service.',
+        'You need to compare quantities or estimate embodied carbon from a simple export before a tender review.',
       ],
       sections: [
         {
@@ -36,9 +36,19 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
           toolIds: ['pressure-drop-head-loss-calculator'],
         },
         {
-          title: 'Turn site detail into clearer handovers',
-          body: 'Shift Handover Builder helps convert rough updates into something supervisors, contractors, and reviewers can work from.',
-          toolIds: ['shift-handover-builder'],
+          title: 'Compare takeoffs and embodied carbon',
+          body: 'Material Takeoff + Carbon Estimator turns simple quantity rows into a readable carbon comparison before the work moves into heavier estimating software.',
+          toolIds: ['material-takeoff-carbon-estimator'],
+        },
+        {
+          title: 'Spot quantity export changes',
+          body: 'BOQ / Quantity Diff Checker helps isolate added, removed, and changed rows across export revisions so spreadsheet review is less error-prone.',
+          toolIds: ['boq-diff-checker'],
+        },
+        {
+          title: 'Keep formulas close at hand',
+          body: 'Civil Formula Finder gives a clean lookup surface for common hydraulics, earthworks, concrete, and geometry relations that often get buried in notes.',
+          toolIds: ['civil-formula-finder'],
         },
       ],
       closing:

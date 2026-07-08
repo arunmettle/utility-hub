@@ -973,6 +973,22 @@ export const tools: ToolDefinition[] = [
     icon: GitCompareArrows,
   },
   {
+    id: 'material-takeoff-carbon-estimator',
+    name: 'Material Takeoff + Carbon Estimator',
+    description: 'Estimate takeoff totals and embodied-carbon impact from a simple local CSV table.',
+    category: 'Converters',
+    path: '/material-takeoff-carbon-estimator',
+    icon: BarChart3,
+  },
+  {
+    id: 'boq-diff-checker',
+    name: 'BOQ / Quantity Diff Checker',
+    description: 'Compare BOQ or quantity-export tables locally to find added, removed, and changed rows.',
+    category: 'Testers',
+    path: '/boq-diff-checker',
+    icon: Table2,
+  },
+  {
     id: 'tolerance-stackup-analyzer',
     name: 'Tolerance Stack-Up Analyzer',
     description: 'Review worst-case and RSS tolerance stacks from simple tabular inputs instead of maintaining fragile spreadsheets.',
@@ -1002,6 +1018,14 @@ export const tools: ToolDefinition[] = [
     description: 'Search recurring mechanical formulas locally instead of hunting through notes, textbooks, or brittle spreadsheets.',
     category: 'Developer',
     path: '/mechanical-formula-finder',
+    icon: PackageSearch,
+  },
+  {
+    id: 'civil-formula-finder',
+    name: 'Civil Formula Finder',
+    description: 'Search recurring civil formulas locally instead of digging through old notes or handbook tabs.',
+    category: 'Developer',
+    path: '/civil-formula-finder',
     icon: PackageSearch,
   },
   {

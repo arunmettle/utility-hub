@@ -19,6 +19,7 @@ const Home = lazy(() => import('./pages/Home'));
 const CollectionsIndex = lazy(() => import('./pages/CollectionsIndex'));
 const CollectionPage = lazy(() => import('./pages/CollectionPage'));
 const MechanicalWorkspacePage = lazy(() => import('./pages/MechanicalWorkspacePage'));
+const CivilWorkspacePage = lazy(() => import('./pages/CivilWorkspacePage'));
 const GuidesIndex = lazy(() => import('./pages/GuidesIndex'));
 const GuidePage = lazy(() => import('./pages/GuidePage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
@@ -147,6 +148,9 @@ const ToleranceStackupAnalyzer = lazy(() => import('./tools/ToleranceStackupAnal
 const BomDiffChecker = lazy(() => import('./tools/BomDiffChecker'));
 const HoleShaftFitCalculator = lazy(() => import('./tools/HoleShaftFitCalculator'));
 const MechanicalFormulaFinder = lazy(() => import('./tools/MechanicalFormulaFinder'));
+const MaterialTakeoffCarbonEstimator = lazy(() => import('./tools/MaterialTakeoffCarbonEstimator'));
+const BoqDiffChecker = lazy(() => import('./tools/BoqDiffChecker'));
+const CivilFormulaFinder = lazy(() => import('./tools/CivilFormulaFinder'));
 
 const loadAiWorkbench = () => import('./tools/AiWorkbench');
 const PromptStudio = lazyNamed(loadAiWorkbench, 'PromptStudio');
@@ -185,6 +189,7 @@ const appRoutes: AppRoute[] = [
   { path: '/collections', Component: CollectionsIndex },
   { path: '/collections/:slug', Component: CollectionPage },
   { path: '/industries/mechanical', Component: MechanicalWorkspacePage },
+  { path: '/industries/civil', Component: CivilWorkspacePage },
   { path: '/guides', Component: GuidesIndex },
   { path: '/guides/:slug', Component: GuidePage },
   { path: '/feedback', Component: FeedbackPage },
@@ -308,8 +313,10 @@ const appRoutes: AppRoute[] = [
   { path: '/shift-handover-builder', Component: ShiftHandoverBuilder },
   { path: '/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/industries/mechanical/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/industries/civil/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
   { path: '/industries/mechanical/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/industries/civil/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
   { path: '/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
   { path: '/industries/mechanical/tools/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
   { path: '/bom-diff-checker', Component: BomDiffChecker },
@@ -318,6 +325,12 @@ const appRoutes: AppRoute[] = [
   { path: '/industries/mechanical/tools/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
   { path: '/mechanical-formula-finder', Component: MechanicalFormulaFinder },
   { path: '/industries/mechanical/tools/mechanical-formula-finder', Component: MechanicalFormulaFinder },
+  { path: '/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
+  { path: '/industries/civil/tools/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
+  { path: '/boq-diff-checker', Component: BoqDiffChecker },
+  { path: '/industries/civil/tools/boq-diff-checker', Component: BoqDiffChecker },
+  { path: '/civil-formula-finder', Component: CivilFormulaFinder },
+  { path: '/industries/civil/tools/civil-formula-finder', Component: CivilFormulaFinder },
   { path: '/prompt-studio', Component: PromptStudio },
   { path: '/prompt-diff-checker', Component: PromptDiffChecker },
   { path: '/prompt-test-runner', Component: PromptTestRunner },

@@ -1089,3 +1089,283 @@ export function findMechanicalFormulas(query: string, category: string) {
     return haystack.includes(normalizedQuery);
   });
 }
+
+export interface CivilFormula {
+  id: string;
+  title: string;
+  category: 'Hydraulics' | 'Earthworks' | 'Concrete' | 'Geometry' | 'Materials' | 'Surveying' | 'Roads';
+  formula: string;
+  variables: string[];
+  notes: string;
+}
+
+export const civilFormulas: CivilFormula[] = [
+  {
+    id: 'manning',
+    title: 'Manning equation',
+    category: 'Hydraulics',
+    formula: 'Q = (1 / n) * A * R^(2 / 3) * S^(1 / 2)',
+    variables: ['Q = flow rate', 'n = roughness coefficient', 'A = flow area', 'R = hydraulic radius', 'S = slope'],
+    notes: 'A common first-pass open-channel and drainage flow relation.',
+  },
+  {
+    id: 'continuity',
+    title: 'Continuity',
+    category: 'Hydraulics',
+    formula: 'Q = A * v',
+    variables: ['Q = discharge', 'A = flow area', 'v = average velocity'],
+    notes: 'The basic link between section area and velocity in pipe or channel checks.',
+  },
+  {
+    id: 'darcy-weisbach',
+    title: 'Darcy-Weisbach head loss',
+    category: 'Hydraulics',
+    formula: 'hf = f * (L / D) * v^2 / (2 * g)',
+    variables: ['hf = friction head loss', 'f = friction factor', 'L = pipe length', 'D = pipe diameter', 'v = velocity', 'g = gravity'],
+    notes: 'Useful for quick pipe-run checks before a more detailed network model.',
+  },
+  {
+    id: 'hazen-williams',
+    title: 'Hazen-Williams flow',
+    category: 'Hydraulics',
+    formula: 'Q = 0.278 * C * D^2.63 * S^0.54',
+    variables: ['Q = flow rate', 'C = Hazen-Williams coefficient', 'D = diameter', 'S = slope'],
+    notes: 'A practical check for water distribution style calculations.',
+  },
+  {
+    id: 'slope-percent',
+    title: 'Grade from rise and run',
+    category: 'Geometry',
+    formula: 'slope % = (rise / run) * 100',
+    variables: ['rise = vertical change', 'run = horizontal distance'],
+    notes: 'A simple planning and layout relation used on civil drawings all the time.',
+  },
+  {
+    id: 'concrete-volume',
+    title: 'Concrete volume',
+    category: 'Concrete',
+    formula: 'V = L * W * H',
+    variables: ['V = volume', 'L = length', 'W = width', 'H = height'],
+    notes: 'Useful for pad, footing, slab, and block-out quantity checks.',
+  },
+  {
+    id: 'slab-load',
+    title: 'Area load from slab thickness',
+    category: 'Concrete',
+    formula: 'w = t * density',
+    variables: ['w = load per area', 't = thickness', 'density = material density'],
+    notes: 'Useful for concept checks before more detailed structural loading analysis.',
+  },
+  {
+    id: 'earthworks-volume',
+    title: 'Prismoidal earthworks volume',
+    category: 'Earthworks',
+    formula: 'V = (L / 6) * (A1 + 4Am + A2)',
+    variables: ['V = volume', 'L = spacing', 'A1 = first area', 'Am = mid area', 'A2 = second area'],
+    notes: 'A common estimate for cut/fill between sections.',
+  },
+  {
+    id: 'area-from-trapezoid',
+    title: 'Trapezoid area',
+    category: 'Geometry',
+    formula: 'A = (a + b) / 2 * h',
+    variables: ['A = area', 'a = first parallel side', 'b = second parallel side', 'h = height'],
+    notes: 'A useful layout geometry relation for simple sections and offsets.',
+  },
+  {
+    id: 'drc-to-corner',
+    title: 'Diagonal rectangle check',
+    category: 'Geometry',
+    formula: 'd = sqrt(L^2 + W^2)',
+    variables: ['d = diagonal', 'L = length', 'W = width'],
+    notes: 'Helpful for site set-out and right-angle checking.',
+  },
+  {
+    id: 'tonnes-from-volume',
+    title: 'Material mass from volume',
+    category: 'Materials',
+    formula: 'm = V * rho',
+    variables: ['m = mass', 'V = volume', 'rho = density'],
+    notes: 'Often used for early concrete, fill, or imported material estimates.',
+  },
+  {
+    id: 'setout-offset',
+    title: 'Offset from chainage',
+    category: 'Surveying',
+    formula: 'offset = tan(theta) * distance',
+    variables: ['offset = lateral offset', 'theta = angle', 'distance = measured distance'],
+    notes: 'A simple survey and set-out helper for lateral offsets.',
+  },
+  {
+    id: 'road-crossfall',
+    title: 'Crossfall / superelevation',
+    category: 'Roads',
+    formula: 'e = rise / width',
+    variables: ['e = crossfall', 'rise = elevation change across the width', 'width = paved width'],
+    notes: 'Useful for quick road and drainage checks.',
+  },
+];
+
+export function findCivilFormulas(query: string, category: string) {
+  const normalizedQuery = query.trim().toLowerCase();
+  return civilFormulas.filter((formula) => {
+    if (category !== 'All' && formula.category !== category) {
+      return false;
+    }
+
+    if (!normalizedQuery) {
+      return true;
+    }
+
+    const haystack = [formula.title, formula.formula, formula.notes, ...formula.variables].join(' ').toLowerCase();
+    return haystack.includes(normalizedQuery);
+  });
+}
+
+export interface MaterialTakeoffRow {
+  item: string;
+  quantity: number;
+  unit: string;
+  carbonFactor: number;
+  description: string;
+  lineCarbon: number;
+}
+
+export interface MaterialTakeoffOutput {
+  rows: MaterialTakeoffRow[];
+  totalQuantity: number;
+  totalCarbonKgCo2e: number;
+  averageCarbonFactor: number;
+  report: string;
+}
+
+export function estimateMaterialTakeoffCarbon(source: string): { output: MaterialTakeoffOutput | null; error: string } {
+  const rows = parseLooseCsv(source);
+  if (rows.length < 2) {
+    return { output: null, error: 'Add a header row plus at least one takeoff row.' };
+  }
+
+  const dataRows = rows.slice(1);
+  const parsed: MaterialTakeoffRow[] = [];
+
+  for (const row of dataRows) {
+    const [item, quantityRaw, unit = '', carbonFactorRaw, description = ''] = row;
+    const quantity = Number(quantityRaw);
+    const carbonFactor = Number(carbonFactorRaw);
+
+    if (!item || !unit || !Number.isFinite(quantity) || !Number.isFinite(carbonFactor)) {
+      return { output: null, error: 'Each row needs item, quantity, unit, and carbonFactorKgCo2e.' };
+    }
+
+    const lineCarbon = quantity * carbonFactor;
+    parsed.push({
+      item,
+      quantity,
+      unit,
+      carbonFactor,
+      description,
+      lineCarbon,
+    });
+  }
+
+  const totalQuantity = parsed.reduce((sum, row) => sum + row.quantity, 0);
+  const totalCarbonKgCo2e = parsed.reduce((sum, row) => sum + row.lineCarbon, 0);
+  const averageCarbonFactor = totalQuantity > 0 ? totalCarbonKgCo2e / totalQuantity : 0;
+  const report = [
+    'Material Takeoff + Carbon Summary',
+    `Rows: ${parsed.length}`,
+    `Total quantity: ${totalQuantity.toFixed(2)}`,
+    `Total carbon: ${totalCarbonKgCo2e.toFixed(2)} kgCO2e`,
+    `Average factor: ${averageCarbonFactor.toFixed(2)} kgCO2e per unit`,
+  ].join('\n');
+
+  return {
+    output: {
+      rows: parsed,
+      totalQuantity,
+      totalCarbonKgCo2e,
+      averageCarbonFactor,
+      report,
+    },
+    error: '',
+  };
+}
+
+export interface BoqDiffOutput {
+  totalItems: number;
+  added: string[];
+  removed: string[];
+  quantityChanged: string[];
+  descriptionChanged: string[];
+  highlights: string[];
+  report: string;
+}
+
+export function diffBoqCsv(left: string, right: string): { output: BoqDiffOutput | null; error: string } {
+  const leftRows = parseLooseCsv(left);
+  const rightRows = parseLooseCsv(right);
+  if (leftRows.length < 2 || rightRows.length < 2) {
+    return { output: null, error: 'Provide a header row and at least one BOQ row on each side.' };
+  }
+
+  const toMap = (rows: string[][]) => {
+    const map = new Map<string, { qty: number; unit: string; description: string }>();
+    for (const [item, qtyRaw, unit = '', description = ''] of rows.slice(1)) {
+      if (!item) continue;
+      map.set(item, { qty: Number(qtyRaw) || 0, unit, description });
+    }
+    return map;
+  };
+
+  const oldMap = toMap(leftRows);
+  const newMap = toMap(rightRows);
+  const allItems = new Set([...oldMap.keys(), ...newMap.keys()]);
+  const added: string[] = [];
+  const removed: string[] = [];
+  const quantityChanged: string[] = [];
+  const descriptionChanged: string[] = [];
+  const highlights: string[] = [];
+
+  for (const item of allItems) {
+    const oldItem = oldMap.get(item);
+    const newItem = newMap.get(item);
+    if (!oldItem && newItem) {
+      const line = `Added ${item} x${newItem.qty} ${newItem.unit} ${newItem.description}`.trim();
+      added.push(line);
+      highlights.push(line);
+      continue;
+    }
+    if (oldItem && !newItem) {
+      const line = `Removed ${item} x${oldItem.qty} ${oldItem.unit} ${oldItem.description}`.trim();
+      removed.push(line);
+      highlights.push(line);
+      continue;
+    }
+    if (!oldItem || !newItem) continue;
+    if (oldItem.qty !== newItem.qty || oldItem.unit !== newItem.unit) {
+      const line = `Quantity changed ${item}: ${oldItem.qty} ${oldItem.unit} -> ${newItem.qty} ${newItem.unit}`;
+      quantityChanged.push(line);
+      highlights.push(line);
+    }
+    if (oldItem.description !== newItem.description) {
+      const line = `Description changed ${item}: ${oldItem.description} -> ${newItem.description}`;
+      descriptionChanged.push(line);
+      highlights.push(line);
+    }
+  }
+
+  const report = ['BOQ Diff Summary', ...highlights].join('\n');
+
+  return {
+    output: {
+      totalItems: allItems.size,
+      added,
+      removed,
+      quantityChanged,
+      descriptionChanged,
+      highlights,
+      report,
+    },
+    error: '',
+  };
+}

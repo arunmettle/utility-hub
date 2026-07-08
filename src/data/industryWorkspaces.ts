@@ -1,4 +1,4 @@
-import { Factory, FileSearch, Gauge, PackageSearch, Sigma, type LucideIcon } from 'lucide-react';
+import { BarChart3, Building2, Factory, FileSearch, Gauge, PackageSearch, Sigma, type LucideIcon } from 'lucide-react';
 import { tools, type ToolDefinition } from './tools';
 
 export interface IndustryWorkspaceSection {
@@ -73,7 +73,55 @@ export const mechanicalWorkspace: IndustryWorkspace = {
   ],
 };
 
-const workspaces = [mechanicalWorkspace];
+export const civilWorkspace: IndustryWorkspace = {
+  slug: 'civil',
+  title: 'Civil Engineering Workspace',
+  shortTitle: 'Civil',
+  audience: 'Civil, site, and construction engineers',
+  path: '/industries/civil',
+  collectionPath: '/collections/civil-construction',
+  subtitle: 'Civil-first browser tools for revision review, quantity comparison, hydraulic checks, and takeoff sanity checks.',
+  description:
+    'A focused civil workspace that keeps drawings, quantities, hydraulics, and formula lookup in one browser-local home without dragging in unrelated utilities.',
+  searchPlaceholder: 'Search civil tools',
+  ctaLabel: 'Civil workspace',
+  icon: Building2,
+  toolIds: [
+    'drawing-revision-diff-checker',
+    'pressure-drop-head-loss-calculator',
+    'material-takeoff-carbon-estimator',
+    'boq-diff-checker',
+    'civil-formula-finder',
+  ],
+  sections: [
+    {
+      id: 'revision-and-quantity',
+      title: 'Revision and quantity review',
+      description: 'Start here when plan notes, BOQs, or quantity exports need a quick comparison before the next coordination step.',
+      toolIds: ['drawing-revision-diff-checker', 'boq-diff-checker'],
+    },
+    {
+      id: 'hydraulic-checks',
+      title: 'Hydraulic and pipe checks',
+      description: 'Use this when water, drainage, or transfer-line checks need a quick browser-local sense check.',
+      toolIds: ['pressure-drop-head-loss-calculator'],
+    },
+    {
+      id: 'takeoff-and-carbon',
+      title: 'Takeoff and carbon',
+      description: 'Keep early quantity comparisons and embodied-carbon estimates close to the tender or concept workflow.',
+      toolIds: ['material-takeoff-carbon-estimator'],
+    },
+    {
+      id: 'formula-lookup',
+      title: 'Formula lookup',
+      description: 'Use this when a quick civil formula reference is faster than digging through old notes or handbook tabs.',
+      toolIds: ['civil-formula-finder'],
+    },
+  ],
+};
+
+const workspaces = [mechanicalWorkspace, civilWorkspace];
 
 export function getIndustryWorkspaceBySlug(slug: string) {
   return workspaces.find((workspace) => workspace.slug === slug);
@@ -122,6 +170,29 @@ export const mechanicalWorkspaceHighlights = [
   {
     title: 'Stay mechanical-only here',
     body: 'This workspace deliberately hides unrelated utilities so mechanical engineers see only the tools that clearly belong to their workflow.',
+    icon: PackageSearch,
+  },
+];
+
+export const civilWorkspaceHighlights = [
+  {
+    title: 'Keep revision review close',
+    body: 'Drawing Revision Diff Checker and BOQ Diff Checker help civil teams spot what changed in notes, schedules, and quantity exports before anything becomes rework.',
+    icon: FileSearch,
+  },
+  {
+    title: 'Run fast hydraulic checks',
+    body: 'Pressure Drop & Head Loss Calculator gives a lightweight browser-local answer for water, drainage, and transfer-line checks.',
+    icon: Gauge,
+  },
+  {
+    title: 'Compare takeoff scenarios locally',
+    body: 'Material Takeoff + Carbon Estimator keeps tender-stage quantities and embodied-carbon comparisons easy to read and easy to share.',
+    icon: BarChart3,
+  },
+  {
+    title: 'Stay civil-only here',
+    body: 'This workspace deliberately hides unrelated utilities so civil engineers only see the tools that clearly match their work.',
     icon: PackageSearch,
   },
 ];
