@@ -37,11 +37,11 @@ export default function CivilWorkspacePage() {
             instead of cluttered.
           </p>
           <div className="guide-hero-actions">
-            <Link className="cta-button" to={civilWorkspace.collectionPath}>
+            <Link className="cta-button" to={civilWorkspace.collectionPath ?? '/collections'}>
               Read the collection guide
             </Link>
-            <Link className="guide-inline-link" to="/collections">
-              Browse all collections <ArrowRight size={16} />
+            <Link className="guide-inline-link" to="/workspaces">
+              Browse all workspaces <ArrowRight size={16} />
             </Link>
           </div>
         </aside>

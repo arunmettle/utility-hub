@@ -13,17 +13,13 @@ import {
   X,
   type LucideIcon,
 } from 'lucide-react';
-import { getIndustryToolPath, getIndustryWorkspaceByPathname } from '../data/industryWorkspaces';
-import { categories, tools, type ToolCategory, type ToolDefinition } from '../data/tools';
+import { getIndustryToolPath, getIndustryWorkspaceByPathname, workspaces } from '../data/industryWorkspaces';
+import { tools, type ToolDefinition } from '../data/tools';
 import BrandMark from './BrandMark';
 import AdNetworkLoader from './AdNetworkLoader';
 import SeoManager from './SeoManager';
 
 type ThemeMode = 'light' | 'dark';
-
-const toolCategories = categories.filter(
-  (category): category is Exclude<ToolCategory, 'All tools'> => category !== 'All tools',
-);
 
 const themeStorageKey = 'utility-hub-theme';
 
@@ -72,13 +68,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [query, setQuery] = useState('');
   const location = useLocation();
   const workspace = useMemo(() => getIndustryWorkspaceByPathname(location.pathname), [location.pathname]);
+  const isWorkspaceContext = Boolean(workspace);
 
   const scopedTools = useMemo<SidebarToolEntry[]>(() => {
     if (!workspace) {
-      return tools.map((tool) => ({
-        ...tool,
-        navigationPath: tool.path,
-      }));
+      return [];
     }
 
     return workspace.toolIds.flatMap((toolId) => {
@@ -95,18 +89,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }, [workspace]);
 
   const groupedTools = useMemo<SidebarGroup[]>(() => {
-    if (workspace) {
-      return workspace.sections.map((section) => ({
-        id: section.id,
-        title: section.title,
-        tools: section.toolIds.flatMap((toolId) => scopedTools.filter((tool) => tool.id === toolId)),
-      }));
+    if (!workspace) {
+      return [];
     }
 
-    return toolCategories.map((category) => ({
-      id: category,
-      title: category,
-      tools: scopedTools.filter((tool) => tool.category === category),
+    return workspace.sections.map((section) => ({
+      id: section.id,
+      title: section.title,
+      tools: section.toolIds.flatMap((toolId) => scopedTools.filter((tool) => tool.id === toolId)),
     }));
   }, [scopedTools, workspace]);
 
@@ -289,20 +279,24 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const sidebarVisible = isDesktop ? desktopSidebarExpanded : mobileSidebarOpen;
   const sidebarNavEntries: NavEntry[] = workspace
     ? [
-        {
-          label: `${workspace.shortTitle} workspace`,
-          to: workspace.path,
-          match: (pathname) => pathname === workspace.path || pathname.startsWith(`${workspace.path}/tools/`),
-          description: 'Industry-specific tool shell',
-          icon: workspace.icon,
-        },
-        {
-          label: 'Collection guide',
-          to: workspace.collectionPath,
-          match: (pathname) => pathname === workspace.collectionPath,
-          description: 'Editorial workflow guide',
-          icon: Lightbulb,
-        },
+        ...workspaces.map((entry) => ({
+          label: `${entry.shortTitle} workspace`,
+          to: entry.path,
+          match: (pathname: string) => pathname === entry.path || Boolean(getIndustryWorkspaceByPathname(pathname)?.slug === entry.slug),
+          description: entry.audience,
+          icon: entry.icon,
+        })),
+        ...(workspace.collectionPath
+          ? [
+              {
+                label: 'Collections',
+                to: workspace.collectionPath,
+                match: (pathname: string) => pathname === workspace.collectionPath || pathname.startsWith('/collections'),
+                description: 'Role and workflow guides',
+                icon: Lightbulb,
+              },
+            ]
+          : []),
         {
           label: 'Feedback',
           to: '/feedback',
@@ -319,6 +313,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         },
       ]
     : [
+        ...workspaces.map((entry) => ({
+          label: `${entry.shortTitle} workspace`,
+          to: entry.path,
+          match: (pathname: string) => pathname === entry.path,
+          description: entry.audience,
+          icon: entry.icon,
+        })),
         {
           label: 'Guides',
           to: '/guides',
@@ -351,12 +352,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   const topbarLinks = workspace
     ? [
+        { label: 'Workspaces', to: '/workspaces' },
         { label: `${workspace.shortTitle} workspace`, to: workspace.path },
-        { label: 'Collection guide', to: workspace.collectionPath },
+        ...(workspace.collectionPath ? [{ label: 'Collections', to: workspace.collectionPath }] : []),
         { label: 'All collections', to: '/collections' },
         { label: 'About', to: '/about' },
       ]
     : [
+        { label: 'Workspaces', to: '/workspaces' },
         { label: 'Guides', to: '/guides' },
         { label: 'Collections', to: '/collections' },
         { label: 'About', to: '/about' },
@@ -390,18 +393,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           >
             <X size={20} />
           </button>
-          <div className="sidebar__brand-copy">
+          <Link
+            to="/"
+            className="sidebar__brand-copy"
+            aria-label="Go to UtilityHub home"
+            onClick={() => setMobileSidebarOpen(false)}
+          >
             <BrandMark withWordmark />
-            <p className="sidebar__subtitle">
-              {workspace?.subtitle ?? 'Minimal browser-side utilities for developers, reviewers, and platform teams'}
-            </p>
-          </div>
+          </Link>
         </div>
 
         <div className="sidebar__section">
           <div className="sidebar__section-head">
-            <p className="sidebar__label">Tools</p>
-            <span className="sidebar__count">{filteredTools.length}</span>
+            <p className="sidebar__label">{isWorkspaceContext ? 'Tools' : 'Workspaces'}</p>
+            <span className="sidebar__count">{isWorkspaceContext ? filteredTools.length : workspaces.length}</span>
           </div>
         </div>
 
@@ -426,57 +431,59 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <div className="sidebar__section sidebar__section--grow">
-          <div className="sidebar__scroll">
-            <nav className="sidebar__accordion">
-              {visibleGroups.map((group) => {
-                const isOpen = openGroups[group.id];
+        {isWorkspaceContext ? (
+          <div className="sidebar__section sidebar__section--grow">
+            <div className="sidebar__scroll">
+              <nav className="sidebar__accordion">
+                {visibleGroups.map((group) => {
+                  const isOpen = openGroups[group.id];
 
-                return (
-                  <section key={group.id} className="sidebar__accordion-section">
-                    <button
-                      type="button"
-                      className={`sidebar__accordion-trigger ${isOpen ? 'is-open' : ''}`}
-                      onClick={() => toggleGroup(group.id)}
-                      aria-expanded={isOpen}
-                      aria-controls={`sidebar-panel-${group.id.toLowerCase()}`}
-                    >
-                      <ChevronDown size={18} />
-                      <span>{group.title}</span>
-                    </button>
+                  return (
+                    <section key={group.id} className="sidebar__accordion-section">
+                      <button
+                        type="button"
+                        className={`sidebar__accordion-trigger ${isOpen ? 'is-open' : ''}`}
+                        onClick={() => toggleGroup(group.id)}
+                        aria-expanded={isOpen}
+                        aria-controls={`sidebar-panel-${group.id.toLowerCase()}`}
+                      >
+                        <ChevronDown size={18} />
+                        <span>{group.title}</span>
+                      </button>
 
-                    <div
-                      id={`sidebar-panel-${group.id.toLowerCase()}`}
-                      className={`sidebar__accordion-panel ${isOpen ? 'is-open' : ''}`}
-                      hidden={!isOpen}
-                    >
-                      <div className="sidebar__accordion-rail" aria-hidden="true" />
-                      <div className="sidebar__group sidebar__group--nested">
-                        {group.tools.map((tool) => {
-                          const Icon = tool.icon;
+                      <div
+                        id={`sidebar-panel-${group.id.toLowerCase()}`}
+                        className={`sidebar__accordion-panel ${isOpen ? 'is-open' : ''}`}
+                        hidden={!isOpen}
+                      >
+                        <div className="sidebar__accordion-rail" aria-hidden="true" />
+                        <div className="sidebar__group sidebar__group--nested">
+                          {group.tools.map((tool) => {
+                            const Icon = tool.icon;
 
-                          return (
-                            <Link
-                              key={tool.id}
-                              to={tool.navigationPath}
-                              className={`sidebar__item sidebar__item--link ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
-                              onClick={() => setMobileSidebarOpen(false)}
-                            >
-                              <Icon size={18} />
-                              <div>
-                                <p>{tool.name}</p>
-                              </div>
-                            </Link>
-                          );
-                        })}
+                            return (
+                              <Link
+                                key={tool.id}
+                                to={tool.navigationPath}
+                                className={`sidebar__item sidebar__item--link ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
+                                onClick={() => setMobileSidebarOpen(false)}
+                              >
+                                <Icon size={18} />
+                                <div>
+                                  <p>{tool.name}</p>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  </section>
-                );
-              })}
-            </nav>
+                    </section>
+                  );
+                })}
+              </nav>
+            </div>
           </div>
-        </div>
+        ) : null}
       </aside>
 
       {!isDesktop && mobileSidebarOpen ? (
@@ -506,7 +513,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                 type="text"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={workspace?.searchPlaceholder ?? 'Search'}
+                placeholder={workspace?.searchPlaceholder ?? 'Open a workspace to search tools'}
+                disabled={!isWorkspaceContext}
               />
               <span className="searchbar__hint">Ctrl + K</span>
             </label>
@@ -530,13 +538,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             >
               {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <Link className="cta-button" to={workspace ? `${workspace.path}#mechanical-tool-groups` : '/#all-tools'}>
+            <Link className="cta-button" to={workspace ? `${workspace.path}#${workspace.slug}-tool-groups` : '/workspaces'}>
               {workspace?.ctaLabel ?? 'View tools'}
             </Link>
           </div>
         </header>
 
-        {!isDesktop && query.trim().length > 0 ? (
+        {!isDesktop && query.trim().length > 0 && isWorkspaceContext ? (
           <section className="mobile-search-results" aria-label="Search results">
             <div className="mobile-search-results__head">
               <strong>Matching tools</strong>
