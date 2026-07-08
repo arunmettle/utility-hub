@@ -2,7 +2,7 @@
   "name": "UtilityHub",
   "siteUrl": "https://utilityhub.dev",
   "privacyModel": "browser-local",
-  "toolCount": 149,
+  "toolCount": 158,
   "guideCount": 144,
   "collectionCount": 22,
   "categories": [
@@ -16,9 +16,9 @@
     "AI"
   ],
   "collections": [
-    { "slug": "civil-construction", "title": "Civil & Construction Toolkit", "path": "/collections/civil-construction", "toolCount": 3 },
-    { "slug": "mechanical-manufacturing", "title": "Mechanical & Manufacturing Toolkit", "path": "/collections/mechanical-manufacturing", "toolCount": 6 },
-    { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 5 },
+    { "slug": "civil-construction", "title": "Civil & Construction Toolkit", "path": "/collections/civil-construction", "toolCount": 6 },
+    { "slug": "mechanical-manufacturing", "title": "Mechanical & Manufacturing Toolkit", "path": "/collections/mechanical-manufacturing", "toolCount": 9 },
+    { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 8 },
     { "slug": "medical-clinical", "title": "Medical & Clinical Toolkit", "path": "/collections/medical-clinical", "toolCount": 1 },
     { "slug": "mining-resources", "title": "Mining & Resources Toolkit", "path": "/collections/mining-resources", "toolCount": 3 },
     { "slug": "operations-field-teams", "title": "Operations & Field Teams Toolkit", "path": "/collections/operations-field-teams", "toolCount": 3 },
@@ -89,6 +89,69 @@
       "category": "Developer",
       "path": "/mechanical-formula-finder",
       "guidePath": "/guides/mechanical-formula-finder"
+    },
+    {
+      "id": "bearing-life-calculator",
+      "name": "Bearing Life Calculator",
+      "description": "Estimate bearing life from load, rating, speed, and a visible service factor.",
+      "category": "Converters",
+      "path": "/bearing-life-calculator"
+    },
+    {
+      "id": "gear-ratio-calculator",
+      "name": "Gear Ratio & Torque Calculator",
+      "description": "Turn tooth counts, speed, and torque into a quick gear ratio screen with efficiency assumptions.",
+      "category": "Converters",
+      "path": "/gear-ratio-calculator"
+    },
+    {
+      "id": "belt-drive-calculator",
+      "name": "Belt Drive Calculator",
+      "description": "Check pulley speed ratio, belt speed, and approximate belt length for a simple drive layout.",
+      "category": "Converters",
+      "path": "/belt-drive-calculator"
+    },
+    {
+      "id": "site-handover-builder",
+      "name": "Site Handover Builder",
+      "description": "Turn rough civil site notes into grouped actions, urgent items, and a cleaner markdown handover.",
+      "category": "Generators",
+      "path": "/site-handover-builder"
+    },
+    {
+      "id": "earthworks-balance-calculator",
+      "name": "Earthworks Balance Calculator",
+      "description": "Screen cut, fill, swell, and shrink balances from a simple browser-local volume check.",
+      "category": "Converters",
+      "path": "/earthworks-balance-calculator"
+    },
+    {
+      "id": "invert-slope-calculator",
+      "name": "Invert & Slope Calculator",
+      "description": "Check drainage or pipe-run fall, slope, and midpoint invert without opening a spreadsheet.",
+      "category": "Converters",
+      "path": "/invert-slope-calculator"
+    },
+    {
+      "id": "breaker-protection-checker",
+      "name": "Breaker Protection Checker",
+      "description": "Screen a breaker choice against load, continuous duty, and derating in the browser.",
+      "category": "Testers",
+      "path": "/breaker-protection-checker"
+    },
+    {
+      "id": "lighting-load-calculator",
+      "name": "Lighting Load Calculator",
+      "description": "Estimate lighting power, current, and fixture count from area and density assumptions.",
+      "category": "Converters",
+      "path": "/lighting-load-calculator"
+    },
+    {
+      "id": "motor-starting-current-calculator",
+      "name": "Motor Starting Current Calculator",
+      "description": "Estimate inrush current, starting kVA, and a rough voltage dip preview for a simple motor start.",
+      "category": "Converters",
+      "path": "/motor-starting-current-calculator"
     },
     {
       "id": "json-formatter",

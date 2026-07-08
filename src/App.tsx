@@ -149,14 +149,23 @@ const DrawingRevisionDiffChecker = lazy(() => import('./tools/DrawingRevisionDif
 const ToleranceStackupAnalyzer = lazy(() => import('./tools/ToleranceStackupAnalyzer'));
 const BomDiffChecker = lazy(() => import('./tools/BomDiffChecker'));
 const HoleShaftFitCalculator = lazy(() => import('./tools/HoleShaftFitCalculator'));
+const BearingLifeCalculator = lazy(() => import('./tools/BearingLifeCalculator'));
+const GearRatioCalculator = lazy(() => import('./tools/GearRatioCalculator'));
+const BeltDriveCalculator = lazy(() => import('./tools/BeltDriveCalculator'));
 const MechanicalFormulaFinder = lazy(() => import('./tools/MechanicalFormulaFinder'));
 const MaterialTakeoffCarbonEstimator = lazy(() => import('./tools/MaterialTakeoffCarbonEstimator'));
 const BoqDiffChecker = lazy(() => import('./tools/BoqDiffChecker'));
+const SiteHandoverBuilder = lazy(() => import('./tools/SiteHandoverBuilder'));
+const EarthworksBalanceCalculator = lazy(() => import('./tools/EarthworksBalanceCalculator'));
+const InvertSlopeCalculator = lazy(() => import('./tools/InvertSlopeCalculator'));
 const CivilFormulaFinder = lazy(() => import('./tools/CivilFormulaFinder'));
 const VoltageDropCalculator = lazy(() => import('./tools/VoltageDropCalculator'));
 const CableSizingAssistant = lazy(() => import('./tools/CableSizingAssistant'));
 const ConduitFillCalculator = lazy(() => import('./tools/ConduitFillCalculator'));
 const PanelScheduleBuilder = lazy(() => import('./tools/PanelScheduleBuilder'));
+const BreakerProtectionChecker = lazy(() => import('./tools/BreakerProtectionChecker'));
+const LightingLoadCalculator = lazy(() => import('./tools/LightingLoadCalculator'));
+const MotorStartingCurrentCalculator = lazy(() => import('./tools/MotorStartingCurrentCalculator'));
 const ElectricalFormulaFinder = lazy(() => import('./tools/ElectricalFormulaFinder'));
 
 const loadAiWorkbench = () => import('./tools/AiWorkbench');
@@ -333,12 +342,24 @@ const appRoutes: AppRoute[] = [
   { path: '/workspaces/mechanical/tools/bom-diff-checker', Component: BomDiffChecker },
   { path: '/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
   { path: '/workspaces/mechanical/tools/hole-shaft-fit-calculator', Component: HoleShaftFitCalculator },
+  { path: '/bearing-life-calculator', Component: BearingLifeCalculator },
+  { path: '/workspaces/mechanical/tools/bearing-life-calculator', Component: BearingLifeCalculator },
+  { path: '/gear-ratio-calculator', Component: GearRatioCalculator },
+  { path: '/workspaces/mechanical/tools/gear-ratio-calculator', Component: GearRatioCalculator },
+  { path: '/belt-drive-calculator', Component: BeltDriveCalculator },
+  { path: '/workspaces/mechanical/tools/belt-drive-calculator', Component: BeltDriveCalculator },
   { path: '/mechanical-formula-finder', Component: MechanicalFormulaFinder },
   { path: '/workspaces/mechanical/tools/mechanical-formula-finder', Component: MechanicalFormulaFinder },
   { path: '/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
   { path: '/workspaces/civil/tools/material-takeoff-carbon-estimator', Component: MaterialTakeoffCarbonEstimator },
   { path: '/boq-diff-checker', Component: BoqDiffChecker },
   { path: '/workspaces/civil/tools/boq-diff-checker', Component: BoqDiffChecker },
+  { path: '/site-handover-builder', Component: SiteHandoverBuilder },
+  { path: '/workspaces/civil/tools/site-handover-builder', Component: SiteHandoverBuilder },
+  { path: '/earthworks-balance-calculator', Component: EarthworksBalanceCalculator },
+  { path: '/workspaces/civil/tools/earthworks-balance-calculator', Component: EarthworksBalanceCalculator },
+  { path: '/invert-slope-calculator', Component: InvertSlopeCalculator },
+  { path: '/workspaces/civil/tools/invert-slope-calculator', Component: InvertSlopeCalculator },
   { path: '/civil-formula-finder', Component: CivilFormulaFinder },
   { path: '/workspaces/civil/tools/civil-formula-finder', Component: CivilFormulaFinder },
   { path: '/voltage-drop-calculator', Component: VoltageDropCalculator },
@@ -349,6 +370,12 @@ const appRoutes: AppRoute[] = [
   { path: '/workspaces/electrical/tools/conduit-fill-calculator', Component: ConduitFillCalculator },
   { path: '/panel-schedule-builder', Component: PanelScheduleBuilder },
   { path: '/workspaces/electrical/tools/panel-schedule-builder', Component: PanelScheduleBuilder },
+  { path: '/breaker-protection-checker', Component: BreakerProtectionChecker },
+  { path: '/workspaces/electrical/tools/breaker-protection-checker', Component: BreakerProtectionChecker },
+  { path: '/lighting-load-calculator', Component: LightingLoadCalculator },
+  { path: '/workspaces/electrical/tools/lighting-load-calculator', Component: LightingLoadCalculator },
+  { path: '/motor-starting-current-calculator', Component: MotorStartingCurrentCalculator },
+  { path: '/workspaces/electrical/tools/motor-starting-current-calculator', Component: MotorStartingCurrentCalculator },
   { path: '/electrical-formula-finder', Component: ElectricalFormulaFinder },
   { path: '/workspaces/electrical/tools/electrical-formula-finder', Component: ElectricalFormulaFinder },
   { path: '/prompt-studio', Component: PromptStudio },
@@ -398,14 +425,23 @@ const redirectRoutes = [
   { path: '/industries/mechanical/tools/tolerance-stackup-analyzer', to: '/workspaces/mechanical/tools/tolerance-stackup-analyzer' },
   { path: '/industries/mechanical/tools/bom-diff-checker', to: '/workspaces/mechanical/tools/bom-diff-checker' },
   { path: '/industries/mechanical/tools/hole-shaft-fit-calculator', to: '/workspaces/mechanical/tools/hole-shaft-fit-calculator' },
+  { path: '/industries/mechanical/tools/bearing-life-calculator', to: '/workspaces/mechanical/tools/bearing-life-calculator' },
+  { path: '/industries/mechanical/tools/gear-ratio-calculator', to: '/workspaces/mechanical/tools/gear-ratio-calculator' },
+  { path: '/industries/mechanical/tools/belt-drive-calculator', to: '/workspaces/mechanical/tools/belt-drive-calculator' },
   { path: '/industries/mechanical/tools/mechanical-formula-finder', to: '/workspaces/mechanical/tools/mechanical-formula-finder' },
   { path: '/industries/civil/tools/material-takeoff-carbon-estimator', to: '/workspaces/civil/tools/material-takeoff-carbon-estimator' },
   { path: '/industries/civil/tools/boq-diff-checker', to: '/workspaces/civil/tools/boq-diff-checker' },
+  { path: '/industries/civil/tools/site-handover-builder', to: '/workspaces/civil/tools/site-handover-builder' },
+  { path: '/industries/civil/tools/earthworks-balance-calculator', to: '/workspaces/civil/tools/earthworks-balance-calculator' },
+  { path: '/industries/civil/tools/invert-slope-calculator', to: '/workspaces/civil/tools/invert-slope-calculator' },
   { path: '/industries/civil/tools/civil-formula-finder', to: '/workspaces/civil/tools/civil-formula-finder' },
   { path: '/industries/electrical/tools/voltage-drop-calculator', to: '/workspaces/electrical/tools/voltage-drop-calculator' },
   { path: '/industries/electrical/tools/cable-sizing-assistant', to: '/workspaces/electrical/tools/cable-sizing-assistant' },
   { path: '/industries/electrical/tools/conduit-fill-calculator', to: '/workspaces/electrical/tools/conduit-fill-calculator' },
   { path: '/industries/electrical/tools/panel-schedule-builder', to: '/workspaces/electrical/tools/panel-schedule-builder' },
+  { path: '/industries/electrical/tools/breaker-protection-checker', to: '/workspaces/electrical/tools/breaker-protection-checker' },
+  { path: '/industries/electrical/tools/lighting-load-calculator', to: '/workspaces/electrical/tools/lighting-load-calculator' },
+  { path: '/industries/electrical/tools/motor-starting-current-calculator', to: '/workspaces/electrical/tools/motor-starting-current-calculator' },
   { path: '/industries/electrical/tools/electrical-formula-finder', to: '/workspaces/electrical/tools/electrical-formula-finder' },
 ];
 

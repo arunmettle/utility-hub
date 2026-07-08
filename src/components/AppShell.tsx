@@ -504,7 +504,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               {sidebarVisible ? <X size={22} /> : <Menu size={22} />}
             </button>
             <Link to="/" className="icon-button icon-button--brand" aria-label="UtilityHub home">
-              <BrandMark size={30} />
+              <BrandMark size={36} />
             </Link>
             <label className="searchbar" htmlFor="tool-search">
               <Search size={18} />

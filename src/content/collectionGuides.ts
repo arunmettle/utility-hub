@@ -22,7 +22,7 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
       useCases: [
         'You need to compare revision text from drawings, notes, or schedules before a coordination meeting.',
         'You want a fast pressure-drop or head-loss sense check during concept, tender, or site troubleshooting work.',
-        'You need to compare quantities or estimate embodied carbon from a simple export before a tender review.',
+        'You need to compare quantities, estimate embodied carbon, or sanity-check field notes before a tender review.',
       ],
       sections: [
         {
@@ -50,6 +50,16 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
           body: 'Civil Formula Finder gives a clean lookup surface for common hydraulics, earthworks, concrete, and geometry relations that often get buried in notes.',
           toolIds: ['civil-formula-finder'],
         },
+        {
+          title: 'Bridge site notes into handover',
+          body: 'Site Handover Builder turns rough field notes into grouped actions, urgent items, and cleaner markdown before the next handoff.',
+          toolIds: ['site-handover-builder'],
+        },
+        {
+          title: 'Balance earthworks and levels locally',
+          body: 'Earthworks Balance Calculator and Invert & Slope Calculator give a quick planning surface for cut/fill and drainage-level checks before heavier design work.',
+          toolIds: ['earthworks-balance-calculator', 'invert-slope-calculator'],
+        },
       ],
       closing:
         'For civil and construction teams, the value is speed with less leakage: smaller jobs stay lightweight, local, and easier to share cleanly.',
@@ -64,7 +74,7 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
       useCases: [
         'You need to build or review a tolerance stack without inheriting another messy workbook.',
         'You want to compare two BOM or drawing revisions before release.',
-        'You need a fast fit or pressure-drop sanity check before stepping into heavier tools.',
+        'You need a fast fit, drive, or pressure-drop sanity check before stepping into heavier tools.',
       ],
       sections: [
         {
@@ -82,6 +92,11 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
           body: 'Pressure Drop & Head Loss Calculator gives a quick browser-local answer for one recurring sizing check, while Mechanical Formula Finder shortens the formula lookup work that still lives in old notes, textbooks, and personal files.',
           toolIds: ['pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
         },
+        {
+          title: 'Screen motion and drive decisions',
+          body: 'Bearing Life Calculator, Gear Ratio & Torque Calculator, and Belt Drive Calculator cover the recurring motion and power-transfer checks that often start in spreadsheets.',
+          toolIds: ['bearing-life-calculator', 'gear-ratio-calculator', 'belt-drive-calculator'],
+        },
       ],
       closing:
         'For mechanical teams, the wedge is not replacing CAD. It is making the spreadsheet-and-review layer around CAD faster, clearer, and easier to trust.',
@@ -96,7 +111,7 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
       useCases: [
         'You need to check voltage drop and cable size before a design review or field coordination call.',
         'You want conduit fill and panel schedules to stay readable without opening a spreadsheet forest.',
-        'You need a quick formula lookup that stays close to the engineering workflow instead of buried in notes.',
+        'You need a quick formula lookup or protection sanity check that stays close to the engineering workflow instead of buried in notes.',
       ],
       sections: [
         {
@@ -113,6 +128,11 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
           title: 'Keep formulas close at hand',
           body: 'Electrical Formula Finder gives a clean browser-local lookup for the equations engineers reuse in daily checks.',
           toolIds: ['electrical-formula-finder'],
+        },
+        {
+          title: 'Check protection and starting locally',
+          body: 'Breaker Protection Checker, Lighting Load Calculator, and Motor Starting Current Calculator keep the next screening step visible before a deeper study starts.',
+          toolIds: ['breaker-protection-checker', 'lighting-load-calculator', 'motor-starting-current-calculator'],
         },
       ],
       closing:

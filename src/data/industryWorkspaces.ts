@@ -38,11 +38,37 @@ function uniqueToolIds(toolIds: string[]) {
   return Array.from(new Set(toolIds));
 }
 
+const mechanicalWorkspaceToolIds = [
+  'tolerance-stackup-analyzer',
+  'hole-shaft-fit-calculator',
+  'bom-diff-checker',
+  'drawing-revision-diff-checker',
+  'pressure-drop-head-loss-calculator',
+  'bearing-life-calculator',
+  'gear-ratio-calculator',
+  'belt-drive-calculator',
+  'mechanical-formula-finder',
+];
+
+const civilWorkspaceToolIds = [
+  'drawing-revision-diff-checker',
+  'pressure-drop-head-loss-calculator',
+  'material-takeoff-carbon-estimator',
+  'boq-diff-checker',
+  'site-handover-builder',
+  'earthworks-balance-calculator',
+  'invert-slope-calculator',
+  'civil-formula-finder',
+];
+
 const electricalWorkspaceToolIds = [
   'voltage-drop-calculator',
   'cable-sizing-assistant',
   'conduit-fill-calculator',
   'panel-schedule-builder',
+  'breaker-protection-checker',
+  'lighting-load-calculator',
+  'motor-starting-current-calculator',
   'electrical-formula-finder',
 ];
 
@@ -79,14 +105,7 @@ export const mechanicalWorkspace: IndustryWorkspace = {
   searchPlaceholder: 'Search mechanical tools',
   ctaLabel: 'Mechanical workspace',
   icon: Factory,
-  toolIds: [
-    'tolerance-stackup-analyzer',
-    'hole-shaft-fit-calculator',
-    'bom-diff-checker',
-    'drawing-revision-diff-checker',
-    'pressure-drop-head-loss-calculator',
-    'mechanical-formula-finder',
-  ],
+  toolIds: mechanicalWorkspaceToolIds,
   sections: [
     {
       id: 'fit-and-tolerance',
@@ -106,6 +125,12 @@ export const mechanicalWorkspace: IndustryWorkspace = {
       description: 'Keep recurring fluid and design-reference calculations close to the review workflow instead of buried in spreadsheets or PDFs.',
       toolIds: ['pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
     },
+    {
+      id: 'motion-and-drive-checks',
+      title: 'Motion and drive checks',
+      description: 'Use these when bearing life, gear ratio, or belt layout questions need a quick browser-local sanity check before deeper design work.',
+      toolIds: ['bearing-life-calculator', 'gear-ratio-calculator', 'belt-drive-calculator'],
+    },
   ],
   aliases: ['/industries/mechanical'],
 };
@@ -123,13 +148,7 @@ export const civilWorkspace: IndustryWorkspace = {
   searchPlaceholder: 'Search civil tools',
   ctaLabel: 'Civil workspace',
   icon: Building2,
-  toolIds: [
-    'drawing-revision-diff-checker',
-    'pressure-drop-head-loss-calculator',
-    'material-takeoff-carbon-estimator',
-    'boq-diff-checker',
-    'civil-formula-finder',
-  ],
+  toolIds: civilWorkspaceToolIds,
   sections: [
     {
       id: 'revision-and-quantity',
@@ -155,6 +174,18 @@ export const civilWorkspace: IndustryWorkspace = {
       description: 'Use this when a quick civil formula reference is faster than digging through old notes or handbook tabs.',
       toolIds: ['civil-formula-finder'],
     },
+    {
+      id: 'field-handover',
+      title: 'Field handover',
+      description: 'Use this when rough civil site notes need to become a cleaner handover with actions, urgent items, and markdown output.',
+      toolIds: ['site-handover-builder'],
+    },
+    {
+      id: 'earthworks-and-levels',
+      title: 'Earthworks and levels',
+      description: 'Use this when cut/fill balances or invert and slope checks need a quick browser-local planning surface.',
+      toolIds: ['earthworks-balance-calculator', 'invert-slope-calculator'],
+    },
   ],
   aliases: ['/industries/civil'],
 };
@@ -176,9 +207,9 @@ export const electricalWorkspace: IndustryWorkspace = {
   sections: [
     {
       id: 'load-and-cable-checks',
-      title: 'Load and cable checks',
-      description: 'Start here when current, drop limits, and routing decisions need a quick browser-local sanity check.',
-      toolIds: ['voltage-drop-calculator', 'cable-sizing-assistant', 'conduit-fill-calculator'],
+      title: 'Load, cable, and lighting checks',
+      description: 'Start here when current, drop limits, lighting loads, and routing decisions need a quick browser-local sanity check.',
+      toolIds: ['voltage-drop-calculator', 'cable-sizing-assistant', 'conduit-fill-calculator', 'lighting-load-calculator'],
     },
     {
       id: 'panel-review',
@@ -192,13 +223,19 @@ export const electricalWorkspace: IndustryWorkspace = {
       description: 'Keep recurring electrical equations close to the review workflow instead of buried in old notes or tabs.',
       toolIds: ['electrical-formula-finder'],
     },
+    {
+      id: 'protection-and-starting',
+      title: 'Protection and starting',
+      description: 'Use this when breaker selection or motor start checks need a quick local screen before a deeper study.',
+      toolIds: ['breaker-protection-checker', 'motor-starting-current-calculator'],
+    },
   ],
   aliases: ['/industries/electrical', '/industries/electrical-power'],
 };
 
 const industrySpecificToolIds = uniqueToolIds([
-  ...mechanicalWorkspace.toolIds,
-  ...civilWorkspace.toolIds,
+  ...mechanicalWorkspaceToolIds,
+  ...civilWorkspaceToolIds,
   ...electricalWorkspaceToolIds,
 ]);
 

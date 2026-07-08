@@ -22,8 +22,8 @@ const cableResistanceTable = [
   { sizeMm2: 4, copper: 4.61, aluminum: 7.65 },
   { sizeMm2: 6, copper: 3.08, aluminum: 5.07 },
   { sizeMm2: 10, copper: 1.83, aluminum: 3.02 },
-  { sizeMm2: 16, copper: 1.15, aluminum: 1.90 },
-  { sizeMm2: 25, copper: 0.727, aluminum: 1.20 },
+  { sizeMm2: 16, copper: 1.15, aluminum: 1.9 },
+  { sizeMm2: 25, copper: 0.727, aluminum: 1.2 },
   { sizeMm2: 35, copper: 0.524, aluminum: 0.865 },
   { sizeMm2: 50, copper: 0.387, aluminum: 0.639 },
   { sizeMm2: 70, copper: 0.268, aluminum: 0.443 },
@@ -180,7 +180,7 @@ export function calculateVoltageDrop(inputs: VoltageDropInputs): VoltageDropOutp
   const resistanceOhmPerKm = getResistance(inputs.conductorSizeMm2, inputs.conductorMaterial);
   const dropVolts = (phaseFactor * current * resistanceOhmPerKm * length) / 1000;
   const dropPercent = (dropVolts / voltage) * 100;
-  const maxRecommendedLengthMeters = (targetDropPercent / 100) * voltage * 1000 / (phaseFactor * current * resistanceOhmPerKm);
+  const maxRecommendedLengthMeters = ((targetDropPercent / 100) * voltage * 1000) / (phaseFactor * current * resistanceOhmPerKm);
 
   return {
     resistanceOhmPerKm,
@@ -427,7 +427,7 @@ export function buildPanelSchedule(
   const spareWays = Math.max(0, Math.round(clampPositive(panelWays, occupiedWays) - occupiedWays));
   const averagePhaseWatts = totalWatts / 3;
   const imbalancePercent =
-    averagePhaseWatts > 0 ? (Math.max(phaseWatts.A, phaseWatts.B, phaseWatts.C) - averagePhaseWatts) / averagePhaseWatts * 100 : 0;
+    averagePhaseWatts > 0 ? ((Math.max(phaseWatts.A, phaseWatts.B, phaseWatts.C) - averagePhaseWatts) / averagePhaseWatts) * 100 : 0;
   const estimatedDemandAmps = totalWatts / (clampPositive(systemVoltage, 230) * clampPositive(powerFactor, 0.95));
 
   return {
@@ -583,4 +583,139 @@ export function findElectricalFormulas(query: string, category: string) {
     const haystack = [formula.title, formula.formula, formula.notes, ...formula.variables].join(' ').toLowerCase();
     return haystack.includes(normalizedQuery);
   });
+}
+
+export interface BreakerProtectionInput {
+  loadCurrentA: number;
+  continuousFactor: number;
+  deratingFactor: number;
+  selectedBreakerA: number;
+}
+
+export interface BreakerProtectionOutput {
+  requiredCurrentA: number;
+  recommendedStandardBreakerA: number;
+  selectedBreakerA: number;
+  loadingPercent: number;
+  headroomA: number;
+  passes: boolean;
+  report: string;
+}
+
+const standardBreakerRatings = [6, 10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500];
+
+export function checkBreakerProtection(input: BreakerProtectionInput): BreakerProtectionOutput {
+  const loadCurrentA = clampPositive(input.loadCurrentA, 0);
+  const continuousFactor = clampPositive(input.continuousFactor, 1);
+  const deratingFactor = clampPositive(input.deratingFactor, 1);
+  const selectedBreakerA = clampPositive(input.selectedBreakerA, 1);
+  const requiredCurrentA = (loadCurrentA * continuousFactor) / deratingFactor;
+  const recommendedStandardBreakerA =
+    standardBreakerRatings.find((rating) => rating >= requiredCurrentA) ?? standardBreakerRatings[standardBreakerRatings.length - 1];
+  const loadingPercent = (loadCurrentA / selectedBreakerA) * 100;
+  const headroomA = selectedBreakerA - requiredCurrentA;
+  const passes = selectedBreakerA >= requiredCurrentA;
+  const report = [
+    'Breaker Check Summary',
+    `Required current: ${requiredCurrentA.toFixed(1)} A`,
+    `Recommended breaker: ${recommendedStandardBreakerA} A`,
+    `Selected breaker: ${selectedBreakerA.toFixed(0)} A`,
+    `Loading: ${loadingPercent.toFixed(1)}%`,
+    `Headroom: ${headroomA.toFixed(1)} A`,
+  ].join('\n');
+
+  return {
+    requiredCurrentA,
+    recommendedStandardBreakerA,
+    selectedBreakerA,
+    loadingPercent,
+    headroomA,
+    passes,
+    report,
+  };
+}
+
+export interface LightingLoadInput {
+  areaM2: number;
+  densityWPerM2: number;
+  voltageV: number;
+  powerFactor: number;
+  fixtureWatts: number;
+}
+
+export interface LightingLoadOutput {
+  totalPowerW: number;
+  currentA: number;
+  estimatedFixtureCount: number;
+  wattsPerFixture: number;
+  report: string;
+}
+
+export function calculateLightingLoad(input: LightingLoadInput): LightingLoadOutput {
+  const areaM2 = clampPositive(input.areaM2, 1);
+  const densityWPerM2 = clampPositive(input.densityWPerM2, 1);
+  const voltageV = clampPositive(input.voltageV, 1);
+  const powerFactor = Math.min(Math.max(input.powerFactor, 0.1), 1);
+  const fixtureWatts = clampPositive(input.fixtureWatts, 1);
+  const totalPowerW = areaM2 * densityWPerM2;
+  const currentA = totalPowerW / (voltageV * powerFactor);
+  const estimatedFixtureCount = Math.max(1, Math.ceil(totalPowerW / fixtureWatts));
+  const report = [
+    'Lighting Load Summary',
+    `Area: ${areaM2.toFixed(1)} m2`,
+    `Total load: ${totalPowerW.toFixed(1)} W`,
+    `Current: ${currentA.toFixed(2)} A`,
+    `Fixture count: ${estimatedFixtureCount}`,
+  ].join('\n');
+
+  return {
+    totalPowerW,
+    currentA,
+    estimatedFixtureCount,
+    wattsPerFixture: fixtureWatts,
+    report,
+  };
+}
+
+export type MotorPhase = 'single' | 'three';
+
+export interface MotorStartingInput {
+  fullLoadAmps: number;
+  startMultiplier: number;
+  voltageV: number;
+  phase: MotorPhase;
+  sourceFaultCurrentA: number;
+}
+
+export interface MotorStartingOutput {
+  startingCurrentA: number;
+  apparentPowerKVA: number;
+  voltageDipPercent: number | null;
+  report: string;
+}
+
+export function calculateMotorStarting(input: MotorStartingInput): MotorStartingOutput {
+  const fullLoadAmps = clampPositive(input.fullLoadAmps, 0.1);
+  const startMultiplier = clampPositive(input.startMultiplier, 1);
+  const voltageV = clampPositive(input.voltageV, 1);
+  const sourceFaultCurrentA = clampPositive(input.sourceFaultCurrentA, 0);
+  const startingCurrentA = fullLoadAmps * startMultiplier;
+  const apparentPowerKVA =
+    input.phase === 'three'
+      ? (Math.sqrt(3) * voltageV * startingCurrentA) / 1000
+      : (voltageV * startingCurrentA) / 1000;
+  const voltageDipPercent = sourceFaultCurrentA > 0 ? (startingCurrentA / sourceFaultCurrentA) * 100 : null;
+  const report = [
+    'Motor Starting Summary',
+    `Starting current: ${startingCurrentA.toFixed(1)} A`,
+    `Starting kVA: ${apparentPowerKVA.toFixed(2)} kVA`,
+    `Voltage dip: ${voltageDipPercent === null ? 'n/a' : `${voltageDipPercent.toFixed(1)}%`}`,
+  ].join('\n');
+
+  return {
+    startingCurrentA,
+    apparentPowerKVA,
+    voltageDipPercent,
+    report,
+  };
 }
