@@ -1,4 +1,4 @@
-import { BarChart3, Blocks, Building2, Factory, FileSearch, Gauge, PackageSearch, Sigma, Table2, Wrench, Zap, type LucideIcon } from 'lucide-react';
+import { Activity, BarChart3, Blocks, Building2, ClipboardList, Factory, FileSearch, Gauge, HeartPulse, PackageSearch, ShieldAlert, Sigma, Table2, Wrench, Zap, type LucideIcon } from 'lucide-react';
 import { categories, tools, type ToolDefinition, type ToolCategory } from './tools';
 
 export interface IndustryWorkspaceSection {
@@ -39,6 +39,9 @@ function uniqueToolIds(toolIds: string[]) {
 }
 
 const mechanicalWorkspaceToolIds = [
+  'tolerance-change-impact-checker',
+  'drawing-inspection-reconciler',
+  'fastener-clamp-load-checker',
   'tolerance-stackup-analyzer',
   'hole-shaft-fit-calculator',
   'bom-diff-checker',
@@ -51,6 +54,9 @@ const mechanicalWorkspaceToolIds = [
 ];
 
 const civilWorkspaceToolIds = [
+  'drainage-schedule-qa-checker',
+  'boq-spec-cross-checker',
+  'tender-addendum-impact-checker',
   'drawing-revision-diff-checker',
   'pressure-drop-head-loss-calculator',
   'material-takeoff-carbon-estimator',
@@ -62,6 +68,9 @@ const civilWorkspaceToolIds = [
 ];
 
 const electricalWorkspaceToolIds = [
+  'cable-schedule-qa-checker',
+  'panel-revision-qa-checker',
+  'load-list-reconciler',
   'voltage-drop-calculator',
   'cable-sizing-assistant',
   'conduit-fill-calculator',
@@ -70,6 +79,33 @@ const electricalWorkspaceToolIds = [
   'lighting-load-calculator',
   'motor-starting-current-calculator',
   'electrical-formula-finder',
+];
+
+const medicalWorkspaceToolIds = [
+  'clinical-handover-completeness-linter',
+  'discharge-instruction-delta-audit',
+  'referral-packet-checklist-builder',
+  'shift-handover-builder',
+  'clinical-report-diff-checker',
+  'clinical-deidentifier',
+];
+
+const miningWorkspaceToolIds = [
+  'dewatering-shift-log-reconciler',
+  'isolation-matrix-change-checker',
+  'production-shift-reconciliation-checker',
+  'shift-handover-builder',
+  'pressure-drop-head-loss-calculator',
+  'drawing-revision-diff-checker',
+];
+
+const operationsWorkspaceToolIds = [
+  'shift-commitment-reconciler',
+  'work-instruction-change-checker',
+  'permit-scope-change-checker',
+  'shift-handover-builder',
+  'drawing-revision-diff-checker',
+  'secret-redactor',
 ];
 
 function buildWorkspaceSections(toolIds: string[]) {
@@ -111,19 +147,19 @@ export const mechanicalWorkspace: IndustryWorkspace = {
       id: 'fit-and-tolerance',
       title: 'Fit and tolerance checks',
       description: 'Start here when stack-ups, fits, and quick dimensional decisions are slowing design or review.',
-      toolIds: ['tolerance-stackup-analyzer', 'hole-shaft-fit-calculator'],
+      toolIds: ['tolerance-change-impact-checker', 'tolerance-stackup-analyzer', 'hole-shaft-fit-calculator'],
     },
     {
       id: 'release-and-revision',
       title: 'Release and revision review',
       description: 'Use these when BOM changes, drawing revisions, and release notes need a cleaner comparison surface.',
-      toolIds: ['bom-diff-checker', 'drawing-revision-diff-checker'],
+      toolIds: ['drawing-inspection-reconciler', 'bom-diff-checker', 'drawing-revision-diff-checker'],
     },
     {
       id: 'calculation-support',
       title: 'Calculation support',
       description: 'Keep recurring fluid and design-reference calculations close to the review workflow instead of buried in spreadsheets or PDFs.',
-      toolIds: ['pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
+      toolIds: ['fastener-clamp-load-checker', 'pressure-drop-head-loss-calculator', 'mechanical-formula-finder'],
     },
     {
       id: 'motion-and-drive-checks',
@@ -154,7 +190,13 @@ export const civilWorkspace: IndustryWorkspace = {
       id: 'revision-and-quantity',
       title: 'Revision and quantity review',
       description: 'Start here when plan notes, BOQs, or quantity exports need a quick comparison before the next coordination step.',
-      toolIds: ['drawing-revision-diff-checker', 'boq-diff-checker'],
+      toolIds: ['drainage-schedule-qa-checker', 'drawing-revision-diff-checker', 'boq-diff-checker'],
+    },
+    {
+      id: 'tender-and-spec-review',
+      title: 'Tender and spec review',
+      description: 'Use these when BOQ references, spec links, or addendum wording needs a faster review surface before tender close.',
+      toolIds: ['boq-spec-cross-checker', 'tender-addendum-impact-checker'],
     },
     {
       id: 'hydraulic-checks',
@@ -209,13 +251,19 @@ export const electricalWorkspace: IndustryWorkspace = {
       id: 'load-and-cable-checks',
       title: 'Load, cable, and lighting checks',
       description: 'Start here when current, drop limits, lighting loads, and routing decisions need a quick browser-local sanity check.',
-      toolIds: ['voltage-drop-calculator', 'cable-sizing-assistant', 'conduit-fill-calculator', 'lighting-load-calculator'],
+      toolIds: ['cable-schedule-qa-checker', 'voltage-drop-calculator', 'cable-sizing-assistant', 'conduit-fill-calculator', 'lighting-load-calculator'],
     },
     {
       id: 'panel-review',
       title: 'Panel review',
       description: 'Use this when circuit loads, spare ways, or phase balance need a cleaner schedule view.',
-      toolIds: ['panel-schedule-builder'],
+      toolIds: ['panel-revision-qa-checker', 'panel-schedule-builder'],
+    },
+    {
+      id: 'coordination-reconciliation',
+      title: 'Coordination and reconciliation',
+      description: 'Use this when load tags, panel names, or single-line assumptions need a deterministic mismatch screen.',
+      toolIds: ['load-list-reconciler'],
     },
     {
       id: 'formula-lookup',
@@ -233,10 +281,124 @@ export const electricalWorkspace: IndustryWorkspace = {
   aliases: ['/industries/electrical', '/industries/electrical-power'],
 };
 
+export const medicalWorkspace: IndustryWorkspace = {
+  slug: 'medical',
+  title: 'Medical & Clinical Workspace',
+  shortTitle: 'Medical',
+  audience: 'Medical and clinical teams',
+  path: '/workspaces/medical',
+  collectionPath: '/collections/medical-clinical',
+  subtitle: 'Medical-first browser tools for structured handovers, report comparison, and clinical note cleanup.',
+  description:
+    'A focused medical workspace that keeps handovers, report comparisons, and note de-identification together so clinicians see only the workflows that matter most.',
+  searchPlaceholder: 'Search medical tools',
+  ctaLabel: 'Medical workspace',
+  icon: HeartPulse,
+  toolIds: medicalWorkspaceToolIds,
+  sections: [
+    {
+      id: 'handover-and-notes',
+      title: 'Handover and notes',
+      description: 'Start here when shift notes, ward notes, or on-call summaries need a cleaner handover surface.',
+      toolIds: ['clinical-handover-completeness-linter', 'shift-handover-builder'],
+    },
+    {
+      id: 'report-review',
+      title: 'Report review',
+      description: 'Use this when a clinical report or extracted note needs a quick local diff before it is shared.',
+      toolIds: ['clinical-report-diff-checker', 'discharge-instruction-delta-audit'],
+    },
+    {
+      id: 'packet-readiness',
+      title: 'Packet readiness',
+      description: 'Use these when referral notes or shared material need a quick structure or privacy pass before moving onward.',
+      toolIds: ['referral-packet-checklist-builder', 'clinical-deidentifier'],
+    },
+  ],
+  aliases: ['/industries/medical', '/industries/medical-clinical'],
+};
+
+export const miningWorkspace: IndustryWorkspace = {
+  slug: 'mining',
+  title: 'Mining & Resources Workspace',
+  shortTitle: 'Mining',
+  audience: 'Mining and resources teams',
+  path: '/workspaces/mining',
+  collectionPath: '/collections/mining-resources',
+  subtitle: 'Mining-first browser tools for handover, hydraulic checks, and revision review.',
+  description:
+    'A focused mining workspace that keeps shift handover, water-transfer checks, and revision review close to the field workflow without unrelated tools in the way.',
+  searchPlaceholder: 'Search mining tools',
+  ctaLabel: 'Mining workspace',
+  icon: Activity,
+  toolIds: miningWorkspaceToolIds,
+  sections: [
+    {
+      id: 'handover-and-hydraulics',
+      title: 'Handover and hydraulics',
+      description: 'Start here when shift notes need structure and a quick hydraulic sanity check needs to stay local.',
+      toolIds: ['shift-handover-builder', 'pressure-drop-head-loss-calculator', 'dewatering-shift-log-reconciler'],
+    },
+    {
+      id: 'revision-review',
+      title: 'Revision review',
+      description: 'Use this when drawing or procedure changes need a smaller text-first review surface.',
+      toolIds: ['drawing-revision-diff-checker', 'isolation-matrix-change-checker'],
+    },
+    {
+      id: 'production-reconciliation',
+      title: 'Production reconciliation',
+      description: 'Keep haul, plant, and shift-tally comparisons visible before totals are locked into reporting.',
+      toolIds: ['production-shift-reconciliation-checker'],
+    },
+  ],
+  aliases: ['/industries/mining', '/industries/mining-resources'],
+};
+
+export const operationsWorkspace: IndustryWorkspace = {
+  slug: 'operations',
+  title: 'Operations & Field Teams Workspace',
+  shortTitle: 'Operations',
+  audience: 'Operations and field teams',
+  path: '/workspaces/operations',
+  collectionPath: '/collections/operations-field-teams',
+  subtitle: 'Operations-first browser tools for handovers, revision checks, and safe note cleanup.',
+  description:
+    'A focused operations workspace that keeps handover notes, revision review, and redaction together so field teams do not need to sift through unrelated utilities.',
+  searchPlaceholder: 'Search operations tools',
+  ctaLabel: 'Operations workspace',
+  icon: ClipboardList,
+  toolIds: operationsWorkspaceToolIds,
+  sections: [
+    {
+      id: 'handover-and-control',
+      title: 'Handover and control',
+      description: 'Start here when shift notes need a cleaner handover or a shared status surface.',
+      toolIds: ['shift-handover-builder', 'shift-commitment-reconciler'],
+    },
+    {
+      id: 'revision-review',
+      title: 'Revision review',
+      description: 'Use this when work packs, permits, or procedures need a quick comparison before release.',
+      toolIds: ['drawing-revision-diff-checker', 'work-instruction-change-checker', 'permit-scope-change-checker'],
+    },
+    {
+      id: 'cleanup-and-packaging',
+      title: 'Cleanup and packaging',
+      description: 'Use this when notes need a safer first pass before they move into tickets, chat, or reports.',
+      toolIds: ['secret-redactor'],
+    },
+  ],
+  aliases: ['/industries/operations', '/industries/field-teams', '/industries/operations-field-teams'],
+};
+
 const industrySpecificToolIds = uniqueToolIds([
   ...mechanicalWorkspaceToolIds,
   ...civilWorkspaceToolIds,
   ...electricalWorkspaceToolIds,
+  ...medicalWorkspaceToolIds,
+  ...miningWorkspaceToolIds,
+  ...operationsWorkspaceToolIds,
 ]);
 
 const technologyToolIds = tools
@@ -260,7 +422,15 @@ export const technologyWorkspace: IndustryWorkspace = {
   sections: buildWorkspaceSections(technologyToolIds),
 };
 
-export const workspaces = [technologyWorkspace, mechanicalWorkspace, civilWorkspace, electricalWorkspace];
+export const workspaces = [
+  technologyWorkspace,
+  mechanicalWorkspace,
+  civilWorkspace,
+  electricalWorkspace,
+  medicalWorkspace,
+  miningWorkspace,
+  operationsWorkspace,
+];
 
 function matchesWorkspacePath(workspace: IndustryWorkspace, pathname: string) {
   if (pathname === workspace.path) {
@@ -316,18 +486,18 @@ export function getIndustryWorkspaceTools(workspace: IndustryWorkspace): Industr
 
 export const mechanicalWorkspaceHighlights = [
   {
-    title: 'Open the dimensional checks first',
-    body: 'Tolerance Stack-Up Analyzer and Hole/Shaft Fit Calculator are the fastest value tools for active design decisions, quoting, and review.',
+    title: 'Open the changed dimensions first',
+    body: 'Tolerance Change Impact Checker and Tolerance Stack-Up Analyzer expose which revision actually moved the assembly window before anyone debates the spreadsheet.',
     icon: Sigma,
   },
   {
-    title: 'Review changes before release',
-    body: 'BOM Diff Checker and Drawing Revision Diff Checker reduce the manual compare work that usually gets spread across spreadsheets, PDFs, and email threads.',
+    title: 'Review release readiness as a system',
+    body: 'Drawing Inspection Reconciler, BOM Diff Checker, and Drawing Revision Diff Checker close the gap between design intent and release paperwork.',
     icon: FileSearch,
   },
   {
-    title: 'Keep recurring formulas within reach',
-    body: 'Pressure Drop and Mechanical Formula Finder cover the repetitive calculation lookup work that engineers repeatedly redo or re-search.',
+    title: 'Keep high-friction checks within reach',
+    body: 'Fastener Clamp Load Checker adds one more repeated machine-design check to the local workspace instead of hiding it in a personal workbook.',
     icon: Gauge,
   },
   {
@@ -339,13 +509,13 @@ export const mechanicalWorkspaceHighlights = [
 
 export const civilWorkspaceHighlights = [
   {
-    title: 'Keep revision review close',
-    body: 'Drawing Revision Diff Checker and BOQ Diff Checker help civil teams spot what changed in notes, schedules, and quantity exports before anything becomes rework.',
+    title: 'Audit the schedule before it reaches site',
+    body: 'Drainage Schedule QA Checker turns one of the most repetitive civil review chores into a deterministic local screen for slope and invert issues.',
     icon: FileSearch,
   },
   {
-    title: 'Run fast hydraulic checks',
-    body: 'Pressure Drop & Head Loss Calculator gives a lightweight browser-local answer for water, drainage, and transfer-line checks.',
+    title: 'Cross-check tender artifacts together',
+    body: 'BOQ Spec Cross Checker and Tender Addendum Impact Checker focus on the exact BOQ-versus-spec-versus-addendum friction that still burns review time.',
     icon: Gauge,
   },
   {
@@ -362,13 +532,13 @@ export const civilWorkspaceHighlights = [
 
 export const electricalWorkspaceHighlights = [
   {
-    title: 'Start with the load checks first',
-    body: 'Voltage Drop Calculator, Cable Sizing Assistant, and Conduit Fill Calculator cover the quick planning questions that usually happen before a deeper design review.',
+    title: 'Start with schedule QA first',
+    body: 'Cable Schedule QA Checker gives electrical teams a release-oriented first pass before cable sizing decisions or procurement assumptions drift.',
     icon: Gauge,
   },
   {
-    title: 'Keep the panel view readable',
-    body: 'Panel Schedule Builder turns a small circuit list into phase totals, spare ways, and a cleaner review surface.',
+    title: 'Keep revision review readable',
+    body: 'Panel Revision QA Checker and Load List Reconciler make panel and single-line coordination a smaller, more trustworthy workflow.',
     icon: Table2,
   },
   {
@@ -380,6 +550,75 @@ export const electricalWorkspaceHighlights = [
     title: 'Stay electrical-only here',
     body: 'This workspace deliberately hides unrelated utilities so electrical users only see tools that clearly match their workflow.',
     icon: Zap,
+  },
+];
+
+export const medicalWorkspaceHighlights = [
+  {
+    title: 'Start with structure, not diagnosis',
+    body: 'Clinical Handover Completeness Linter keeps the medical workspace grounded in documentation quality instead of trying to act like clinical decision support.',
+    icon: HeartPulse,
+  },
+  {
+    title: 'Review instruction deltas carefully',
+    body: 'Discharge Instruction Delta Audit gives draft-versus-final changes a safer, more focused review surface around medications, follow-up, and warning wording.',
+    icon: FileSearch,
+  },
+  {
+    title: 'Prepare the packet before it moves',
+    body: 'Referral Packet Checklist Builder and Clinical De-Identifier help teams clean structure and privacy issues before broader sharing.',
+    icon: ShieldAlert,
+  },
+  {
+    title: 'Stay medical-only here',
+    body: 'This workspace deliberately hides unrelated utilities so clinicians see only the tools that clearly fit their workflow.',
+    icon: PackageSearch,
+  },
+];
+
+export const miningWorkspaceHighlights = [
+  {
+    title: 'Treat dewatering data as reviewable',
+    body: 'Dewatering Shift Log Reconciler gives mining teams a browser-local way to challenge suspicious pump and pond numbers before they drive decisions.',
+    icon: ClipboardList,
+  },
+  {
+    title: 'Keep hydraulic and field checks lightweight',
+    body: 'Pressure Drop & Head Loss Calculator still supports transfer-line sanity checks, but now the workspace also covers the shift-log reconciliation pain around those systems.',
+    icon: Gauge,
+  },
+  {
+    title: 'Review revision risk before the job starts',
+    body: 'Isolation Matrix Change Checker and Production Shift Reconciliation Checker extend the workspace into high-value operational review instead of generic note tooling.',
+    icon: FileSearch,
+  },
+  {
+    title: 'Stay mining-only here',
+    body: 'This workspace deliberately hides unrelated utilities so mining users see only the tools that clearly match their work.',
+    icon: PackageSearch,
+  },
+];
+
+export const operationsWorkspaceHighlights = [
+  {
+    title: 'Carry actions across shifts on purpose',
+    body: 'Shift Commitment Reconciler turns a vague handover problem into a concrete dropped-action check that teams can actually reuse.',
+    icon: ClipboardList,
+  },
+  {
+    title: 'Focus on operationally dangerous changes',
+    body: 'Work Instruction Change Checker and Permit Scope Change Checker narrow review onto the specific wording and table fields that can change field execution.',
+    icon: FileSearch,
+  },
+  {
+    title: 'Clean notes before sharing',
+    body: 'Secret Redactor helps remove obvious sensitive details before the note is pasted into a ticket, chat, or report.',
+    icon: ShieldAlert,
+  },
+  {
+    title: 'Stay operations-only here',
+    body: 'This workspace deliberately hides unrelated utilities so field teams only see the tools that clearly match their workflow.',
+    icon: PackageSearch,
   },
 ];
 

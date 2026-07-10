@@ -22,6 +22,9 @@ const TechnologyWorkspacePage = lazy(() => import('./pages/TechnologyWorkspacePa
 const MechanicalWorkspacePage = lazy(() => import('./pages/MechanicalWorkspacePage'));
 const CivilWorkspacePage = lazy(() => import('./pages/CivilWorkspacePage'));
 const ElectricalWorkspacePage = lazy(() => import('./pages/ElectricalWorkspacePage'));
+const MedicalWorkspacePage = lazy(() => import('./pages/MedicalWorkspacePage'));
+const MiningWorkspacePage = lazy(() => import('./pages/MiningWorkspacePage'));
+const OperationsWorkspacePage = lazy(() => import('./pages/OperationsWorkspacePage'));
 const GuidesIndex = lazy(() => import('./pages/GuidesIndex'));
 const GuidePage = lazy(() => import('./pages/GuidePage'));
 const FeedbackPage = lazy(() => import('./pages/FeedbackPage'));
@@ -146,6 +149,8 @@ const JsonSchemaGenerator = lazy(() => import('./tools/JsonSchemaGenerator'));
 const ShiftHandoverBuilder = lazy(() => import('./tools/ShiftHandoverBuilder'));
 const PressureDropHeadLossCalculator = lazy(() => import('./tools/PressureDropHeadLossCalculator'));
 const DrawingRevisionDiffChecker = lazy(() => import('./tools/DrawingRevisionDiffChecker'));
+const ClinicalReportDiffChecker = lazy(() => import('./tools/ClinicalReportDiffChecker'));
+const ClinicalDeIdentifier = lazy(() => import('./tools/ClinicalDeIdentifier'));
 const ToleranceStackupAnalyzer = lazy(() => import('./tools/ToleranceStackupAnalyzer'));
 const BomDiffChecker = lazy(() => import('./tools/BomDiffChecker'));
 const HoleShaftFitCalculator = lazy(() => import('./tools/HoleShaftFitCalculator'));
@@ -167,6 +172,34 @@ const BreakerProtectionChecker = lazy(() => import('./tools/BreakerProtectionChe
 const LightingLoadCalculator = lazy(() => import('./tools/LightingLoadCalculator'));
 const MotorStartingCurrentCalculator = lazy(() => import('./tools/MotorStartingCurrentCalculator'));
 const ElectricalFormulaFinder = lazy(() => import('./tools/ElectricalFormulaFinder'));
+const loadTechnologyAuditWorkbench = () => import('./tools/TechnologyAuditWorkbench');
+const ApiContractDriftChecker = lazyNamed(loadTechnologyAuditWorkbench, 'ApiContractDriftChecker');
+const CsvSchemaDriftChecker = lazyNamed(loadTechnologyAuditWorkbench, 'CsvSchemaDriftChecker');
+const EnvSchemaDriftChecker = lazyNamed(loadTechnologyAuditWorkbench, 'EnvSchemaDriftChecker');
+const loadMechanicalAuditWorkbench = () => import('./tools/MechanicalAuditWorkbench');
+const ToleranceChangeImpactChecker = lazyNamed(loadMechanicalAuditWorkbench, 'ToleranceChangeImpactChecker');
+const DrawingInspectionReconciler = lazyNamed(loadMechanicalAuditWorkbench, 'DrawingInspectionReconciler');
+const FastenerClampLoadChecker = lazyNamed(loadMechanicalAuditWorkbench, 'FastenerClampLoadChecker');
+const loadCivilAuditWorkbench = () => import('./tools/CivilAuditWorkbench');
+const DrainageScheduleQaChecker = lazyNamed(loadCivilAuditWorkbench, 'DrainageScheduleQaChecker');
+const BoqSpecCrossChecker = lazyNamed(loadCivilAuditWorkbench, 'BoqSpecCrossChecker');
+const TenderAddendumImpactChecker = lazyNamed(loadCivilAuditWorkbench, 'TenderAddendumImpactChecker');
+const loadElectricalAuditWorkbench = () => import('./tools/ElectricalAuditWorkbench');
+const CableScheduleQaChecker = lazyNamed(loadElectricalAuditWorkbench, 'CableScheduleQaChecker');
+const PanelRevisionQaChecker = lazyNamed(loadElectricalAuditWorkbench, 'PanelRevisionQaChecker');
+const LoadListReconciler = lazyNamed(loadElectricalAuditWorkbench, 'LoadListReconciler');
+const loadMedicalAuditWorkbench = () => import('./tools/MedicalAuditWorkbench');
+const ClinicalHandoverCompletenessLinter = lazyNamed(loadMedicalAuditWorkbench, 'ClinicalHandoverCompletenessLinter');
+const DischargeInstructionDeltaAudit = lazyNamed(loadMedicalAuditWorkbench, 'DischargeInstructionDeltaAudit');
+const ReferralPacketChecklistBuilder = lazyNamed(loadMedicalAuditWorkbench, 'ReferralPacketChecklistBuilder');
+const loadMiningAuditWorkbench = () => import('./tools/MiningAuditWorkbench');
+const DewateringShiftLogReconciler = lazyNamed(loadMiningAuditWorkbench, 'DewateringShiftLogReconciler');
+const IsolationMatrixChangeChecker = lazyNamed(loadMiningAuditWorkbench, 'IsolationMatrixChangeChecker');
+const ProductionShiftReconciliationChecker = lazyNamed(loadMiningAuditWorkbench, 'ProductionShiftReconciliationChecker');
+const loadOperationsAuditWorkbench = () => import('./tools/OperationsAuditWorkbench');
+const ShiftCommitmentReconciler = lazyNamed(loadOperationsAuditWorkbench, 'ShiftCommitmentReconciler');
+const WorkInstructionChangeChecker = lazyNamed(loadOperationsAuditWorkbench, 'WorkInstructionChangeChecker');
+const PermitScopeChangeChecker = lazyNamed(loadOperationsAuditWorkbench, 'PermitScopeChangeChecker');
 
 const loadAiWorkbench = () => import('./tools/AiWorkbench');
 const PromptStudio = lazyNamed(loadAiWorkbench, 'PromptStudio');
@@ -209,6 +242,9 @@ const appRoutes: AppRoute[] = [
   { path: '/workspaces/mechanical', Component: MechanicalWorkspacePage },
   { path: '/workspaces/civil', Component: CivilWorkspacePage },
   { path: '/workspaces/electrical', Component: ElectricalWorkspacePage },
+  { path: '/workspaces/medical', Component: MedicalWorkspacePage },
+  { path: '/workspaces/mining', Component: MiningWorkspacePage },
+  { path: '/workspaces/operations', Component: OperationsWorkspacePage },
   { path: '/guides', Component: GuidesIndex },
   { path: '/guides/:slug', Component: GuidePage },
   { path: '/feedback', Component: FeedbackPage },
@@ -330,12 +366,23 @@ const appRoutes: AppRoute[] = [
   { path: '/markdown-studio', Component: MarkdownStudio },
   { path: '/json-schema-generator', Component: JsonSchemaGenerator },
   { path: '/shift-handover-builder', Component: ShiftHandoverBuilder },
+  { path: '/workspaces/medical/tools/shift-handover-builder', Component: ShiftHandoverBuilder },
+  { path: '/workspaces/mining/tools/shift-handover-builder', Component: ShiftHandoverBuilder },
+  { path: '/workspaces/operations/tools/shift-handover-builder', Component: ShiftHandoverBuilder },
   { path: '/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/workspaces/mechanical/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/workspaces/civil/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
+  { path: '/workspaces/mining/tools/pressure-drop-head-loss-calculator', Component: PressureDropHeadLossCalculator },
   { path: '/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
   { path: '/workspaces/mechanical/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
   { path: '/workspaces/civil/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/workspaces/mining/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/workspaces/operations/tools/drawing-revision-diff-checker', Component: DrawingRevisionDiffChecker },
+  { path: '/clinical-report-diff-checker', Component: ClinicalReportDiffChecker },
+  { path: '/workspaces/medical/tools/clinical-report-diff-checker', Component: ClinicalReportDiffChecker },
+  { path: '/clinical-deidentifier', Component: ClinicalDeIdentifier },
+  { path: '/workspaces/medical/tools/clinical-deidentifier', Component: ClinicalDeIdentifier },
+  { path: '/workspaces/operations/tools/secret-redactor', Component: SecretRedactor },
   { path: '/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
   { path: '/workspaces/mechanical/tools/tolerance-stackup-analyzer', Component: ToleranceStackupAnalyzer },
   { path: '/bom-diff-checker', Component: BomDiffChecker },
@@ -378,6 +425,45 @@ const appRoutes: AppRoute[] = [
   { path: '/workspaces/electrical/tools/motor-starting-current-calculator', Component: MotorStartingCurrentCalculator },
   { path: '/electrical-formula-finder', Component: ElectricalFormulaFinder },
   { path: '/workspaces/electrical/tools/electrical-formula-finder', Component: ElectricalFormulaFinder },
+  { path: '/api-contract-drift-checker', Component: ApiContractDriftChecker },
+  { path: '/csv-schema-drift-checker', Component: CsvSchemaDriftChecker },
+  { path: '/env-schema-drift-checker', Component: EnvSchemaDriftChecker },
+  { path: '/tolerance-change-impact-checker', Component: ToleranceChangeImpactChecker },
+  { path: '/workspaces/mechanical/tools/tolerance-change-impact-checker', Component: ToleranceChangeImpactChecker },
+  { path: '/drawing-inspection-reconciler', Component: DrawingInspectionReconciler },
+  { path: '/workspaces/mechanical/tools/drawing-inspection-reconciler', Component: DrawingInspectionReconciler },
+  { path: '/fastener-clamp-load-checker', Component: FastenerClampLoadChecker },
+  { path: '/workspaces/mechanical/tools/fastener-clamp-load-checker', Component: FastenerClampLoadChecker },
+  { path: '/drainage-schedule-qa-checker', Component: DrainageScheduleQaChecker },
+  { path: '/workspaces/civil/tools/drainage-schedule-qa-checker', Component: DrainageScheduleQaChecker },
+  { path: '/boq-spec-cross-checker', Component: BoqSpecCrossChecker },
+  { path: '/workspaces/civil/tools/boq-spec-cross-checker', Component: BoqSpecCrossChecker },
+  { path: '/tender-addendum-impact-checker', Component: TenderAddendumImpactChecker },
+  { path: '/workspaces/civil/tools/tender-addendum-impact-checker', Component: TenderAddendumImpactChecker },
+  { path: '/cable-schedule-qa-checker', Component: CableScheduleQaChecker },
+  { path: '/workspaces/electrical/tools/cable-schedule-qa-checker', Component: CableScheduleQaChecker },
+  { path: '/panel-revision-qa-checker', Component: PanelRevisionQaChecker },
+  { path: '/workspaces/electrical/tools/panel-revision-qa-checker', Component: PanelRevisionQaChecker },
+  { path: '/load-list-reconciler', Component: LoadListReconciler },
+  { path: '/workspaces/electrical/tools/load-list-reconciler', Component: LoadListReconciler },
+  { path: '/clinical-handover-completeness-linter', Component: ClinicalHandoverCompletenessLinter },
+  { path: '/workspaces/medical/tools/clinical-handover-completeness-linter', Component: ClinicalHandoverCompletenessLinter },
+  { path: '/discharge-instruction-delta-audit', Component: DischargeInstructionDeltaAudit },
+  { path: '/workspaces/medical/tools/discharge-instruction-delta-audit', Component: DischargeInstructionDeltaAudit },
+  { path: '/referral-packet-checklist-builder', Component: ReferralPacketChecklistBuilder },
+  { path: '/workspaces/medical/tools/referral-packet-checklist-builder', Component: ReferralPacketChecklistBuilder },
+  { path: '/dewatering-shift-log-reconciler', Component: DewateringShiftLogReconciler },
+  { path: '/workspaces/mining/tools/dewatering-shift-log-reconciler', Component: DewateringShiftLogReconciler },
+  { path: '/isolation-matrix-change-checker', Component: IsolationMatrixChangeChecker },
+  { path: '/workspaces/mining/tools/isolation-matrix-change-checker', Component: IsolationMatrixChangeChecker },
+  { path: '/production-shift-reconciliation-checker', Component: ProductionShiftReconciliationChecker },
+  { path: '/workspaces/mining/tools/production-shift-reconciliation-checker', Component: ProductionShiftReconciliationChecker },
+  { path: '/shift-commitment-reconciler', Component: ShiftCommitmentReconciler },
+  { path: '/workspaces/operations/tools/shift-commitment-reconciler', Component: ShiftCommitmentReconciler },
+  { path: '/work-instruction-change-checker', Component: WorkInstructionChangeChecker },
+  { path: '/workspaces/operations/tools/work-instruction-change-checker', Component: WorkInstructionChangeChecker },
+  { path: '/permit-scope-change-checker', Component: PermitScopeChangeChecker },
+  { path: '/workspaces/operations/tools/permit-scope-change-checker', Component: PermitScopeChangeChecker },
   { path: '/prompt-studio', Component: PromptStudio },
   { path: '/prompt-diff-checker', Component: PromptDiffChecker },
   { path: '/prompt-test-runner', Component: PromptTestRunner },
@@ -418,6 +504,22 @@ const redirectRoutes = [
   { path: '/industries/civil', to: '/workspaces/civil' },
   { path: '/industries/electrical', to: '/workspaces/electrical' },
   { path: '/industries/electrical-power', to: '/workspaces/electrical' },
+  { path: '/industries/medical', to: '/workspaces/medical' },
+  { path: '/industries/medical-clinical', to: '/workspaces/medical' },
+  { path: '/industries/mining', to: '/workspaces/mining' },
+  { path: '/industries/mining-resources', to: '/workspaces/mining' },
+  { path: '/industries/operations', to: '/workspaces/operations' },
+  { path: '/industries/field-teams', to: '/workspaces/operations' },
+  { path: '/industries/operations-field-teams', to: '/workspaces/operations' },
+  { path: '/industries/medical/tools/shift-handover-builder', to: '/workspaces/medical/tools/shift-handover-builder' },
+  { path: '/industries/medical/tools/clinical-report-diff-checker', to: '/workspaces/medical/tools/clinical-report-diff-checker' },
+  { path: '/industries/medical/tools/clinical-deidentifier', to: '/workspaces/medical/tools/clinical-deidentifier' },
+  { path: '/industries/mining/tools/shift-handover-builder', to: '/workspaces/mining/tools/shift-handover-builder' },
+  { path: '/industries/mining/tools/pressure-drop-head-loss-calculator', to: '/workspaces/mining/tools/pressure-drop-head-loss-calculator' },
+  { path: '/industries/mining/tools/drawing-revision-diff-checker', to: '/workspaces/mining/tools/drawing-revision-diff-checker' },
+  { path: '/industries/operations/tools/shift-handover-builder', to: '/workspaces/operations/tools/shift-handover-builder' },
+  { path: '/industries/operations/tools/drawing-revision-diff-checker', to: '/workspaces/operations/tools/drawing-revision-diff-checker' },
+  { path: '/industries/operations/tools/secret-redactor', to: '/workspaces/operations/tools/secret-redactor' },
   { path: '/industries/mechanical/tools/pressure-drop-head-loss-calculator', to: '/workspaces/mechanical/tools/pressure-drop-head-loss-calculator' },
   { path: '/industries/civil/tools/pressure-drop-head-loss-calculator', to: '/workspaces/civil/tools/pressure-drop-head-loss-calculator' },
   { path: '/industries/mechanical/tools/drawing-revision-diff-checker', to: '/workspaces/mechanical/tools/drawing-revision-diff-checker' },
@@ -429,12 +531,18 @@ const redirectRoutes = [
   { path: '/industries/mechanical/tools/gear-ratio-calculator', to: '/workspaces/mechanical/tools/gear-ratio-calculator' },
   { path: '/industries/mechanical/tools/belt-drive-calculator', to: '/workspaces/mechanical/tools/belt-drive-calculator' },
   { path: '/industries/mechanical/tools/mechanical-formula-finder', to: '/workspaces/mechanical/tools/mechanical-formula-finder' },
+  { path: '/industries/mechanical/tools/tolerance-change-impact-checker', to: '/workspaces/mechanical/tools/tolerance-change-impact-checker' },
+  { path: '/industries/mechanical/tools/drawing-inspection-reconciler', to: '/workspaces/mechanical/tools/drawing-inspection-reconciler' },
+  { path: '/industries/mechanical/tools/fastener-clamp-load-checker', to: '/workspaces/mechanical/tools/fastener-clamp-load-checker' },
   { path: '/industries/civil/tools/material-takeoff-carbon-estimator', to: '/workspaces/civil/tools/material-takeoff-carbon-estimator' },
   { path: '/industries/civil/tools/boq-diff-checker', to: '/workspaces/civil/tools/boq-diff-checker' },
   { path: '/industries/civil/tools/site-handover-builder', to: '/workspaces/civil/tools/site-handover-builder' },
   { path: '/industries/civil/tools/earthworks-balance-calculator', to: '/workspaces/civil/tools/earthworks-balance-calculator' },
   { path: '/industries/civil/tools/invert-slope-calculator', to: '/workspaces/civil/tools/invert-slope-calculator' },
   { path: '/industries/civil/tools/civil-formula-finder', to: '/workspaces/civil/tools/civil-formula-finder' },
+  { path: '/industries/civil/tools/drainage-schedule-qa-checker', to: '/workspaces/civil/tools/drainage-schedule-qa-checker' },
+  { path: '/industries/civil/tools/boq-spec-cross-checker', to: '/workspaces/civil/tools/boq-spec-cross-checker' },
+  { path: '/industries/civil/tools/tender-addendum-impact-checker', to: '/workspaces/civil/tools/tender-addendum-impact-checker' },
   { path: '/industries/electrical/tools/voltage-drop-calculator', to: '/workspaces/electrical/tools/voltage-drop-calculator' },
   { path: '/industries/electrical/tools/cable-sizing-assistant', to: '/workspaces/electrical/tools/cable-sizing-assistant' },
   { path: '/industries/electrical/tools/conduit-fill-calculator', to: '/workspaces/electrical/tools/conduit-fill-calculator' },
@@ -443,6 +551,18 @@ const redirectRoutes = [
   { path: '/industries/electrical/tools/lighting-load-calculator', to: '/workspaces/electrical/tools/lighting-load-calculator' },
   { path: '/industries/electrical/tools/motor-starting-current-calculator', to: '/workspaces/electrical/tools/motor-starting-current-calculator' },
   { path: '/industries/electrical/tools/electrical-formula-finder', to: '/workspaces/electrical/tools/electrical-formula-finder' },
+  { path: '/industries/electrical/tools/cable-schedule-qa-checker', to: '/workspaces/electrical/tools/cable-schedule-qa-checker' },
+  { path: '/industries/electrical/tools/panel-revision-qa-checker', to: '/workspaces/electrical/tools/panel-revision-qa-checker' },
+  { path: '/industries/electrical/tools/load-list-reconciler', to: '/workspaces/electrical/tools/load-list-reconciler' },
+  { path: '/industries/medical/tools/clinical-handover-completeness-linter', to: '/workspaces/medical/tools/clinical-handover-completeness-linter' },
+  { path: '/industries/medical/tools/discharge-instruction-delta-audit', to: '/workspaces/medical/tools/discharge-instruction-delta-audit' },
+  { path: '/industries/medical/tools/referral-packet-checklist-builder', to: '/workspaces/medical/tools/referral-packet-checklist-builder' },
+  { path: '/industries/mining/tools/dewatering-shift-log-reconciler', to: '/workspaces/mining/tools/dewatering-shift-log-reconciler' },
+  { path: '/industries/mining/tools/isolation-matrix-change-checker', to: '/workspaces/mining/tools/isolation-matrix-change-checker' },
+  { path: '/industries/mining/tools/production-shift-reconciliation-checker', to: '/workspaces/mining/tools/production-shift-reconciliation-checker' },
+  { path: '/industries/operations/tools/shift-commitment-reconciler', to: '/workspaces/operations/tools/shift-commitment-reconciler' },
+  { path: '/industries/operations/tools/work-instruction-change-checker', to: '/workspaces/operations/tools/work-instruction-change-checker' },
+  { path: '/industries/operations/tools/permit-scope-change-checker', to: '/workspaces/operations/tools/permit-scope-change-checker' },
 ];
 
 export default function App() {

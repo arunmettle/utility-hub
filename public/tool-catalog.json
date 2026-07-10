@@ -2,8 +2,8 @@
   "name": "UtilityHub",
   "siteUrl": "https://utilityhub.dev",
   "privacyModel": "browser-local",
-  "toolCount": 158,
-  "guideCount": 144,
+  "toolCount": 160,
+  "guideCount": 146,
   "collectionCount": 22,
   "categories": [
     "Formatters",
@@ -19,7 +19,7 @@
     { "slug": "civil-construction", "title": "Civil & Construction Toolkit", "path": "/collections/civil-construction", "toolCount": 6 },
     { "slug": "mechanical-manufacturing", "title": "Mechanical & Manufacturing Toolkit", "path": "/collections/mechanical-manufacturing", "toolCount": 9 },
     { "slug": "electrical-power", "title": "Electrical & Power Toolkit", "path": "/collections/electrical-power", "toolCount": 8 },
-    { "slug": "medical-clinical", "title": "Medical & Clinical Toolkit", "path": "/collections/medical-clinical", "toolCount": 1 },
+    { "slug": "medical-clinical", "title": "Medical & Clinical Toolkit", "path": "/collections/medical-clinical", "toolCount": 3 },
     { "slug": "mining-resources", "title": "Mining & Resources Toolkit", "path": "/collections/mining-resources", "toolCount": 3 },
     { "slug": "operations-field-teams", "title": "Operations & Field Teams Toolkit", "path": "/collections/operations-field-teams", "toolCount": 3 },
     { "slug": "web-designers", "title": "Web Designer Toolkit", "path": "/collections/web-designers", "toolCount": 10 },
@@ -46,6 +46,22 @@
       "description": "Turn raw shift notes into a structured local handover for hospitals, crews, and operations teams.",
       "category": "Developer",
       "path": "/shift-handover-builder"
+    },
+    {
+      "id": "clinical-report-diff-checker",
+      "name": "Clinical Report Diff Checker",
+      "description": "Compare pasted clinical notes or report extracts locally and isolate changed lines before escalation or handover.",
+      "category": "Testers",
+      "path": "/clinical-report-diff-checker",
+      "guidePath": "/guides/clinical-report-diff-checker"
+    },
+    {
+      "id": "clinical-deidentifier",
+      "name": "Clinical De-Identifier",
+      "description": "Redact obvious patient identifiers, dates, contact details, and labeled fields before broader sharing.",
+      "category": "Security",
+      "path": "/clinical-deidentifier",
+      "guidePath": "/guides/clinical-deidentifier"
     },
     {
       "id": "pressure-drop-head-loss-calculator",

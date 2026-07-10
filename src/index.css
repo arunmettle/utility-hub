@@ -251,44 +251,44 @@ textarea {
   padding: 28px 22px 0;
 }
 
-.sidebar__section--grow {
+.sidebar__content {
   flex: 1;
-  min-height: 0;
-  padding-bottom: 24px;
-  overflow: hidden;
-}
-
-.sidebar__scroll {
-  height: 100%;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding-right: 8px;
+  padding-bottom: 24px;
   scrollbar-width: thin;
   scrollbar-color: var(--scroll-thumb) transparent;
-  mask-image: linear-gradient(to bottom, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
 }
 
-.sidebar__scroll::-webkit-scrollbar {
+.sidebar__content::-webkit-scrollbar {
   width: 10px;
 }
 
-.sidebar__scroll::-webkit-scrollbar-track {
+.sidebar__content::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.sidebar__scroll::-webkit-scrollbar-thumb {
+.sidebar__content::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--scroll-thumb-start) 0%, var(--scroll-thumb) 100%);
   border: 2px solid transparent;
   border-radius: 999px;
   background-clip: padding-box;
 }
 
-.sidebar__scroll::-webkit-scrollbar-thumb:hover {
+.sidebar__content::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--scroll-thumb-hover-start) 0%, var(--scroll-thumb-hover) 100%);
   border: 2px solid transparent;
   background-clip: padding-box;
+}
+
+.sidebar__section--grow {
+  padding-bottom: 0;
+}
+
+.sidebar__scroll {
+  padding-right: 8px;
 }
 
 .sidebar__section-head {
@@ -1562,8 +1562,36 @@ textarea {
   padding: 18px;
   resize: vertical;
   outline: none;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) color-mix(in srgb, var(--surface-track) 58%, transparent);
   color: var(--text);
   font: 500 0.95rem/1.65 'IBM Plex Mono', monospace;
+}
+
+.editor-textarea::-webkit-scrollbar {
+  width: 12px;
+}
+
+.editor-textarea::-webkit-scrollbar-track {
+  background: color-mix(in srgb, var(--surface-track) 58%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--surface-border-soft) 72%, transparent);
+  border-radius: 999px;
+  margin: 10px 6px 10px 0;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--scroll-thumb-start) 0%, var(--scroll-thumb) 100%);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--scroll-thumb-hover-start) 0%, var(--scroll-thumb-hover) 100%);
+  border: 3px solid transparent;
+  background-clip: padding-box;
 }
 
 .editor-textarea:focus {

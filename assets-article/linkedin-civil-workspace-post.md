@@ -85,3 +85,6 @@ Ask:
 
 What is the civil workflow you still patch together with spreadsheets, PDFs, and screenshots?
 
+## Suggested Hashtags
+
+`#CivilEngineering #ConstructionTech #ProjectEngineering #QuantitySurveying #BOQ #Infrastructure #EngineeringTools #DigitalEngineering`

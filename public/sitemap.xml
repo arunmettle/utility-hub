@@ -16,9 +16,12 @@
   <url><loc>https://utilityhub.dev/workspaces/civil</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/workspaces/mechanical</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/workspaces/electrical</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://utilityhub.dev/collections/medical-clinical</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
-  <url><loc>https://utilityhub.dev/collections/mining-resources</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
-  <url><loc>https://utilityhub.dev/collections/operations-field-teams</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/medical-clinical</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/mining-resources</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/collections/operations-field-teams</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://utilityhub.dev/workspaces/medical</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/workspaces/mining</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/workspaces/operations</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/collections/web-designers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/web-developers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/collections/frontend-developers</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
@@ -37,6 +40,8 @@
   <url><loc>https://utilityhub.dev/collections/data-engineers-and-analysts</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://utilityhub.dev/json-formatter</loc><lastmod>2026-06-25</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/shift-handover-builder</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/clinical-report-diff-checker</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://utilityhub.dev/clinical-deidentifier</loc><lastmod>2026-07-09</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/pressure-drop-head-loss-calculator</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/drawing-revision-diff-checker</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://utilityhub.dev/tolerance-stackup-analyzer</loc><lastmod>2026-07-07</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>

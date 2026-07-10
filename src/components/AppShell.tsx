@@ -403,87 +403,89 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
 
-        <div className="sidebar__section">
-          <div className="sidebar__section-head">
-            <p className="sidebar__label">{isWorkspaceContext ? 'Tools' : 'Workspaces'}</p>
-            <span className="sidebar__count">{isWorkspaceContext ? filteredTools.length : workspaces.length}</span>
-          </div>
-        </div>
-
-        <div className="sidebar__section">
-          <div className="sidebar__group">
-            {sidebarNavEntries.map((entry) => {
-              const Icon = entry.icon;
-              return (
-                <Link
-                  key={entry.label}
-                  to={entry.to}
-                  className={`sidebar__item sidebar__item--link ${entry.match(location.pathname) ? 'is-active' : ''}`}
-                >
-                  <Icon size={18} />
-                  <div>
-                    <p>{entry.label}</p>
-                    <span>{entry.description}</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-
-        {isWorkspaceContext ? (
-          <div className="sidebar__section sidebar__section--grow">
-            <div className="sidebar__scroll">
-              <nav className="sidebar__accordion">
-                {visibleGroups.map((group) => {
-                  const isOpen = openGroups[group.id];
-
-                  return (
-                    <section key={group.id} className="sidebar__accordion-section">
-                      <button
-                        type="button"
-                        className={`sidebar__accordion-trigger ${isOpen ? 'is-open' : ''}`}
-                        onClick={() => toggleGroup(group.id)}
-                        aria-expanded={isOpen}
-                        aria-controls={`sidebar-panel-${group.id.toLowerCase()}`}
-                      >
-                        <ChevronDown size={18} />
-                        <span>{group.title}</span>
-                      </button>
-
-                      <div
-                        id={`sidebar-panel-${group.id.toLowerCase()}`}
-                        className={`sidebar__accordion-panel ${isOpen ? 'is-open' : ''}`}
-                        hidden={!isOpen}
-                      >
-                        <div className="sidebar__accordion-rail" aria-hidden="true" />
-                        <div className="sidebar__group sidebar__group--nested">
-                          {group.tools.map((tool) => {
-                            const Icon = tool.icon;
-
-                            return (
-                              <Link
-                                key={tool.id}
-                                to={tool.navigationPath}
-                                className={`sidebar__item sidebar__item--link ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
-                                onClick={() => setMobileSidebarOpen(false)}
-                              >
-                                <Icon size={18} />
-                                <div>
-                                  <p>{tool.name}</p>
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </section>
-                  );
-                })}
-              </nav>
+        <div className="sidebar__content">
+          <div className="sidebar__section">
+            <div className="sidebar__section-head">
+              <p className="sidebar__label">{isWorkspaceContext ? 'Tools' : 'Workspaces'}</p>
+              <span className="sidebar__count">{isWorkspaceContext ? filteredTools.length : workspaces.length}</span>
             </div>
           </div>
-        ) : null}
+
+          <div className="sidebar__section">
+            <div className="sidebar__group">
+              {sidebarNavEntries.map((entry) => {
+                const Icon = entry.icon;
+                return (
+                  <Link
+                    key={entry.label}
+                    to={entry.to}
+                    className={`sidebar__item sidebar__item--link ${entry.match(location.pathname) ? 'is-active' : ''}`}
+                  >
+                    <Icon size={18} />
+                    <div>
+                      <p>{entry.label}</p>
+                      <span>{entry.description}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {isWorkspaceContext ? (
+            <div className="sidebar__section sidebar__section--grow">
+              <div className="sidebar__scroll">
+                <nav className="sidebar__accordion">
+                  {visibleGroups.map((group) => {
+                    const isOpen = openGroups[group.id];
+
+                    return (
+                      <section key={group.id} className="sidebar__accordion-section">
+                        <button
+                          type="button"
+                          className={`sidebar__accordion-trigger ${isOpen ? 'is-open' : ''}`}
+                          onClick={() => toggleGroup(group.id)}
+                          aria-expanded={isOpen}
+                          aria-controls={`sidebar-panel-${group.id.toLowerCase()}`}
+                        >
+                          <ChevronDown size={18} />
+                          <span>{group.title}</span>
+                        </button>
+
+                        <div
+                          id={`sidebar-panel-${group.id.toLowerCase()}`}
+                          className={`sidebar__accordion-panel ${isOpen ? 'is-open' : ''}`}
+                          hidden={!isOpen}
+                        >
+                          <div className="sidebar__accordion-rail" aria-hidden="true" />
+                          <div className="sidebar__group sidebar__group--nested">
+                            {group.tools.map((tool) => {
+                              const Icon = tool.icon;
+
+                              return (
+                                <Link
+                                  key={tool.id}
+                                  to={tool.navigationPath}
+                                  className={`sidebar__item sidebar__item--link ${location.pathname === tool.navigationPath ? 'is-active' : ''}`}
+                                  onClick={() => setMobileSidebarOpen(false)}
+                                >
+                                  <Icon size={18} />
+                                  <div>
+                                    <p>{tool.name}</p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </section>
+                    );
+                  })}
+                </nav>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </aside>
 
       {!isDesktop && mobileSidebarOpen ? (

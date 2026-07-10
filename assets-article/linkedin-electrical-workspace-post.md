@@ -86,3 +86,7 @@ The goal is to make these tasks easier to access in one focused browser-side wor
 Ask:
 
 What is the electrical task your team repeats most often that still feels more manual than it should?
+
+## Suggested Hashtags
+
+`#ElectricalEngineering #MEP #BuildingServices #PowerSystems #CableSizing #EngineeringTools #DigitalEngineering #ProjectEngineering`

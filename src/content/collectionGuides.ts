@@ -142,17 +142,29 @@ export const collectionGuideBySlug = new Map<string, CollectionGuideContent>([
   [
     'medical-clinical',
     {
-      summary: 'A privacy-first clinical starting point focused on structured handovers instead of generic reused utilities.',
+      summary: 'A privacy-first clinical starting point focused on structured handovers, report comparison, and note cleanup instead of generic reused utilities.',
       intro:
-        'Medical and clinical teams often need fast, structured communication, but that does not mean every generic text or security utility belongs in their toolkit. Right now the strongest fit is a handover-focused workflow, so this collection stays intentionally narrow until more truly clinical-native tools are added.',
+        'Medical and clinical teams often need fast, structured communication, but that does not mean every generic text or security utility belongs in their toolkit. This collection keeps the strongest browser-local wedges together so the workflow stays narrow, useful, and easier to trust.',
       useCases: [
         'You need to convert rough ward, on-call, or imaging notes into a cleaner handover.',
+        'You want to compare a draft report against an updated version before sharing it.',
+        'You need to remove obvious identifiers from notes before broader clinical sharing.',
       ],
       sections: [
         {
           title: 'Structure the shift handover first',
           body: 'Shift Handover Builder is the anchor workflow here because it turns rough notes into grouped actions, urgent items, and a cleaner markdown summary.',
           toolIds: ['shift-handover-builder'],
+        },
+        {
+          title: 'Compare report updates quickly',
+          body: 'Clinical Report Diff Checker gives clinicians a clear local surface for spotting changed lines in reports, summaries, and extracted notes.',
+          toolIds: ['clinical-report-diff-checker'],
+        },
+        {
+          title: 'Clean notes before sharing',
+          body: 'Clinical De-Identifier removes obvious names, IDs, dates, email addresses, and phone-like strings so notes are safer to share or paste elsewhere.',
+          toolIds: ['clinical-deidentifier'],
         },
       ],
       closing:

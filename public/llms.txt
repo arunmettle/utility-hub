@@ -42,8 +42,9 @@ UtilityHub provides local, client-side tools for formatting, encoding, security 
 - /collections/civil-construction: curated utilities for handover notes, earthworks, and level checks.
 - /collections/mechanical-manufacturing: curated utilities for bearings, drives, ratios, and quick machine checks.
 - /collections/electrical-power: curated utilities for voltage drop, cable sizing, conduit fill, panel schedules, and formula lookup.
-- /collections/medical-clinical: curated utilities for shift handover, note cleanup, and care-team workflow support.
-- /collections/mining-resources: curated utilities for site handover, production notes, and field-level tracking.
+- /collections/medical-clinical: curated utilities for shift handover, report comparison, and privacy-first note cleanup.
+- /collections/mining-resources: curated utilities for site handover, dewatering checks, and revision review.
+- /collections/operations-field-teams: curated utilities for handoff notes, revision comparison, and safer field-note sharing.
 - /collections/business-analysts: curated utilities for structured notes, tables, comparisons, and summaries.
 - /collections/manual-testers: curated utilities for QA evidence, fixtures, and response inspection.
 - /collections/automation-testers: curated utilities for regex, payload paths, CI checks, and test data.

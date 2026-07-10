@@ -125,6 +125,8 @@ export const personaCollections: PersonaCollectionDefinition[] = [
     ],
     toolIds: [
       'shift-handover-builder',
+      'clinical-report-diff-checker',
+      'clinical-deidentifier',
     ],
   },
   {

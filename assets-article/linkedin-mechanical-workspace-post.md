@@ -90,3 +90,6 @@ Ask:
 
 What is the most repetitive mechanical review task your team still does manually?
 
+## Suggested Hashtags
+
+`#MechanicalEngineering #DesignEngineering #Manufacturing #EngineeringTools #ProductDevelopment #ToleranceAnalysis #BOM #DigitalEngineering`
